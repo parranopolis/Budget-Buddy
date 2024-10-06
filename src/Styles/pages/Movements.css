@@ -1,0 +1,36 @@
+/* Move this to NavBar */
+
+.title {
+    margin-bottom: 0;
+    text-align: center;
+    color: var(--secondary-color);
+}
+
+.profile {
+    background-color: var(--third-color);
+    /* position: fixed;
+    top: 1.7rem;
+    right: 1.3rem; */
+    border-radius: 50%;
+    z-index: 1;
+    margin-right: 1rem;
+}
+
+.profile .profileCircle {
+    border-radius: 50%;
+    width: 4rem;
+    height: 4rem;
+}
+
+.profileOptions {
+    color: var(--primary-color);
+    text-align: center;
+}
+
+.profileMenu {
+    position: fixed;
+    top: 3.62rem;
+    width: 100%;
+    right: 0;
+    z-index: 1;
+}

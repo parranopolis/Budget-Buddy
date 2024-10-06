@@ -1,0 +1,48 @@
+.navBar {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    align-items: center;
+    text-align: center;
+    background-color: var(--dark-color);
+    height: 5rem;
+    position: fixed;
+    top: 90%;
+    width: 100%;
+    color: white;
+}
+
+.navBar section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 5rem;
+}
+
+.navBar .navBar-NewMovement {
+    border-radius: 100%;
+    width: 40%;
+    height: 4rem;
+    margin: auto;
+    background: #F36C9C;
+}
+
+.movementMenu {
+    width: 100%;
+    padding: 0 3rem;
+    position: fixed;
+    top: 12rem;
+    text-align: center;
+}
+
+.is-Active {
+    display: block;
+}
+
+.disable {
+    display: none;
+}
+
+
+.TopNavBar {
+    background-color: var(--primary-color);
+}

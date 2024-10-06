@@ -1,0 +1,14 @@
+.googleButton {
+    border: 1px solid black;
+    border-radius: 20rem;
+    padding: 1rem 2rem;
+    display: flex;
+    gap: .5rem;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+}
+
+.SubmitButton {
+    width: 100%;
+}

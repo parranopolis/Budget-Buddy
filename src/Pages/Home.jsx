@@ -1,12 +1,16 @@
-import { useEffect } from "react"
-import { redirect } from "react-router-dom"
-
+import '../Styles/pages/Home.css'
+import '../Styles/main.css'
+import { NavBar, TopNavBar } from "../Components/NavBar"
+import { ProfileMenu } from '../Components/ProfileMenu'
+import { auth } from '../../services/firebaseConfig'
 export function Home() {
-    redirect('login')
+
+    console.log(auth?.currentUser?.displayName)
 
     return (
         <>
-            <h1>This is Home</h1>
+            <TopNavBar title='Home' />
+            <NavBar />
         </>
     )
 }

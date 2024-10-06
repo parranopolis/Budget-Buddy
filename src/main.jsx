@@ -2,17 +2,19 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import {
   createBrowserRouter,
-  RouterProvider
+  RouterProvider,
 } from 'react-router-dom'
 
 import { Home } from './Pages/Home'
-import { Auth, SignIn } from './Pages/Auth'
-
+import { Login } from './Pages/Auth/Login'
+import { PasswordRecovery } from './Pages/Auth/passwordRecovery'
+import { CreateAccount } from './Pages/Auth/CreateAccount'
+import { DailyExpense } from './Pages/Movements'
 
 
 const root = createRoot(document.getElementById('root'))
 
-
+const user = false
 const router = createBrowserRouter([
   {
     path: '/',
@@ -20,11 +22,19 @@ const router = createBrowserRouter([
   },
   {
     path: 'login',
-    element: <Auth />
+    element: <Login />
   },
   {
-    path: 'signIn',
-    element: <SignIn />
+    path: 'password_recovery',
+    element: <PasswordRecovery />
+  },
+  {
+    path: 'create_account',
+    element: <CreateAccount />
+  },
+  {
+    path: 'DailyExpense',
+    element: <DailyExpense />
   }
 ])
 

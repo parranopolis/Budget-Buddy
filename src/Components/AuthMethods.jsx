@@ -1,31 +1,34 @@
 import { auth, googleProvider } from "../../services/firebaseConfig"
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth"
 
-export function SignInWithGoogleComponent() {
+import { GoogleButton } from "./Buttons"
 
-    const SignInWithGoogle = async () => {
-        try {
-            await signInWithPopup(auth, googleProvider)
-                .then((result) => {
-                    // console.log(result.user.accessToken)
-                    const credential = GoogleAuthProvider.credentialFromResult(result)
-                    const token = credential.accessToken
+export function UseGoogleAccount({ text }) {
 
-                    const user = result.user
+    // const SignInWithGoogle = async () => {
+    //     try {
+    //         await signInWithPopup(auth, googleProvider)
+    //             .then((result) => {
+    //                 // console.log(result.user.accessToken)
+    //                 const credential = GoogleAuthProvider.credentialFromResult(result)
+    //                 const token = credential.accessToken
 
-                    console.log(credential)
+    //                 const user = result.user
 
-                    console.log(token)
-                    reRoute('/')
+    //                 console.log(credential)
 
-                })
-        } catch (error) {
-            console.error(error)
-        }
-    }
+    //                 console.log(token)
+    //                 reRoute('/')
+
+    //             })
+    //     } catch (error) {
+    //         console.error(error)
+    //     }
+    // }
     return (
         <>
-            <button onClick={SignInWithGoogle}>Sign In With Google</button>
+            {/* <button onClick={SignInWithGoogle}>Sign In With Google</button> */}
+            <GoogleButton text={text} />
         </>
     )
 }

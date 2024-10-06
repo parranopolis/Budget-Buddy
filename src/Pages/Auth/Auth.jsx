@@ -1,40 +1,10 @@
 import { useState } from "react"
-import { auth, googleProvider } from "../../services/firebaseConfig"
+import { auth, googleProvider } from "../../../services/firebaseConfig"
 import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth"
 import { redirect, useNavigate, Link } from "react-router-dom"
 
-import { SignInWithGoogleComponent } from './../Components/AuthMethods'
+import { SignInWithGoogleComponent } from '../../Components/AuthMethods'
 
-export function Auth() {
-
-    const [email, setEmail] = useState() //crear un contexto global
-    const [password, setPassword] = useState() //crear un contexto global
-
-    const reRoute = useNavigate()
-
-
-    return (
-        <>
-
-            <div>
-                <h1>Log in</h1>
-                <input
-                    placeholder="email... "
-                    onChange={(e) => setEmail(e.target.value)}
-                />
-                <input placeholder="password... "
-                    type="password"
-                    onChange={(e) => setPassword(e.target.value)}
-                />
-                {/* <button onClick={login}>Log in</button> */}
-
-                <button>Create account</button>
-            </div>
-            <SignInWithGoogleComponent />
-            <Link to={'/signIn'}>create account</Link>
-        </>
-    )
-}
 
 export function SignIn() {
     const singIn = async () => {
