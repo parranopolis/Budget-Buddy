@@ -1,24 +1,24 @@
-import { Link, useNavigate } from "react-router-dom"
-import { useState } from "react"
+import { Link, redirect, useNavigate } from "react-router-dom"
+import { useContext, useState } from "react"
 import { buildingBranch } from "../Logic"
 
 import { auth } from "../../services/firebaseConfig"
 import { signOut } from "firebase/auth"
+import { UserContext } from "../Context/Context"
 
 export function ProfileMenu() {
     const [state, setState] = useState('disable')
     var q = window.innerHeight - 70
-    let setDisplay = () => {
-        let add = document.querySelector('#addMovement')
-        add.style.diplay = 'block'
-    }
 
     const reRoute = useNavigate()
+    const { userId, setUserId } = useContext(UserContext)
 
     const logAuth = async () => {
         try {
-            await signOut(auth)
-            reRoute('/login')
+            await signOut(auth).then((result) => {
+                setUserId(null)
+                reRoute('/login')
+            })
         } catch (error) {
             console.error(error)
         }
@@ -28,7 +28,6 @@ export function ProfileMenu() {
         <>
             <section className="profile z-depth-3 col" onClick={e => state != 'is-active' ? setState('is-active') : setState('disable')}>
                 <section className="profileCircle col s1" >
-                    {/* <ion-icon name="person-circle-outline"></ion-icon> */}
                 </section>
             </section>
             <div className={`collection z-depth-3 ${state} profileMenu`}>

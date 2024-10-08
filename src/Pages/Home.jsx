@@ -3,13 +3,18 @@ import '../Styles/main.css'
 import { NavBar, TopNavBar } from "../Components/NavBar"
 import { ProfileMenu } from '../Components/ProfileMenu'
 import { auth } from '../../services/firebaseConfig'
+
+import { useContext } from 'react'
+import { UserContext } from '../Context/Context'
 export function Home() {
 
-    console.log(auth?.currentUser?.displayName)
-
+    const { userId } = useContext(UserContext)
     return (
         <>
             <TopNavBar title='Home' />
+
+            <span>{userId}</span>
+
             <NavBar />
         </>
     )

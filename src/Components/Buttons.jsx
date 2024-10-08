@@ -1,40 +1,25 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import { auth, googleProvider } from '../../services/firebaseConfig'
 import '../Styles/components/Buttons.css'
 import '../Styles/main.css'
 
 import { useNavigate } from 'react-router-dom'
-import { GoogleAuthProvider, getAuth, signInWithPopup, signInWithRedirect, getRedirectResult } from 'firebase/auth'
+import { signInWithPopup } from 'firebase/auth'
 
-
-import { Link } from 'react-router-dom'
+import { UserContext } from '../Context/Context'
 
 export function GoogleButton({ text }) {
-
-    const q = useNavigate()
-
+    const { userId, setUserId } = useContext(UserContext)
     const reRoute = useNavigate()
     const signInWithGoogle = (e) => {
-        e.preventDefault()
         signInWithPopup(auth, googleProvider)
             // getRedirectResult(auth)
             .then((result) => {
-
-                // This gives you a Google Access Token. You can use it to access the Google API.
-                const credential = GoogleAuthProvider.credentialFromResult(result);
-                const token = credential.accessToken;
-                // The signed-in user info.
-                const user = result.user;
-                // IdP data available using getAdditionalUserInfo(result)
-                // ...
-
-                console.log(user.email)
-                q('/')
+                reRoute('/')
             })
 
             .catch((error) => {
                 console.error(error);
-
             })
 
     }
@@ -52,22 +37,6 @@ export function GoogleButton({ text }) {
 
 export function Submit({ text }) {
     return (
-        // <button>{text}</button>
-        <button className="btn waves-effect waves-light blue SubmitButton p-large" type="submit" name="action">{text}</button>
-    )
-}
-
-export function SignIn() {
-
-    return (
-        <button className="btn waves-effect waves-light SubmitButton" type="submit" name="action">Sign in</button>
-
-    )
-}
-
-export function LinkButton({ className }) {
-
-    return (
-        <Link to='/create_account' className={`waves-effect waves-light ${className}`}>Go to</Link>
+        <button className="btn waves-effect waves-light SubmitButton SubmitButton-PrimaryColor p-large" type="submit" name="action">{text}</button>
     )
 }

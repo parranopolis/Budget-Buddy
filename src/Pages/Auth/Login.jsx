@@ -1,30 +1,24 @@
-import { useState } from "react"
+import { useContext, useState } from "react"
 import { useNavigate, Link } from "react-router-dom"
 
 import { UseGoogleAccount } from "../../Components/AuthMethods"
 import { LoginForm } from "../../Components/Forms"
 import '../../Styles/Auth/Login.css'
-import { SignIn, LinkButton } from "../../Components/Buttons"
-
+import { auth } from "../../../services/firebaseConfig"
+import { UserContext } from "../../Context/Context"
 
 export function Login() {
-
     return (
         <>
             <article className="login">
-                <section className="login-logo">
-                    Logo
+                <section className="login-header">
+                    <div className="logo">Logo</div>
+                    <div className="center h3">Sign In to Budget Buddy</div>
                 </section>
-                {/* <section className="formContainer"> */}
                 <section className="login-Form">
-                    <UseGoogleAccount text={'Log in with Google'} />
-
-                    <hr className="divisor" />
-                    <LoginForm link='Forgot my password' path={'password_recovery'} />
-                </section>
-                <section className="login-SignIn">
-
-                    <LinkButton className={'btn SubmitButton p-large '} />
+                    <UseGoogleAccount text={'Continue with Google'} />
+                    <span className="h6 center divisor">OR</span>
+                    <LoginForm />
                 </section>
             </article>
         </>
