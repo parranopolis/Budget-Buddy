@@ -1,8 +1,16 @@
-
+import { PasswordRecoveryForm } from "../../Components/Forms"
 export function PasswordRecovery() {
     return (
         <>
-            <h1>passwordRecovery</h1>
+            <article className="login">
+                <section className="login-header">
+                    <div className="logo">Logo</div>
+                    <div className="center h3">Enter your email to reset password</div>
+                </section>
+                <section className="login-Form">
+                    <PasswordRecoveryForm />
+                </section>
+            </article>
         </>
     )
 }

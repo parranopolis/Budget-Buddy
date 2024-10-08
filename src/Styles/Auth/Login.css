@@ -2,15 +2,17 @@
     display: grid;
     grid-template-rows: auto 1fr;
     height: 95vh;
-    padding-top: 5rem;
+    padding-top: 2rem;
     width: 85%;
     margin: auto;
 }
 
-.login .divisor {
-    width: 60%;
-    margin: 2rem auto;
+.login-Form .divisor {
+    /* width: 60%; */
+    margin-top: 2rem;
 }
+
+
 
 .login .login-Form {
     display: flex;
@@ -18,6 +20,9 @@
     flex-direction: column;
 }
 
-.login .login-logo {
-    text-align: center;
+.login-header .logo {
+    width: 3.5rem;
+    height: 3.5rem;
+    background-color: red;
+    margin-bottom: 2rem;
 }

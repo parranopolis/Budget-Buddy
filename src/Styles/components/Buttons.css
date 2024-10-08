@@ -1,6 +1,6 @@
 .googleButton {
     border: 1px solid black;
-    border-radius: 20rem;
+    border-radius: 1rem;
     padding: 1rem 2rem;
     display: flex;
     gap: .5rem;
@@ -11,4 +11,11 @@
 
 .SubmitButton {
     width: 100%;
+    border-radius: 1rem;
+    /* padding: 1rem 2rem; */
+    /* height: 4rem; */
+}
+
+.SubmitButton-PrimaryColor {
+    background-color: var(--secondary-color);
 }
