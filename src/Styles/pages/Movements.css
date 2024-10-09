@@ -34,3 +34,7 @@
     right: 0;
     z-index: 1;
 }
+
+.formError {
+    color: red;
+}

@@ -13,6 +13,7 @@ import { PasswordRecovery } from './Pages/Auth/PasswordRecovery'
 import { CreateAccount } from './Pages/Auth/CreateAccount'
 import { DailyExpense } from './Pages/Movements'
 import { ProtectedRoute } from './Components/ProtetedRoute'
+import { MovementsHistory } from './Pages/MovementsHistory'
 
 
 const root = createRoot(document.getElementById('root'))
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
       {
         path: 'DailyExpense',
         element: <DailyExpense />
+      },
+      {
+        path: 'movementHistory',
+        element: <MovementsHistory />
       }
     ]
   },
