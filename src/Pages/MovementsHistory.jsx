@@ -25,7 +25,7 @@ export function MovementsHistory() {
     }, [userId, setMonthlyExpense])
     return (
         <>
-            <h1>History</h1>
+            <h1>Records</h1>
             <div>
                 {monthlyExpense != 0 ? monthlyExpense.map((data, index) => {
                     console.log(index)

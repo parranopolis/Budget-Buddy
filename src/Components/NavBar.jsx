@@ -18,7 +18,7 @@ export function NavBar() {
                 <Link onClick={buildingBranch} className="collection-item h6" >Monthly Expense</Link>
             </section>
             <article className='navBar shadow ' style={{ top: `${q}px` }}>
-                <section onClick={buildingBranch} className='h5 navBar-Resume'>Resume</section> {/* Go to Resume View = ? */}
+                <section className='h5 navBar-Resume'><Link to={'/movementHistory'}>Records</Link></section> {/* Go to Resume View = ? */}
                 <section id='addMovement' onClick={e => state != 'is-active' ? setState('is-active') : setState('disable')} className='h5 navBar-NewMovement z-depth-5'> <ion-icon name="add-outline"></ion-icon> </section> {/* this is representated by a + symbol for a new Movement and show a modal with differtents options : Income, Daily Expense, Monthly Expense. */}
                 <section onClick={buildingBranch} className='h5 navBar-Dashboard'>Dashboard</section>  {/* Go to dashboard = Home */}
             </article>
