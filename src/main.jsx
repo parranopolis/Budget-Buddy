@@ -29,13 +29,13 @@ const router = createBrowserRouter([
         element: <Home />
       },
       {
+        path: 'movementHistory',
+        element: <MovementsHistory />
+      },
+      {
         path: 'DailyExpense',
         element: <DailyExpense />
       },
-      {
-        path: 'movementHistory',
-        element: <MovementsHistory />
-      }
     ]
   },
   {

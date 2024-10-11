@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react"
 import { db } from "../../services/firebaseConfig"
 import { getDocs, collection, query, where } from "firebase/firestore"
 import { UserContext } from "../Context/Context"
+import { NavBar, TopNavBar } from "../Components/NavBar"
 
 export function MovementsHistory() {
     const [monthlyExpense, setMonthlyExpense] = useState([])
@@ -25,7 +26,7 @@ export function MovementsHistory() {
     }, [userId, setMonthlyExpense])
     return (
         <>
-            <h1>Records</h1>
+            <TopNavBar title='Records' />
             <div>
                 {monthlyExpense != 0 ? monthlyExpense.map((data, index) => {
                     console.log(index)
@@ -43,6 +44,7 @@ export function MovementsHistory() {
                     )
                 }) : <h4>Nothing here</h4>}
             </div>
+            <NavBar />
         </>
     )
 }
