@@ -1,4 +1,4 @@
-import { useNavigate, Link } from "react-router-dom"
+import { useNavigate, Link, useLocation } from "react-router-dom"
 import { useEffect, useRef, useState, useContext } from 'react'
 import { auth } from "../../services/firebaseConfig"
 import { signOut } from "firebase/auth"
@@ -47,12 +47,17 @@ export function NavBar() {
 }
 
 export function TopNavBar({ title }) {
+    const location = useLocation()
+    let isTitle = title
+    if (location.pathname == '/') {
+        isTitle = <div className="logo">Logo add Logo</div>
+    }
     return (
         <>
             <nav className='TopNavBar z-depth-3 '>
                 <div className="row">
                     <div className='col s10'>
-                        <span className='h3'>{title}</span>
+                        <span className='h3'>{isTitle}</span>
                     </div>
                     <div className='col s2 right'>
                         <ProfileMenu />
@@ -98,17 +103,6 @@ function ProfileMenu() {
                 <Link to="#!" onClick={buildingBranch} className="collection-item profileOptions">Settings</Link>
                 <Link onClick={logAuth} className="collection-item profileOptions">Logout</Link>
             </section>
-        </>
-    )
-}
-
-function AddMovement() {
-
-
-    return (
-        <>
-
-
         </>
     )
 }

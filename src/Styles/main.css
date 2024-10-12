@@ -75,3 +75,10 @@ html {
     /* box-shadow: 4px 9px 22px #414141; */
     box-shadow: 4px 9px 22px var(--dark-color);
 }
+
+.logo {
+    width: 3.5rem;
+    height: 3.5rem;
+    background-color: red;
+    margin-bottom: 2rem;
+}

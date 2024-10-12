@@ -19,10 +19,3 @@
     justify-content: center;
     flex-direction: column;
 }
-
-.login-header .logo {
-    width: 3.5rem;
-    height: 3.5rem;
-    background-color: red;
-    margin-bottom: 2rem;
-}
