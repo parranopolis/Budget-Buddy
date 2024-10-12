@@ -21,7 +21,7 @@ export function NavBar() {
 
 
             <section className={`collection z-depth-3 ${state} movementMenu`} ref={modalReft}>
-                <Link onClick={buildingBranch} className="collection-item h6">Income</Link>
+                <Link className="collection-item h6" to={'/addIncome'}>Income</Link>
                 <Link className="collection-item h6" to={'/DailyExpense'} >Daily Expense</Link>
                 <Link onClick={buildingBranch} className="collection-item h6" >Monthly Expense</Link>
             </section>

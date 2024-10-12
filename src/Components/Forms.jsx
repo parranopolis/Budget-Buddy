@@ -140,3 +140,127 @@ export function SignIn() {
         </section >
     )
 }
+
+export function AddIncomeForm() {
+    return (
+        <>
+            <article className="container">
+                <section className="center">
+                    <br />
+                    <span className="formError">Error Message</span>
+                    <span className="formError">Success Message</span>
+                </section>
+                <section>
+                    <form>
+                        <section className="col">
+                            <div className="row">
+                                <div className="input-field col s12">
+                                    <input
+                                        name='amount'
+                                        type="number"
+                                        pattern="[0-9]*"
+                                        inputMode="decimal"
+                                        id='amount'
+                                        required
+                                        className='validate'
+                                        placeholder="123.45"
+                                    />
+                                    <label className="active" htmlFor='amount'>Amount *</label>
+                                </div>
+                                <div className="input-field col s12">
+                                    <input
+                                        name='date'
+                                        type="date"
+                                        id='date'
+                                        required
+                                        className='validate'
+                                    />
+                                    <label className="active" htmlFor='amount'>Date *</label>
+                                </div>
+                                <div className="input-field col s12">
+                                    <input
+                                        name='from'
+                                        type="text"
+                                        id='from'
+                                        required
+                                        className='validate'
+                                        placeholder="Example: Amazon"
+                                    />
+                                    <label className="active" htmlFor='amount'>From *</label>
+                                </div>
+                                <div className="input-field col s12">
+                                    <input
+                                        name='note'
+                                        type="text"
+                                        id='note'
+                                    />
+                                    <label className="active" htmlFor='amount'>Note </label>
+                                </div>
+                            </div>
+                        </section>
+                        <section>
+                            {/* <button>add persentage</button> */}
+                            <div className="collection">
+                                {/* Los datos vienen de la base de datos, y en base a lo que el usuario ingrese en el formulario, debe actualizarce cada elemento/divison */}
+                                {/* los datos obtenidos seran los porcentajes, en base a eso hacer la matematica */}
+                                <a className="collection-item">
+                                    <span className="badge">D</span>  {/* Delete percentage */}
+                                    <span className="badge">280</span>
+                                    <span className="badge">15%</span>
+                                    Savings
+                                </a>
+                                <a className="collection-item">
+                                    <span className="badge">D</span>  {/* Delete percentage */}
+                                    <span className="badge">120</span>
+                                    <span className="badge">10%</span>
+                                    Investmet
+                                </a>
+                                <a className="collection-item">
+                                    <span className="badge">D</span>  {/* Delete percentage */}
+                                    <span className="badge">890</span>
+                                    <span className="badge">55%</span>
+                                    rest
+                                </a>
+                                <a className="collection-item">
+                                    <span className="new pink lighten-2 badge" data-badge-caption='+'></span>  {/* al dar click en este elemento se debe mostrar el modal para agregar porcentage de division */}
+                                    Add Percentage
+                                </a>
+                            </div>
+                            <div className="row disable"> {/* Modal para agregar porcentage */}
+                                <div className="input-field col s12">
+                                    <input
+                                        name='Category'
+                                        type="text"
+                                        id='Category'
+                                        required
+                                        className='validate'
+                                        placeholder="Food"
+                                    />
+                                    <label className="active" htmlFor='amount'>Category *</label>
+                                </div>
+                                <div className="input-field col s12">
+                                    <input
+                                        name='Percentage'
+                                        type="text"
+                                        id='percentage'
+                                        required
+                                        className='validate'
+                                        placeholder="17%"
+                                    />
+                                    <label className="active" htmlFor='amount'>Percentage *</label>
+                                </div>
+                                <Submit text={'add Division'} />
+                            </div>
+                        </section>
+                        <section>
+                            <Submit text='Add Income' />
+                        </section>
+                    </form>
+                </section>
+                <section>
+
+                </section>
+            </article>
+        </>
+    )
+}
