@@ -1,7 +1,8 @@
 import { useState, useContext } from "react"
 import { useNavigate, Link } from "react-router-dom"
 
-import { auth } from "../../services/firebaseConfig"
+import { auth, db } from "../../services/firebaseConfig"
+import { addDoc, collection } from "firebase/firestore"
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth"
 
 import { UserContext } from "../Context/Context"
@@ -142,34 +143,90 @@ export function SignIn() {
 }
 
 export function AddIncomeForm() {
+
+    const expenseCollectionRef = collection(db, 'monthlyIncome')
+    const { userId } = useContext(UserContext)
+
+    const [formData, setFormData] = useState({
+        amount: '',
+        date: '',
+        from: '',
+        note: '',
+    })
+    const [formError, setFormError] = useState('')
+    const [successMessage, setSuccessMessage] = useState('')
+
+    const handleChange = (e) => {
+        const { name, value } = e.target
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: value
+        }))
+    }
+
+    const sendForm = async (e) => {
+        e.preventDefault()
+
+        const { amount, date, from, note } = formData
+        if (!amount || !date || !from) {
+            setFormError('Please fill in all require fields')
+            return
+        }
+        setFormError('')
+        try {
+            await addDoc(expenseCollectionRef, {
+                uid: userId,
+                amount: Number(amount),
+                date,
+                from,
+                note,
+                time: new Date().toLocaleDateString()
+            })
+            setSuccessMessage('Income Added successfully')
+            setFormData({
+                amount: '',
+                date: '',
+                from: '',
+                note: '',
+            })
+        } catch (error) {
+            console.log(error)
+            setFormError('Failed to add expense. Try again later.')
+        }
+    }
+
     return (
         <>
             <article className="container">
                 <section className="center">
                     <br />
-                    <span className="formError">Error Message</span>
-                    <span className="formError">Success Message</span>
+                    <span className="formError">{formError}</span>
+                    <span className="formSucces">{successMessage}</span>
                 </section>
                 <section>
-                    <form>
+                    <form action="" id="addIncomeForm" onSubmit={sendForm}>
                         <section className="col">
                             <div className="row">
                                 <div className="input-field col s12">
                                     <input
                                         name='amount'
+                                        value={formData.amount}
+                                        onChange={handleChange}
                                         type="number"
                                         pattern="[0-9]*"
                                         inputMode="decimal"
                                         id='amount'
                                         required
                                         className='validate'
-                                        placeholder="123.45"
+                                    // placeholder="123.45"
                                     />
                                     <label className="active" htmlFor='amount'>Amount *</label>
                                 </div>
                                 <div className="input-field col s12">
                                     <input
                                         name='date'
+                                        value={formData.date}
+                                        onChange={handleChange}
                                         type="date"
                                         id='date'
                                         required
@@ -180,11 +237,13 @@ export function AddIncomeForm() {
                                 <div className="input-field col s12">
                                     <input
                                         name='from'
+                                        value={formData.from}
+                                        onChange={handleChange}
                                         type="text"
                                         id='from'
                                         required
                                         className='validate'
-                                        placeholder="Example: Amazon"
+                                    // placeholder="Example: Amazon"
                                     />
                                     <label className="active" htmlFor='amount'>From *</label>
                                 </div>
@@ -192,41 +251,43 @@ export function AddIncomeForm() {
                                     <input
                                         name='note'
                                         type="text"
+                                        value={formData.note}
+                                        onChange={handleChange}
                                         id='note'
                                     />
                                     <label className="active" htmlFor='amount'>Note </label>
                                 </div>
                             </div>
                         </section>
-                        <section>
-                            {/* <button>add persentage</button> */}
+                        {/* <section>
+                             <button>add persentage</button>
                             <div className="collection">
-                                {/* Los datos vienen de la base de datos, y en base a lo que el usuario ingrese en el formulario, debe actualizarce cada elemento/divison */}
-                                {/* los datos obtenidos seran los porcentajes, en base a eso hacer la matematica */}
+                                 Los datos vienen de la base de datos, y en base a lo que el usuario ingrese en el formulario, debe actualizarce cada elemento/divison
+                                {/* los datos obtenidos seran los porcentajes, en base a eso hacer la matematica 
                                 <a className="collection-item">
-                                    <span className="badge">D</span>  {/* Delete percentage */}
+                                    <span className="badge">D</span>  {/* Delete percentage 
                                     <span className="badge">280</span>
                                     <span className="badge">15%</span>
                                     Savings
                                 </a>
                                 <a className="collection-item">
-                                    <span className="badge">D</span>  {/* Delete percentage */}
+                                    <span className="badge">D</span>  {/* Delete percentage
                                     <span className="badge">120</span>
                                     <span className="badge">10%</span>
                                     Investmet
                                 </a>
                                 <a className="collection-item">
-                                    <span className="badge">D</span>  {/* Delete percentage */}
+                                    <span className="badge">D</span>  {/* Delete percentage
                                     <span className="badge">890</span>
                                     <span className="badge">55%</span>
                                     rest
                                 </a>
                                 <a className="collection-item">
-                                    <span className="new pink lighten-2 badge" data-badge-caption='+'></span>  {/* al dar click en este elemento se debe mostrar el modal para agregar porcentage de division */}
+                                    <span className="new pink lighten-2 badge" data-badge-caption='+'></span>  {/* al dar click en este elemento se debe mostrar el modal para agregar porcentage de division
                                     Add Percentage
                                 </a>
                             </div>
-                            <div className="row disable"> {/* Modal para agregar porcentage */}
+                            <div className="row disable">  Modal para agregar porcentage
                                 <div className="input-field col s12">
                                     <input
                                         name='Category'
@@ -236,7 +297,7 @@ export function AddIncomeForm() {
                                         className='validate'
                                         placeholder="Food"
                                     />
-                                    <label className="active" htmlFor='amount'>Category *</label>
+                                    <label className="active" htmlFor='Category'>Category *</label>
                                 </div>
                                 <div className="input-field col s12">
                                     <input
@@ -247,11 +308,11 @@ export function AddIncomeForm() {
                                         className='validate'
                                         placeholder="17%"
                                     />
-                                    <label className="active" htmlFor='amount'>Percentage *</label>
-                                </div>
+                                    <label className="active" htmlFor='Percentage'>Percentage *</label>
+                                </div> 
                                 <Submit text={'add Division'} />
                             </div>
-                        </section>
+                        </section> */}
                         <section>
                             <Submit text='Add Income' />
                         </section>
