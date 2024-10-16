@@ -57,13 +57,16 @@ export function TopNavBar({ title }) {
             <nav className='TopNavBar z-depth-3 '>
                 <div className="row">
                     <div className='col s10'>
-                        <span className='h3'>{isTitle}</span>
+                        <Link to={'/'}>
+                            <span className='h3'>{isTitle}</span>
+                        </Link>
                     </div>
                     <div className='col s2 right'>
                         <ProfileMenu />
                     </div>
                 </div>
             </nav>
+            <br />
         </>
     )
 }

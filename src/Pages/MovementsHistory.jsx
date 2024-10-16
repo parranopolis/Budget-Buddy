@@ -4,7 +4,25 @@ import { getDocs, collection, query, where } from "firebase/firestore"
 import { UserContext } from "../Context/Context"
 import { NavBar, TopNavBar } from "../Components/NavBar"
 
-export function MovementsHistory() {
+import './../Styles/pages/MovementsHistory.css'
+
+export function Records() {
+
+    return (
+        <>
+            <TopNavBar title={'Records'} />
+            <section className="pathRecords">
+                <span className="h5 is-path-active">Income</span>
+                <span className="h5">Expense</span>
+            </section>
+            <ExpenseRecord />
+            <IncomeRecords />
+            <NavBar />
+        </>
+    )
+}
+
+function ExpenseRecord() {
     const [monthlyExpense, setMonthlyExpense] = useState([])
     const expenseCollectionRef = collection(db, 'monthlyExpenses')
     const { userId } = useContext(UserContext)
@@ -26,10 +44,8 @@ export function MovementsHistory() {
     }, [userId, setMonthlyExpense])
     return (
         <>
-            <TopNavBar title='Records' />
             <div>
                 {monthlyExpense != 0 ? monthlyExpense.map((data, index) => {
-                    console.log(index)
                     return (
                         <div key={index}>
                             <div className="h4">{data.store}</div>
@@ -44,7 +60,15 @@ export function MovementsHistory() {
                     )
                 }) : <h4>Nothing here</h4>}
             </div>
-            <NavBar />
         </>
     )
+    // return (<>
+    //     <h1>Expense Records</h1>
+    // </>)
+}
+
+function IncomeRecords() {
+    return (<>
+        <h1>Income Records</h1>
+    </>)
 }

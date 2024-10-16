@@ -13,8 +13,11 @@ import { PasswordRecovery } from './Pages/Auth/PasswordRecovery'
 import { CreateAccount } from './Pages/Auth/CreateAccount'
 import { DailyExpense } from './Pages/Movements'
 import { ProtectedRoute } from './Components/ProtetedRoute'
-import { MovementsHistory } from './Pages/MovementsHistory'
+import { Records } from './Pages/MovementsHistory'
 import { AddIncome } from './Pages/AddIncome'
+import { MonthlyCollectionProvider } from './Context/ExpensesContext'
+import { MonthlyIncomeProvider } from './Context/IncomeContext'
+import { MerchanDetail } from './Components/Records'
 
 
 const root = createRoot(document.getElementById('root'))
@@ -31,7 +34,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'movementHistory',
-        element: <MovementsHistory />
+        element: <Records />
       },
       {
         path: 'DailyExpense',
@@ -40,6 +43,10 @@ const router = createBrowserRouter([
       {
         path: 'addIncome',
         element: <AddIncome />
+      },
+      {
+        path: 'merchanDetail/:id',
+        element: <MerchanDetail />
       }
     ]
   },
@@ -60,7 +67,11 @@ const router = createBrowserRouter([
 root.render(
   <StrictMode>
     <UserProvider>
-      <RouterProvider router={router} />
+      <MonthlyCollectionProvider>
+        <MonthlyIncomeProvider>
+          <RouterProvider router={router} />
+        </MonthlyIncomeProvider>
+      </MonthlyCollectionProvider>
     </UserProvider>
   </StrictMode>,
 )

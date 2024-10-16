@@ -1,0 +1,16 @@
+.pathRecords {
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+
+}
+
+.pathRecords span {
+    /* border: 1px solid; */
+    width: 100%;
+    text-align: center;
+}
+
+.pathRecords .is-path-active {
+    background-color: var(--highlight-color);
+}

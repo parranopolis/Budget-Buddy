@@ -8,21 +8,24 @@ const UID = auth
 
 export const UserProvider = ({ children }) => {
     const [userId, setUserId] = useState('')
+    const [userName, setUserName] = useState('')
 
-    const q = async () => {
+    useEffect(() => {
+        const data = async () => {
 
-        await onAuthStateChanged(auth, (user) => {
-            if (user) {
-                setUserId(user.uid)
-                console.log(userId)
-            } else {
-                console.log('user is signed out')
-            }
-        })
+            await onAuthStateChanged(auth, (user) => {
+                if (user) {
+                    setUserId(user.uid)
+                    setUserName(user.displayName)
+                } else {
+                    console.log('user is signed out')
+                }
+            })
+        }
+        data()
+    }, [])
 
-    }
-
-    return <UserContext.Provider value={{ userId, setUserId }}>
+    return <UserContext.Provider value={{ userId, setUserId, userName, setUserName }}>
         {children}
     </UserContext.Provider>
 }
