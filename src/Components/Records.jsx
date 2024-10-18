@@ -1,6 +1,5 @@
 import { useContext, useEffect, useState } from "react"
 import { Link, useLocation } from "react-router-dom"
-import { doc, getDoc } from "firebase/firestore"
 
 import { monthlyCollectionContext } from "../Context/ExpensesContext"
 import { MonthlyIncomeContext } from "../Context/IncomeContext"
@@ -105,7 +104,7 @@ export function Transactions() {
                 </div>
                 {state.transaction.map((item, index) => {
                     return (
-                        <Link key={index} to={`./MerchanDetail/${item.store}`} state={{ store: item.store }}> {/* Merchan detail */}
+                        <Link key={item.id} to={`./MerchanDetail/${item.store}`} state={{ store: item.store }}> {/* Merchan detail */}
                             <section className="transactionCard">
 
                                 <section className="card-image">

@@ -13,7 +13,7 @@ import { PasswordRecovery } from './Pages/Auth/PasswordRecovery'
 import { CreateAccount } from './Pages/Auth/CreateAccount'
 import { DailyExpense, AddIncome } from './Pages/Movements'
 import { ProtectedRoute } from './Components/ProtetedRoute'
-import { Records } from './Pages/MovementsHistory'
+import { Activity } from './Pages/MovementsHistory'
 import { MonthlyCollectionProvider } from './Context/ExpensesContext'
 import { MonthlyIncomeProvider } from './Context/IncomeContext'
 import { MerchanDetail } from './Components/Records'
@@ -33,7 +33,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'movementHistory',
-        element: <Records />
+        element: <Activity />
       },
       {
         path: 'DailyExpense',

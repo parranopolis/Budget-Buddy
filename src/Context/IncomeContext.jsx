@@ -19,7 +19,10 @@ export const MonthlyIncomeProvider = ({ children }) => {
                 if (userId !== '') {
                     const setQuery = await query(incomeCollectionRef, where('uid', '==', userId));
                     const data = (await getDocs(setQuery))
-                    const incomeData = data.docs.map(item => item.data())
+                    const incomeData = data.docs.map(item => ({
+                        id: item.id,
+                        ...item.data()
+                    }))
                     setMonthlyIncome(incomeData)
                 }
             } catch (error) {

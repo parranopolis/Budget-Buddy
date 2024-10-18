@@ -1,20 +1,14 @@
 import '../Styles/pages/Home.css'
 import '../Styles/main.css'
 import { NavBar, TopNavBar } from "../Components/NavBar"
-// import { ProfileMenu } from '../Components/ProfileMenu'
-import { auth, db } from '../../services/firebaseConfig'
 
-import { buildingBranch } from '../Logic'
-import { useContext, useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useContext } from 'react'
 import { UserContext } from '../Context/Context'
-import { collection } from 'firebase/firestore'
-import { monthlyCollectionContext } from '../Context/ExpensesContext'
-import { MonthlyIncomeContext } from '../Context/IncomeContext'
 import { TotalSum, Transactions } from '../Components/Records'
+
 export function Home() {
 
-    const { userId, userName } = useContext(UserContext)
+    const { userName } = useContext(UserContext)
     return (
         <>
             <TopNavBar title='Home' />

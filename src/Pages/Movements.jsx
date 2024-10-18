@@ -1,9 +1,8 @@
 import '../Styles/pages/Movements.css'
 
 import { NavBar, TopNavBar } from "../Components/NavBar";
-import { Link } from "react-router-dom";
 import { Submit } from "../Components/Buttons";
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 
 import { addDoc, collection } from 'firebase/firestore';
 import { db, auth } from '../../services/firebaseConfig';

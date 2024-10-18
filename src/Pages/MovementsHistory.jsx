@@ -1,51 +1,75 @@
-import { useContext, useEffect, useState } from "react"
+import { useContext, useState } from "react"
 import { db } from "../../services/firebaseConfig"
-import { getDocs, collection, query, where } from "firebase/firestore"
-import { UserContext } from "../Context/Context"
 import { NavBar, TopNavBar } from "../Components/NavBar"
-
+import { MonthlyIncomeContext } from "../Context/IncomeContext"
+import { monthlyCollectionContext } from "../Context/ExpensesContext"
 import './../Styles/pages/MovementsHistory.css'
 
-export function Records() {
+export function Activity() {
+
+    const { monthlyIncome } = useContext(MonthlyIncomeContext)
+    const { monthlyExpense } = useContext(monthlyCollectionContext)
+
+    const [status, setStatus] = useState({
+        category: 'Income'
+    })
+
+    const handleShowCategory = () => {
+        setStatus(prevStatus => ({
+            ...prevStatus,
+            category: prevStatus.category === 'Expense' ? 'Income' : "Expense"
+        }))
+    }
 
     return (
         <>
             <TopNavBar title={'Records'} />
-            <section className="container pathRecords">
-                <span className="h5 is-path-active">Income</span>
-                <span className="h5">Expense</span>
-            </section>
-            <ExpenseRecord />
-            <IncomeRecords />
+            <div className="container">
+                <article>
+                    <section>
+                        <div>
+                            <span>W | </span>
+                            <span>M | </span>
+                            <span>Y | </span>
+                        </div>
+                        <div>
+                            <span>Month 2024</span>
+                        </div>
+                        <div>
+                            <section>
+                                <span>Total: {status.category === 'Income' ? 'Earned' : 'Spent'} in this Period</span>
+                                <br />
+                                <span>$3612</span><span> Total Transaccionses en este periodo: 58</span>
+                            </section>
+                            <section>
+                                charts
+                            </section>
+                        </div>
+                    </section>
+                </article>
+                <hr />
+                <article>
+                    <section>
+                        <span>{status.category}</span>
+                        <br />
+                        <span onClick={handleShowCategory} className="h6" style={{ color: '#f36c9c' }}>Show {status.category === "Income" ? 'Expense' : "Income"}<ion-icon name="chevron-forward-outline"></ion-icon></span>
+
+                    </section>
+                    <section>
+                        {status.category === 'Income' ? <IncomeRecords data={monthlyIncome} /> : <ExpenseRecord data={monthlyExpense} />}
+                    </section>
+                </article>
+            </div>
             <NavBar />
         </>
     )
 }
 
-function ExpenseRecord() {
-    const [monthlyExpense, setMonthlyExpense] = useState([])
-    const expenseCollectionRef = collection(db, 'monthlyExpenses')
-    const { userId } = useContext(UserContext)
-    useEffect(() => {
-        const getExpenseList = async () => {
-            // set the state equual to that data
-            try {
-                if (userId !== '') {
-                    const setQuery = await query(expenseCollectionRef, where('uid', '==', userId))
-                    const data = (await getDocs(setQuery))
-                    const expenseData = data.docs.map(item => item.data())
-                    setMonthlyExpense(expenseData)
-                }
-            } catch (error) {
-                console.log(error)
-            }
-        }
-        getExpenseList()
-    }, [userId, setMonthlyExpense])
+function ExpenseRecord({ data }) {
     return (
         <>
             <div>
-                {monthlyExpense != 0 ? monthlyExpense.map((data, index) => {
+                {data != 0 ? data.map((data, index) => {
                     return (
                         <div key={index}>
                             <div className="h4">{data.store}</div>
@@ -62,13 +86,24 @@ function ExpenseRecord() {
             </div>
         </>
     )
-    // return (<>
-    //     <h1>Expense Records</h1>
-    // </>)
 }
 
-function IncomeRecords() {
-    return (<>
-        <h1>Income Records</h1>
-    </>)
+function IncomeRecords({ data }) {
+    return (
+        <>
+            <div>
+                {data != 0 ? data.map(item => {
+                    return (
+                        <div key={item.id}>
+                            <div>{item.from}</div>
+                            <div>{item.date}</div>
+                            <div>{item.id}</div>
+                            <div>{item.amount}</div>
+                            <hr />
+                        </div>
+                    )
+                }) : <span>no data</span>}
+            </div>
+        </>
+    )
 }

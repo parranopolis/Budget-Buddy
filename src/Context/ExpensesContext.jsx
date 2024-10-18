@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { auth, db } from "../../services/firebaseConfig";
+import { db } from "../../services/firebaseConfig";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { UserContext } from "./Context";
 
@@ -23,7 +23,6 @@ export const MonthlyCollectionProvider = ({ children }) => {
                     }))
                     setMonthlyExpense(expenseData)
                     data.docs.map(i => {
-                        // console.log(i.id)
                     })
                 }
             } catch (error) {
