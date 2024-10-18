@@ -8,6 +8,7 @@ import { useContext, useEffect, useState } from 'react';
 import { addDoc, collection } from 'firebase/firestore';
 import { db, auth } from '../../services/firebaseConfig';
 import { UserContext } from '../Context/Context';
+import { AddIncomeForm } from '../Components/Forms';
 
 
 
@@ -176,3 +177,13 @@ export function DailyExpense() {
         </>
     )
 }
+
+export function AddIncome() {
+    return (
+        <>
+            <TopNavBar title='Add Income' />
+            <AddIncomeForm />
+            <NavBar />
+        </>
+    )
+};

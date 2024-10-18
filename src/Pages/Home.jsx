@@ -18,7 +18,6 @@ export function Home() {
 
     return (
         <>
-            <NavBar />
             <TopNavBar title='Home' />
             <article className='container'>
                 <section>
@@ -29,13 +28,15 @@ export function Home() {
                 <section className='ShortRecords'>  {/*  Records */}
                     <TotalSum className='income' title='Income' collectionRef={'monthlyIncome'} />
                     <TotalSum className='expense' title='Spend' collectionRef={'monthlyExpenses'} />
-                    <section className='activities center h5'>
+                    {/* <section className='activities center h5'>2
                         <Link to={'#'} onClick={buildingBranch}>
                             <span>Monthly Activity</span>
                             <span><ion-icon name="chevron-forward-outline"></ion-icon></span>
-                        </Link>  {/* Monthly Activitie */}
-                    </section>
+                        </Link>  Monthly Activitie
+                    </section> */}
                 </section>
+                <hr />
+                <br />
                 <Transactions />
             </article>
             <NavBar />

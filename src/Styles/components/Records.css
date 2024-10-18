@@ -79,6 +79,7 @@
     justify-content: space-around;
     grid-template-rows: 100%;
     margin-bottom: 1rem;
+    color: black;
 }
 
 .transactionHistory .itemB {

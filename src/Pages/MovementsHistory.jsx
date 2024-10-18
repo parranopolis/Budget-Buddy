@@ -11,7 +11,7 @@ export function Records() {
     return (
         <>
             <TopNavBar title={'Records'} />
-            <section className="pathRecords">
+            <section className="container pathRecords">
                 <span className="h5 is-path-active">Income</span>
                 <span className="h5">Expense</span>
             </section>

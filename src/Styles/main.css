@@ -12,6 +12,10 @@ html {
     font-style: normal;
 }
 
+.container {
+    margin-top: 4rem;
+}
+
 :root {
     --primary-color: #96C7A6;
     --secondary-color: #50AB93;

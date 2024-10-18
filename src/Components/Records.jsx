@@ -84,19 +84,20 @@ export function Transactions() {
 
                 {expenses.map((item) => {
                     return (
-                        <section key={item.id} className="transactionCard">
-                            <section className="card-image">
-                                <img src="#" alt="" />
-                            </section>
-                            <section className="card-title">
-                                <div>
-                                    <span className="h5"><ion-icon name="storefront-outline"></ion-icon> {item.store}</span>
-                                </div>
-                                <div>
-                                    <span><ion-icon name="calendar-number-outline"></ion-icon> {item.date}</span>
-                                </div>
-                            </section>
-                            <Link to={`./MerchanDetail/${item.store}`} state={{ store: item.store }}> {/* Merchan detail */}
+                        <Link key={item.id} to={`./MerchanDetail/${item.store}`} state={{ store: item.store }}> {/* Merchan detail */}
+                            <section className="transactionCard">
+
+                                <section className="card-image">
+                                    <img src="#" alt="" />
+                                </section>
+                                <section className="card-title">
+                                    <div>
+                                        <span className="h5"><ion-icon name="storefront-outline"></ion-icon> {item.store}</span>
+                                    </div>
+                                    <div>
+                                        <span><ion-icon name="calendar-number-outline"></ion-icon> {item.date}</span>
+                                    </div>
+                                </section>
                                 <section className="card-amount">
                                     <div>
                                         <span className="h6 price">$ {item.amount}</span>
@@ -104,8 +105,9 @@ export function Transactions() {
                                     <div>
                                         <ion-icon name="chevron-forward-outline"></ion-icon>
                                     </div>
-                                </section></Link>
-                        </section>
+                                </section>
+                            </section>
+                        </Link>
                     )
                 })}
             </section>
@@ -176,20 +178,22 @@ export function MerchanDetail() {
                     <span className="h4">Transaction History</span>{/* Show all transactions related with ths Company */}
                     {expenses.map(item => {
                         return (
-                            <section className="transactionHistory" key={item.id}>
-                                <div className="itemA">
-                                    <div className=" h6">{item.field}</div>
-                                    <div className=" p-large">{item.date}</div>
-                                </div>
-                                <div className="itemB">
-                                    <div className="h4 price">$ {item.amount}</div>
-                                    <div className="itemB-Actions">
-                                        <span className="h5"><ion-icon name="document-text-outline"></ion-icon></span>
-                                        <span className="h5"><ion-icon name="trash-outline"></ion-icon></span>
-                                        <Link to={'/'}><span className="h5"><ion-icon name="chevron-forward-outline"></ion-icon></span></Link> {/* transaction Detail */}
+                            <Link key={item.id} to={'/transactionDetail'}>
+                                <section className="transactionHistory">
+                                    <div className="itemA">
+                                        <div className=" h6">{item.field}</div>
+                                        <div className=" p-large">{item.date}</div>
                                     </div>
-                                </div>
-                            </section>
+                                    <div className="itemB">
+                                        <div className="h4 price">$ {item.amount}</div>
+                                        <div className="itemB-Actions">
+                                            <span className="h5"><ion-icon name="document-text-outline"></ion-icon></span>
+                                            <span className="h5"><ion-icon name="trash-outline"></ion-icon></span>
+                                            <span className="h5"><ion-icon name="chevron-forward-outline"></ion-icon></span> {/* transaction Detail */}
+                                        </div>
+                                    </div>
+                                </section>
+                            </Link>
                         )
                     })}
                 </article>

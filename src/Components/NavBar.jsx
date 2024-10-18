@@ -11,28 +11,53 @@ import '../Styles/main.css'
 import useOutsideClick from "../Logic/modal"
 
 export function NavBar() {
-    const [state, setState] = useState('disable')
+    const [modalState, setModalState] = useState('disable')
+
+    const [navBarState, setNavBarState] = useState('')
+
+    const [lastScrollY, setLastScrollY] = useState(0)
 
     const modalReft = useRef(null)
-    useOutsideClick(modalReft, () => setState('disable'))
-    var q = window.innerHeight - 70
+
+    const handleScroll = () => {
+
+        const currentScrollY = window.scrollY
+
+        if (currentScrollY > lastScrollY && currentScrollY > 100) {
+            setNavBarState('disable')
+        } else if (currentScrollY < lastScrollY) {
+            setNavBarState('')
+        }
+
+        setLastScrollY(currentScrollY)
+    }
+
+
+    useEffect(() => {
+        window.addEventListener('scroll', handleScroll)
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll)
+        }
+
+    }, [lastScrollY])
+    useOutsideClick(modalReft, () => setModalState('disable'))
+
     return (
         <>
-
-
-            <section className={`collection z-depth-3 ${state} movementMenu`} ref={modalReft}>
+            <section className={`collection z-depth-3 ${modalState} movementMenu`} ref={modalReft}>
                 <Link className="collection-item h6" to={'/addIncome'}>Income</Link>
                 <Link className="collection-item h6" to={'/DailyExpense'} >Daily Expense</Link>
                 <Link onClick={buildingBranch} className="collection-item h6" >Monthly Expense</Link>
             </section>
             {/* <AddMovement /> */}
-            <article className='navBar shadow  z-depth-3' style={{ top: `${q}px` }}>
+            <article className={`navBar shadow z-depth-3 ${navBarState}`}>
                 <section className='h5 navBar-Dashboard'>
                     <Link to={'/'}>Home</Link>{/* Go to dashboard = Home */}
                 </section>
                 <section
                     id='addMovement'
-                    onClick={e => state != 'is-active' ? setState('is-active') : setState('disable2')}
+                    onClick={e => modalState != 'is-active' ? setModalState('is-active') : setModalState('disable')}
                     className='h5 navBar-NewMovement z-depth-5'
                 >
                     <ion-icon name="add-outline"></ion-icon>
@@ -50,7 +75,7 @@ export function TopNavBar({ title }) {
     const location = useLocation()
     let isTitle = title
     if (location.pathname == '/') {
-        isTitle = <div className="logo">Logo add Logo</div>
+        isTitle = <div className="logo" style={{ color: 'black' }}></div>
     }
     return (
         <>

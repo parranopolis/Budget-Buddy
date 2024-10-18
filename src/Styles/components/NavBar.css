@@ -6,6 +6,7 @@
     background-color: var(--dark-color);
     height: 5rem;
     position: fixed;
+    z-index: 5;
     top: 90%;
     width: 100%;
     color: white;
@@ -27,7 +28,7 @@
 
 .movementMenu {
     width: 100%;
-    padding: 0 3rem;
+    /* padding: 0 3rem; */
     position: fixed;
     top: 12rem;
     text-align: center;
@@ -39,8 +40,13 @@
 
 .disable {
     display: none;
+    transition: 1s ease-out;
 }
+
+
 
 .TopNavBar {
     background-color: var(--primary-color);
+    position: fixed;
+    z-index: 1;
 }
