@@ -4,7 +4,6 @@ import { doc, getDoc } from "firebase/firestore"
 
 import { monthlyCollectionContext } from "../Context/ExpensesContext"
 import { MonthlyIncomeContext } from "../Context/IncomeContext"
-
 import './../Styles/components/Records.css'
 import { NavBar, TopNavBar } from "./NavBar"
 import { db } from "../../services/firebaseConfig"
@@ -47,13 +46,21 @@ export function TotalSum({ title, collectionRef }) {
 
 export function Transactions() {
     const { monthlyExpense } = useContext(monthlyCollectionContext)
-    const [month, setMonth] = useState('')
-    const [expenses, setExpenses] = useState([])
+    const { monthlyIncome } = useContext(MonthlyIncomeContext)
+
+    const [state, setState] = useState({
+        month: '',
+        transaction: [],
+        category: 'Income'
+    })
+
     const currentMonth = new Date().getMonth()
     const currentYear = new Date().getFullYear()
 
     useEffect(() => {
-        const filteredData = monthlyExpense.filter(entry => { // Modified this to filter throw a prop array of object 
+        const data = state.category === 'Expense' ? monthlyExpense : monthlyIncome
+
+        const filteredData = data.filter(entry => { // Modified this to filter throw a prop array of object 
             if (entry.date) {
                 const entryDate = new Date(entry.date)
                 const entryMonth = entryDate.getMonth()
@@ -72,19 +79,33 @@ export function Transactions() {
             const dateB = new Date(b.date)
             return dateB - dateA
         })
-        setMonth(getMonthName)
-        setExpenses(sortedData)
 
-    }, [monthlyExpense])
+        setState(prevState => ({
+            ...prevState,
+            month: getMonthName(),
+            transaction: sortedData
+        }))
+    }, [monthlyExpense, monthlyIncome, state.category, currentMonth])
+
+    const handleShowCategory = (e) => {
+        setState(prevState => ({
+            ...prevState,
+            category: prevState.category === 'Expense' ? 'Income' : 'Expense'
+        }))
+    }
 
     return (
         <>
             <section>
-                <span className='h5'>Latest transactions of {month}</span>
-
-                {expenses.map((item) => {
+                <div>
+                    <span className='h4'>Latest {state.category === 'Income' ? "Income" : 'Expense'} of {state.month}</span>
+                    <br />
+                    <span onClick={handleShowCategory} className="h6" style={{ color: '#f36c9c' }}>Show {state.category === "Income" ? 'Expense' : "Income"}<ion-icon name="chevron-forward-outline"></ion-icon></span>
+                    <br />
+                </div>
+                {state.transaction.map((item, index) => {
                     return (
-                        <Link key={item.id} to={`./MerchanDetail/${item.store}`} state={{ store: item.store }}> {/* Merchan detail */}
+                        <Link key={index} to={`./MerchanDetail/${item.store}`} state={{ store: item.store }}> {/* Merchan detail */}
                             <section className="transactionCard">
 
                                 <section className="card-image">
@@ -92,7 +113,7 @@ export function Transactions() {
                                 </section>
                                 <section className="card-title">
                                     <div>
-                                        <span className="h5"><ion-icon name="storefront-outline"></ion-icon> {item.store}</span>
+                                        <span className="h5"><ion-icon name="storefront-outline"></ion-icon> {state.category === 'Income' ? item.from : item.store}</span>
                                     </div>
                                     <div>
                                         <span><ion-icon name="calendar-number-outline"></ion-icon> {item.date}</span>

@@ -10,12 +10,11 @@ import { Link } from 'react-router-dom'
 import { UserContext } from '../Context/Context'
 import { collection } from 'firebase/firestore'
 import { monthlyCollectionContext } from '../Context/ExpensesContext'
+import { MonthlyIncomeContext } from '../Context/IncomeContext'
 import { TotalSum, Transactions } from '../Components/Records'
 export function Home() {
 
     const { userId, userName } = useContext(UserContext)
-    const { monthlyExpense } = useContext(monthlyCollectionContext)
-
     return (
         <>
             <TopNavBar title='Home' />
