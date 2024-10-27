@@ -112,3 +112,52 @@
 .totalCompanyExpense {
     border-top: 1px solid var(--dark-color);
 }
+
+/* ------------ Activity ------------ */
+
+.transactionList {
+    border-bottom: 1px solid var(--highlight-color);
+    margin: 1rem auto;
+}
+
+.transactionList a {
+    color: var(--dark-color);
+}
+
+.transactionList div {
+    margin: auto 1.2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-bottom: .5rem;
+}
+
+section .period {
+    background-color: var(--dark-color);
+    color: white;
+    border-radius: 10px;
+    width: 60%;
+    margin: auto;
+    /* padding: 0 1rem; */
+    font-weight: 500;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+section .period span {
+    /* border-right: 1px solid; */
+    padding: .3rem 1rem;
+    display: block;
+    width: 33%;
+}
+
+section .period span:last-child {
+    border: none;
+}
+
+.isActive {
+    background-color: var(--highlight-color);
+    color: var(--dark-color);
+    border-radius: 10px;
+    font-weight: 700;
+}

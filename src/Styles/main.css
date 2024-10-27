@@ -33,7 +33,6 @@ html {
     --p-small: 0.694rem;
 }
 
-
 /* ----------- paragraph ----------- */
 .p-small {
     font-size: var(--p-small);

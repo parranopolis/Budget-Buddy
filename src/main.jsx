@@ -5,7 +5,7 @@ import {
   RouterProvider,
 } from 'react-router-dom'
 
-import { UserProvider } from './Context/Context'
+import { TimeProvider, UserProvider } from './Context/Context'
 
 import { Home } from './Pages/Home'
 import { Login } from './Pages/Auth/Login'
@@ -68,7 +68,9 @@ root.render(
     <UserProvider>
       <MonthlyCollectionProvider>
         <MonthlyIncomeProvider>
-          <RouterProvider router={router} />
+          <TimeProvider>
+            <RouterProvider router={router} />
+          </TimeProvider>
         </MonthlyIncomeProvider>
       </MonthlyCollectionProvider>
     </UserProvider>

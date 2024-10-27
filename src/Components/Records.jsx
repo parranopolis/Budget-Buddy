@@ -5,13 +5,11 @@ import { monthlyCollectionContext } from "../Context/ExpensesContext"
 import { MonthlyIncomeContext } from "../Context/IncomeContext"
 import './../Styles/components/Records.css'
 import { NavBar, TopNavBar } from "./NavBar"
-import { db } from "../../services/firebaseConfig"
 
 export function TotalSum({ title, collectionRef }) {
     const { monthlyIncome } = useContext(MonthlyIncomeContext)
     const { monthlyExpense } = useContext(monthlyCollectionContext)
     const [totalAmount, setTotalAmount] = useState(0)
-    const q = [monthlyExpense, monthlyIncome]
 
     const calcTotal = (collectionName) => {
         const total = collectionName.reduce((sum, entry) => {
@@ -50,7 +48,7 @@ export function Transactions() {
     const [state, setState] = useState({
         month: '',
         transaction: [],
-        category: 'Income'
+        category: 'Expense'
     })
 
     const currentMonth = new Date().getMonth()
