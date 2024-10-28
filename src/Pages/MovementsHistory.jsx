@@ -145,7 +145,9 @@ function DataList({ data, category }) {
             {data != 0 ? data.map(data => {
                 return (
                     <div key={data.id} className="transactionList">
-                        <Link to={'/'}>
+                        {/* <Link to={`/transactionDetail/:${data.id}`}> */}
+                        <Link to={`/MerchanDetail/${data.store}`} state={{ store: data.store }}> {/* Merchan detail */}
+
                             <div className="itemA">
                                 <span className="h4">{category === 'Income' ? data.from : data.store}</span>
                                 <span className="h5 price">${data.amount} <ion-icon name="chevron-forward-outline"></ion-icon></span>

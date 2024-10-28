@@ -1,10 +1,13 @@
 import { useContext, useEffect, useState } from "react"
 import { Link, useLocation } from "react-router-dom"
 
+import { doc, deleteDoc, getDoc } from 'firebase/firestore'
+
 import { monthlyCollectionContext } from "../Context/ExpensesContext"
 import { MonthlyIncomeContext } from "../Context/IncomeContext"
 import './../Styles/components/Records.css'
 import { NavBar, TopNavBar } from "./NavBar"
+import { db } from "../../services/firebaseConfig"
 
 export function TotalSum({ title, collectionRef }) {
     const { monthlyIncome } = useContext(MonthlyIncomeContext)
@@ -175,6 +178,7 @@ export function MerchanDetail() {
         setTotalSpend(number)
         setMonth(getMonthName)
         setExpenses(merchanDataList)
+        console.log(merchanDataList)
     }, [monthlyExpense])
 
     return (
@@ -196,22 +200,20 @@ export function MerchanDetail() {
                     <span className="h4">Transaction History</span>{/* Show all transactions related with ths Company */}
                     {expenses.map(item => {
                         return (
-                            <Link key={item.id} to={'/transactionDetail'}>
-                                <section className="transactionHistory">
-                                    <div className="itemA">
-                                        <div className=" h6">{item.field}</div>
-                                        <div className=" p-large">{item.date}</div>
+                            // <Link key={item.id} to={'/transactionDetail'}>
+                            <section key={item.id} className="transactionHistory">
+                                <div className="itemA">
+                                    <div className=" h6">{item.field}</div>
+                                    <div className=" p-large">{item.date}</div>
+                                </div>
+                                <div className="itemB">
+                                    <div className="h4 price">$ {item.amount}</div>
+                                    <div className="itemB-Actions">
+                                        <Actions item={item} />
                                     </div>
-                                    <div className="itemB">
-                                        <div className="h4 price">$ {item.amount}</div>
-                                        <div className="itemB-Actions">
-                                            <span className="h5"><ion-icon name="document-text-outline"></ion-icon></span>
-                                            <span className="h5"><ion-icon name="trash-outline"></ion-icon></span>
-                                            <span className="h5"><ion-icon name="chevron-forward-outline"></ion-icon></span> {/* transaction Detail */}
-                                        </div>
-                                    </div>
-                                </section>
-                            </Link>
+                                </div>
+                            </section>
+                            // </Link>
                         )
                     })}
                 </article>
@@ -220,11 +222,31 @@ export function MerchanDetail() {
                     <div className="h4 price">${totalSpend}</div>
                 </aside>
             </div >
+
             <NavBar />
         </>
     )
 }
-
+// monthlyExpenses
+function Actions({ item }) {
+    console.log(item)
+    const onDelete = async (e) => {
+        // const q = await doc(db, 'id', item.id)
+        const w = doc(db, 'monthlyExpenses', item.id)
+        const q = await deleteDoc(w)
+        // console.log(q.data())
+    }
+    return (
+        <>
+            <span>{item.id}</span>
+            <span className="h5"><ion-icon name="document-text-outline"></ion-icon></span>
+            <span onClick={onDelete} className="h5"><ion-icon name="trash-outline"></ion-icon></span>
+            <Link to={'/transactionDetail'}>
+                <span className="h5"><ion-icon name="chevron-forward-outline"></ion-icon></span>
+            </Link>
+        </>
+    )
+}
 
 {/* <article className="review">
                     <section>

@@ -17,6 +17,7 @@ import { Activity } from './Pages/MovementsHistory'
 import { MonthlyCollectionProvider } from './Context/ExpensesContext'
 import { MonthlyIncomeProvider } from './Context/IncomeContext'
 import { MerchanDetail } from './Components/Records'
+import { TransactionDetail } from './Pages/TransactionDetail'
 
 
 const root = createRoot(document.getElementById('root'))
@@ -46,6 +47,10 @@ const router = createBrowserRouter([
       {
         path: 'merchanDetail/:id',
         element: <MerchanDetail />
+      },
+      {
+        path: 'transactionDetail/:id',
+        element: <TransactionDetail />
       }
     ]
   },
