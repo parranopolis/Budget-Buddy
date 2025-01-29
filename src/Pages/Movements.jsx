@@ -1,6 +1,6 @@
 import '../Styles/pages/Movements.css'
 
-import { NavBar, TopNavBar } from "../Components/NavBar";
+import { NavBar, NavBarTest, TopNavBar } from "../Components/NavBar";
 import { Submit } from "../Components/Buttons";
 import { useContext, useState } from 'react';
 
@@ -172,7 +172,8 @@ export function DailyExpense() {
                     </form>
                 </section>
             </article>
-            <NavBar />
+            {/* <NavBar /> */}
+            <NavBarTest />
         </>
     )
 }
@@ -182,7 +183,8 @@ export function AddIncome() {
         <>
             <TopNavBar title='Add Income' />
             <AddIncomeForm />
-            <NavBar />
+            {/* <NavBar /> */}
+            <NavBarTest />
         </>
     )
 };

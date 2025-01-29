@@ -20,6 +20,7 @@ export function NavBar() {
     const modalReft = useRef(null)
 
     const handleScroll = () => {
+        console.log('asdas')
 
         const currentScrollY = window.scrollY
 
@@ -43,30 +44,29 @@ export function NavBar() {
     }, [lastScrollY])
     useOutsideClick(modalReft, () => setModalState('disable'))
 
+
+    const reRoute = useNavigate()
+    const { userId, setUserId } = useContext(UserContext)
+    const logAuth = async () => {
+        try {
+            await signOut(auth).then((result) => {
+                setUserId(null)
+                reRoute('/login')
+            })
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
+
     return (
         <>
-            <section className={`collection z-depth-3 ${modalState} movementMenu`} ref={modalReft}>
-                <Link className="collection-item h6" to={'/addIncome'}>Income</Link>
-                <Link className="collection-item h6" to={'/DailyExpense'} >Daily Expense</Link>
-                <Link onClick={buildingBranch} className="collection-item h6" >Monthly Expense</Link>
+            <section className={`navBar shadow z-depth-3 ${navBarState}`}>
+                <div><Link to={'/'}><ion-icon name="home-outline"></ion-icon></Link></div>
+                <div><Link to={'/movementHistory'}><ion-icon name="stats-chart-outline"></ion-icon></Link></div>
+                {/* <div><Link><ion-icon name="person-outline"></ion-icon></Link></div> */}
+                <div><Link onClick={logAuth}><ion-icon name="log-out-outline"></ion-icon></Link></div>
             </section>
-            {/* <AddMovement /> */}
-            <article className={`navBar shadow z-depth-3 ${navBarState}`}>
-                <section className='h5 navBar-Dashboard'>
-                    <Link to={'/'}>Home</Link>{/* Go to dashboard = Home */}
-                </section>
-                <section
-                    id='addMovement'
-                    onClick={e => modalState != 'is-active' ? setModalState('is-active') : setModalState('disable')}
-                    className='h5 navBar-NewMovement z-depth-5'
-                >
-                    <ion-icon name="add-outline"></ion-icon>
-                    {/* this is representated by a + symbol for a new Movement and show a modal with differtents options : Income, Daily Expense, Monthly Expense. */}
-                </section>
-                <section className='h5 navBar-Resume'>
-                    <Link to={'/movementHistory'}>Records</Link>{/* Go to Resume View = ? */}
-                </section>
-            </article>
         </>
     )
 }
@@ -134,3 +134,52 @@ function ProfileMenu() {
         </>
     )
 }
+
+export function NavBarTest() {
+    const reRoute = useNavigate()
+    const { userId, setUserId } = useContext(UserContext)
+    const logAuth = async () => {
+        try {
+            await signOut(auth).then((result) => {
+                setUserId(null)
+                reRoute('/login')
+            })
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
+    return (
+        <>
+            <section className="navBar shadow z-depth-3">
+                <div><Link to={'/'}><ion-icon name="home-outline"></ion-icon></Link></div>
+                <div><Link to={'/movementHistory'}><ion-icon name="stats-chart-outline"></ion-icon></Link></div>
+                {/* <div><Link><ion-icon name="person-outline"></ion-icon></Link></div> */}
+                <div><Link onClick={logAuth}><ion-icon name="log-out-outline"></ion-icon></Link></div>
+            </section>
+        </>
+    )
+}
+
+// <section className={`collection z-depth-3 ${modalState} movementMenu`} ref={modalReft}>
+//                 <Link className="collection-item h6" to={'/addIncome'}>Income</Link>
+//                 <Link className="collection-item h6" to={'/DailyExpense'} >Daily Expense</Link>
+//                 <Link onClick={buildingBranch} className="collection-item h6" >Monthly Expense</Link>
+//             </section>
+//             {/* <AddMovement /> */}
+//             <article className={`navBar shadow z-depth-3 ${navBarState}`}>
+//                 <section className='h5 navBar-Dashboard'>
+//                     <Link to={'/'}>Home</Link>{/* Go to dashboard = Home */}
+//                 </section>
+//                 <section
+//                     id='addMovement'
+//                     onClick={e => modalState != 'is-active' ? setModalState('is-active') : setModalState('disable')}
+//                     className='h5 navBar-NewMovement z-depth-5'
+//                 >
+//                     <ion-icon name="add-outline"></ion-icon>
+//                     {/* this is representated by a + symbol for a new Movement and show a modal with differtents options : Income, Daily Expense, Monthly Expense. */}
+//                 </section>
+//                 <section className='h5 navBar-Resume'>
+//                     <Link to={'/movementHistory'}>Records</Link>{/* Go to Resume View = ? */}
+//                 </section>
+//             </article>

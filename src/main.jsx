@@ -69,15 +69,14 @@ const router = createBrowserRouter([
 ])
 
 root.render(
-  <StrictMode>
-    <UserProvider>
-      <MonthlyCollectionProvider>
-        <MonthlyIncomeProvider>
-          <TimeProvider>
-            <RouterProvider router={router} />
-          </TimeProvider>
-        </MonthlyIncomeProvider>
-      </MonthlyCollectionProvider>
-    </UserProvider>
-  </StrictMode>,
+
+  <UserProvider>
+    <MonthlyCollectionProvider>
+      <MonthlyIncomeProvider>
+        <TimeProvider>
+          <RouterProvider router={router} />
+        </TimeProvider>
+      </MonthlyIncomeProvider>
+    </MonthlyCollectionProvider>
+  </UserProvider>
 )

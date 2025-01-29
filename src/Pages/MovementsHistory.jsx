@@ -5,7 +5,7 @@ import { monthlyCollectionContext } from "../Context/ExpensesContext"
 import { TimeContext } from "../Context/Context"
 import { MonthlyIncomeContext } from "../Context/IncomeContext"
 
-import { NavBar, TopNavBar } from "../Components/NavBar"
+import { NavBar, NavBarTest, TopNavBar } from "../Components/NavBar"
 
 import { filterDataBy, TotalSum2 } from "../Logic/functions"
 
@@ -134,7 +134,8 @@ export function Activity() {
                     </section>
                 </article>
             </div>
-            <NavBar />
+            {/* <NavBar /> */}
+            <NavBarTest />
         </>
     )
 }

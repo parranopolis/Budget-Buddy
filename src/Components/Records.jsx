@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react"
+import { useContext, useEffect, useRef, useState } from "react"
 import { Link, useLocation } from "react-router-dom"
 
 import { doc, deleteDoc, getDoc } from 'firebase/firestore'
@@ -9,31 +9,31 @@ import './../Styles/components/Records.css'
 import { NavBar, TopNavBar } from "./NavBar"
 import { db } from "../../services/firebaseConfig"
 
-export function TotalSum({ title, collectionRef }) {
+export function TotalSum({ title, collectionRef, date = 'test' }) {
     const { monthlyIncome } = useContext(MonthlyIncomeContext)
     const { monthlyExpense } = useContext(monthlyCollectionContext)
     const [totalAmount, setTotalAmount] = useState(0)
 
-    const calcTotal = (collectionName) => {
-        const total = collectionName.reduce((sum, entry) => {
-            return sum + (typeof entry.amount === 'string' ? parseFloat(entry.amount) : entry.amount)
+    // const calcTotal = (collectionName) => {
+    //     const total = collectionName.reduce((sum, entry) => {
+    //         return sum + (typeof entry.amount === 'string' ? parseFloat(entry.amount) : entry.amount)
 
-        }, 0)
-        return total.toFixed(2)
-    }
-
+    //     }, 0)
+    //     return total.toFixed(2)
+    // }
     useEffect(() => {
-
         let total = 0
-
         if (collectionRef === 'monthlyIncome') {
-            total = calcTotal(monthlyIncome)
+            total = monthlyIncome
+                .filter((element) => element.date === date)
+                .reduce((acc, element) => acc + parseFloat(element.amount), 0);
         } else if (collectionRef === 'monthlyExpenses') {
-            total = calcTotal(monthlyExpense)
+            total = monthlyExpense
+                .filter((element) => element.date === date)
+                .reduce((acc, element) => acc + parseFloat(element.amount), 0);
         }
         setTotalAmount(total)
-
-    }, [monthlyIncome, monthlyExpense, collectionRef])
+    }, [monthlyExpense, monthlyIncome, collectionRef])
     return (
         <>
             <section className="box">
@@ -44,47 +44,60 @@ export function TotalSum({ title, collectionRef }) {
     )
 }
 
-export function Transactions() {
+export function Transactions({ date }) {
     const { monthlyExpense } = useContext(monthlyCollectionContext)
     const { monthlyIncome } = useContext(MonthlyIncomeContext)
 
     const [state, setState] = useState({
-        month: '',
+        date: '',
         transaction: [],
         category: 'Expense'
     })
-
+    const [element, setElement] = useState([])
     const currentMonth = new Date().getMonth()
     const currentYear = new Date().getFullYear()
 
     useEffect(() => {
         const data = state.category === 'Expense' ? monthlyExpense : monthlyIncome
-
-        const filteredData = data.filter(entry => { // Modified this to filter throw a prop array of object 
-            if (entry.date) {
-                const entryDate = new Date(entry.date)
-                const entryMonth = entryDate.getMonth()
-                const entryYear = entryDate.getFullYear()
-
-                return entryMonth === currentMonth && entryYear === currentYear
+        // console.log(date)
+        // console.log(data)
+        let filterElement = []
+        data.forEach(element => {
+            if (element.date === date) {
+                filterElement.push(element)
             }
-            return false
-        })
+        });
+        // console.log(filterElement)
+        // const filteredData = data.filter(entry => { // Modified this to filter throw a prop array of object 
+        //     if (entry.date) {
+        //         const entryDate = new Date(entry.date)
+        //         const entryMonth = entryDate.getMonth()
+        //         const entryYear = entryDate.getFullYear()
+
+        //         return entryMonth === currentMonth && entryYear === currentYear
+        //     }
+        //     return false
+        // })
         const getMonthName = () => {
             const date = new Date(currentYear, currentMonth, 2)
             return date.toLocaleDateString('en-US', { month: "long" })
         }
-        const sortedData = filteredData.sort((a, b) => {
-            const dateA = new Date(a.date)
-            const dateB = new Date(b.date)
-            return dateB - dateA
-        })
+        // const sortedData = filteredData.sort((a, b) => {
+        //     const dateA = new Date(a.date)
+        //     const dateB = new Date(b.date)
+        //     return dateB - dateA
+        // })
+        setElement(filterElement)
+        let q = new Date()
+
 
         setState(prevState => ({
             ...prevState,
-            month: getMonthName(),
-            transaction: sortedData
+            date: q.toDateString(),
+            transaction: filterElement
         }))
+
+
     }, [monthlyExpense, monthlyIncome, state.category, currentMonth])
 
     const handleShowCategory = (e) => {
@@ -93,17 +106,20 @@ export function Transactions() {
             category: prevState.category === 'Expense' ? 'Income' : 'Expense'
         }))
     }
-
     return (
         <>
             <section>
                 <div>
-                    <span className='h4'>Latest {state.category === 'Income' ? "Income" : 'Expense'} of {state.month}</span>
+                    <span className='h3'>Resent Activity:</span>
+                    <br />
+                    <span className="h5">{state.date}</span>
+                    {/* <span className='h4'>Resent Activity: {state.category === 'Income' ? "Income" : 'Expense'} </span> */}
+                    {/* of {state.month}</span> */}
                     <br />
                     <span onClick={handleShowCategory} className="h6" style={{ color: '#f36c9c' }}>Show {state.category === "Income" ? 'Expense' : "Income"}<ion-icon name="chevron-forward-outline"></ion-icon></span>
                     <br />
                 </div>
-                {state.transaction.map((item, index) => {
+                {state.transaction.map((item) => {
                     return (
                         <Link key={item.id} to={`./MerchanDetail/${item.store}`} state={{ store: item.store }}> {/* Merchan detail */}
                             <section className="transactionCard">
@@ -178,7 +194,7 @@ export function MerchanDetail() {
         setTotalSpend(number)
         setMonth(getMonthName)
         setExpenses(merchanDataList)
-        console.log(merchanDataList)
+        // console.log(merchanDataList)
     }, [monthlyExpense])
 
     return (
@@ -229,7 +245,6 @@ export function MerchanDetail() {
 }
 // monthlyExpenses
 function Actions({ item }) {
-    console.log(item)
     const onDelete = async (e) => {
         // const q = await doc(db, 'id', item.id)
         const w = doc(db, 'monthlyExpenses', item.id)

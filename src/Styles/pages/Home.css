@@ -1,0 +1,48 @@
+.action {
+    /* border: 1px solid red; */
+}
+
+.action div {
+    display: flex;
+    justify-content: space-around;
+    /* height: 5rem; */
+    /* width: 5rem; */
+    /* border: 1px solid blue; */
+}
+
+.action div .options {
+    height: 8rem;
+    width: 11rem;
+}
+
+div.options {
+    /* border: 1px solid red; */
+    color: black;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: .5rem;
+    align-items: center;
+
+}
+
+div.options .optionIcon>* {
+    height: 2rem;
+    width: 2rem;
+}
+
+a.first div.options {
+    /* a div.options:first-child { */
+    /* background-color: var(--secondary-color); */
+    background-color: rgb(133, 197, 133);
+}
+
+a.second div.options {
+    background-color: var(--highlight-color);
+}
+
+div.options:nth-child(3) {
+    background-color: rgb(160, 160, 255);
+
+}
