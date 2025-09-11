@@ -1,10 +1,7 @@
-import { auth, googleProvider } from "../../services/firebaseConfig"
-import { signInWithPopup, GoogleAuthProvider } from "firebase/auth"
 
 import { GoogleButton } from "./Buttons"
 
 export function UseGoogleAccount({ text }) {
-
     // const SignInWithGoogle = async () => {
     //     try {
     //         await signInWithPopup(auth, googleProvider)

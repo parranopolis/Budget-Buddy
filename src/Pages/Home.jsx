@@ -1,8 +1,8 @@
 import '../Styles/pages/Home.css'
 import '../Styles/main.css'
-import { NavBar, NavBarTest, TopNavBar } from "../Components/NavBar"
+import { NavBar, TopNavBar } from "../Components/NavBar"
 
-import { useContext, useEffect, useRef, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { UserContext } from '../Context/Context'
 import { TotalSum, Transactions } from '../Components/Records'
 import { Link } from 'react-router-dom'
@@ -12,8 +12,8 @@ export function Home() {
     const [date, setDate] = useState('')
     const { userName } = useContext(UserContext)
 
-    const getDate = new Date()
     useEffect(() => {
+        const getDate = new Date()
 
         const year = getDate.getFullYear()
         const month = String(getDate.getMonth() + 1).padStart(2, '0')
@@ -21,11 +21,11 @@ export function Home() {
         setDate(`${year}-${month}-${day}`)
         // setDate('2024-11-03')
 
-    }, [getDate])
+    }, [])
 
     return (
         <>
-            <TopNavBar title='Home' />
+            <TopNavBar title={'Home'} />
             <article className='container'>
                 <section>
                     <span className='h3' >Hi {userName}</span>

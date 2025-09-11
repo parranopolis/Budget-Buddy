@@ -18,11 +18,12 @@ import { MonthlyCollectionProvider } from './Context/ExpensesContext'
 import { MonthlyIncomeProvider } from './Context/IncomeContext'
 import { MerchanDetail } from './Components/Records'
 import { TransactionDetail } from './Pages/TransactionDetail'
+import { TestingComponent } from './Components/TestingComponent'
 
 
 const root = createRoot(document.getElementById('root'))
-
-const user = false
+// actualizar el estado luego de hacer cambios en el ingreso o egreso de dinero
+// const user = false
 const router = createBrowserRouter([
   {
     path: '/',
@@ -51,6 +52,10 @@ const router = createBrowserRouter([
       {
         path: 'transactionDetail/:id',
         element: <TransactionDetail />
+      },
+      {
+        path:'testing',
+        element: <TestingComponent/>
       }
     ]
   },

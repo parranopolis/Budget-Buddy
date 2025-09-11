@@ -1,23 +1,23 @@
 import { useNavigate, Link, useLocation } from "react-router-dom"
-import { useEffect, useRef, useState, useContext } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { auth } from "../../services/firebaseConfig"
 import { signOut } from "firebase/auth"
 
 import { buildingBranch } from '../Logic'
-import { UserContext } from "../Context/Context"
+// import { UserContext } from "../Context/Context"
 
 import '../Styles/components/NavBar.css'
 import '../Styles/main.css'
 import useOutsideClick from "../Logic/modal"
 
 export function NavBar() {
-    const [modalState, setModalState] = useState('disable')
+    // const [modalState, setModalState] = useState('disable')
 
     const [navBarState, setNavBarState] = useState('')
 
     const [lastScrollY, setLastScrollY] = useState(0)
 
-    const modalReft = useRef(null)
+    // const modalReft = useRef(null)
 
     const handleScroll = () => {
         console.log('asdas')
@@ -42,15 +42,16 @@ export function NavBar() {
         }
 
     }, [lastScrollY])
-    useOutsideClick(modalReft, () => setModalState('disable'))
+    // useOutsideClick(modalReft, () => setModalState('disable'))
 
 
     const reRoute = useNavigate()
-    const { userId, setUserId } = useContext(UserContext)
+    // const { userId, setUserId } = useContext(UserContext)
     const logAuth = async () => {
         try {
-            await signOut(auth).then((result) => {
-                setUserId(null)
+            await signOut(auth).then(() => {
+                // setUserId(null)
+                
                 reRoute('/login')
             })
         } catch (error) {
@@ -71,9 +72,10 @@ export function NavBar() {
     )
 }
 
-export function TopNavBar({ title }) {
+export function TopNavBar(title) {
     const location = useLocation()
-    let isTitle = title
+    let isTitle = title.title
+
     if (location.pathname == '/') {
         isTitle = <div className="logo" style={{ color: 'black' }}></div>
     }
@@ -102,14 +104,14 @@ function ProfileMenu() {
     const modalReft = useRef(null)
 
     const reRoute = useNavigate()
-    const { userId, setUserId } = useContext(UserContext)
+    // const { userId, setUserId } = useContext(UserContext)
 
     useOutsideClick(modalReft, () => setState('disable'))
 
     const logAuth = async () => {
         try {
-            await signOut(auth).then((result) => {
-                setUserId(null)
+            await signOut(auth).then(() => {
+                // setUserId(null)
                 reRoute('/login')
             })
         } catch (error) {
@@ -121,7 +123,7 @@ function ProfileMenu() {
         <>
             <section
                 className="profile z-depth-3 col"
-                onClick={e => state != 'is-active' ? setState('is-active') : setState('disable')}
+                onClick={ () => state != 'is-active' ? setState('is-active') : setState('disable')}
             >
                 <section className="profileCircle col s1" >
                 </section>
@@ -137,11 +139,11 @@ function ProfileMenu() {
 
 export function NavBarTest() {
     const reRoute = useNavigate()
-    const { userId, setUserId } = useContext(UserContext)
+    // const { userId, setUserId } = useContext(UserContext)
     const logAuth = async () => {
         try {
-            await signOut(auth).then((result) => {
-                setUserId(null)
+            await signOut(auth).then(() => {
+                // setUserId(null)
                 reRoute('/login')
             })
         } catch (error) {

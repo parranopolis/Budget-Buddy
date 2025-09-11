@@ -5,7 +5,7 @@ import { monthlyCollectionContext } from "../Context/ExpensesContext"
 import { TimeContext } from "../Context/Context"
 import { MonthlyIncomeContext } from "../Context/IncomeContext"
 
-import { NavBar, NavBarTest, TopNavBar } from "../Components/NavBar"
+import {NavBarTest, TopNavBar } from "../Components/NavBar"
 
 import { filterDataBy, TotalSum2 } from "../Logic/functions"
 
@@ -31,6 +31,7 @@ export function Activity() {
         }))
     }
 
+    // Thank you. What are your strategies for managing and optimizing the rendering of components in a React application, especially when dealing with large lists or complex UI structures?
     const onPeriodState = (e) => {
         setStatus(prevStatus => ({
             ...prevStatus,
@@ -63,10 +64,11 @@ export function Activity() {
     saturdayOfCurrentWeek.setDate(sundayOfCurrentWeek.getDate() + 6)
 
     const q = `${today.toLocaleString('en-US', { month: 'short' })} ${sundayOfCurrentWeek.toLocaleDateString('en-US', { day: '2-digit' })} - ${saturdayOfCurrentWeek.toLocaleDateString('en-US', { day: 'numeric' })}`
-
+            
+//aqui esta el problema -> <TopNavBar title={'Records'} />
     return (
         <>
-            <TopNavBar title={'Records'} />
+            <TopNavBar title='Records' />
             <div className="container">
                 <article>
                     <section>
@@ -140,7 +142,7 @@ export function Activity() {
     )
 }
 
-function DataList({ data, category }) {
+function DataList( {data, category} ) {
     return (
         <>
             {data != 0 ? data.map(data => {
@@ -164,42 +166,84 @@ function DataList({ data, category }) {
         </>
     )
 }
-function ExpenseRecord({ data }) {
-    return (
-        <>
-            {data != 0 ? data.map((data, index) => {
-                return (
-                    <div key={index}>
-                        <div className="h4">{data.store}</div>
-                        <div className="h5">${data.amount}</div>
-                        <div className="p-large">{data.field}</div>
-                        <div className="p-large">{data.date}</div>
-                        <div className="p-large">{data.payMethod}</div>
-                        <div className="p-large">{data.uid}</div>
-                        <hr />
-                    </div>
-                )
-            }) : <h4>Nothing here</h4>}
-        </>
-    )
-}
+// commented to find the issue
+// function ExpenseRecord({ data }) {
+//     return (
+//         <>
+//             {data != 0 ? data.map((data, index) => {
+//                 return (
+//                     <div key={index}>
+//                         <div className="h4">{data.store}</div>
+//                         <div className="h5">${data.amount}</div>
+//                         <div className="p-large">{data.field}</div>
+//                         <div className="p-large">{data.date}</div>
+//                         <div className="p-large">{data.payMethod}</div>
+//                         <div className="p-large">{data.uid}</div>
+//                         <hr />
+//                     </div>
+//                 )
+//             }) : <h4>Nothing here</h4>}
+//         </>
+//     )
+// }
 
-function IncomeRecords({ data }) {
-    return (
-        <>
-            <div>
-                {data != 0 ? data.map(item => {
-                    return (
-                        <div key={item.id}>
-                            <div>{item.from}</div>
-                            <div>{item.date}</div>
-                            <div>{item.id}</div>
-                            <div>{item.amount}</div>
-                            <hr />
-                        </div>
-                    )
-                }) : <span>no data</span>}
-            </div>
-        </>
-    )
-}
+// function IncomeRecords({ data }) {
+//     return (
+//         <>
+//             <div>
+//                 {data != 0 ? data.map(item => {
+//                     return (
+//                         <div key={item.id}>
+//                             <div>{item.from}</div>
+//                             <div>{item.date}</div>
+//                             <div>{item.id}</div>
+//                             <div>{item.amount}</div>
+//                             <hr />
+//                         </div>
+//                     )
+//                 }) : <span>no data</span>}
+//             </div>
+//         </>
+//     )
+// }
+
+
+
+
+// EXAMPLE 1
+// Input:[
+//   {userId: 'U1', timestamp: 2, content: 'Hello'},
+//   {userId: 'U2', timestamp: 3, content: 'Hi'},
+//   {userId: 'U1', timestamp: 6, content: 'How are you'},
+//   {userId: 'U1', timestamp: 4, content: 'Hey'}
+// ]
+// Output:[
+//   {userId: 'U2', timestamp: 3, content: 'Hi'},
+//   {userId: 'U1', timestamp: 6, content: 'How are you'}
+// ]
+// Explanation:Messages from U1 at timestamps 2 and 4 are within 5 seconds, so only the latest (timestamp 4) is kept. Then, that message is also within 5 seconds of the message at timestamp 6, so only the message at 6 remains. U2's message is preserved as it's from a different user.
+// EXAMPLE 2
+// Input:[
+//   {userId: 'U1', timestamp: 1, content: 'Hello'},
+//   {userId: 'U1', timestamp: 10, content: 'World'},
+//   {userId: 'U2', timestamp: 2, content: 'Hi'}
+// ]
+// Output:[
+//   {userId: 'U1', timestamp: 1, content: 'Hello'},
+//   {userId: 'U2', timestamp: 2, content: 'Hi'},
+//   {userId: 'U1', timestamp: 10, content: 'World'}
+// ]
+// Explanation:All messages are kept because U1's messages are more than 5 seconds apart, and U2's message is from a different user.
+// Requirements
+// 1
+// Input will be an array of message objects, each containing userId (string), timestamp (integer), and content (string)
+// 2
+// Messages from the same user within 5 seconds should be consolidated, keeping only the latest one
+// 3
+// Output should be chronologically sorted messages after applying the quiet period rule
+// 4
+// Preserve messages from different users even if they fall within the same time window
+// 5
+// Handle empty input gracefully
+// 6
+// Maintain time complexity of O(n log n) or better

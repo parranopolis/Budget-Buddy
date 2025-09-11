@@ -1,7 +1,7 @@
-import { useContext, useEffect, useRef, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { Link, useLocation } from "react-router-dom"
 
-import { doc, deleteDoc, getDoc } from 'firebase/firestore'
+import { doc, deleteDoc } from 'firebase/firestore'
 
 import { monthlyCollectionContext } from "../Context/ExpensesContext"
 import { MonthlyIncomeContext } from "../Context/IncomeContext"
@@ -54,42 +54,18 @@ export function Transactions({ date }) {
         category: 'Expense'
     })
     const [element, setElement] = useState([])
-    const currentMonth = new Date().getMonth()
-    const currentYear = new Date().getFullYear()
 
     useEffect(() => {
         const data = state.category === 'Expense' ? monthlyExpense : monthlyIncome
-        // console.log(date)
-        // console.log(data)
         let filterElement = []
         data.forEach(element => {
             if (element.date === date) {
                 filterElement.push(element)
             }
         });
-        // console.log(filterElement)
-        // const filteredData = data.filter(entry => { // Modified this to filter throw a prop array of object 
-        //     if (entry.date) {
-        //         const entryDate = new Date(entry.date)
-        //         const entryMonth = entryDate.getMonth()
-        //         const entryYear = entryDate.getFullYear()
 
-        //         return entryMonth === currentMonth && entryYear === currentYear
-        //     }
-        //     return false
-        // })
-        const getMonthName = () => {
-            const date = new Date(currentYear, currentMonth, 2)
-            return date.toLocaleDateString('en-US', { month: "long" })
-        }
-        // const sortedData = filteredData.sort((a, b) => {
-        //     const dateA = new Date(a.date)
-        //     const dateB = new Date(b.date)
-        //     return dateB - dateA
-        // })
         setElement(filterElement)
         let q = new Date()
-
 
         setState(prevState => ({
             ...prevState,
@@ -97,8 +73,7 @@ export function Transactions({ date }) {
             transaction: filterElement
         }))
 
-
-    }, [monthlyExpense, monthlyIncome, state.category, currentMonth])
+    }, [monthlyExpense, monthlyIncome, state.category, setElement])
 
     const handleShowCategory = (e) => {
         setState(prevState => ({
@@ -110,9 +85,9 @@ export function Transactions({ date }) {
         <>
             <section>
                 <div>
-                    <span className='h3'>Resent Activity:</span>
+                    <span className="h3">{state.date}</span>
                     <br />
-                    <span className="h5">{state.date}</span>
+                    <span className='h5'>Resent Activity:</span>
                     {/* <span className='h4'>Resent Activity: {state.category === 'Income' ? "Income" : 'Expense'} </span> */}
                     {/* of {state.month}</span> */}
                     <br />
@@ -276,3 +251,15 @@ function Actions({ item }) {
                         </div>
                     </section>
                 </article>*/}
+
+// console.log(filterElement)
+// const filteredData = data.filter(entry => { // Modified this to filter throw a prop array of object
+//     if (entry.date) {
+//         const entryDate = new Date(entry.date)
+//         const entryMonth = entryDate.getMonth()
+//         const entryYear = entryDate.getFullYear()
+
+//         return entryMonth === currentMonth && entryYear === currentYear
+//     }
+//     return false
+// })

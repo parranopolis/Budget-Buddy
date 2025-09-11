@@ -1,11 +1,7 @@
-import { useContext, useState } from "react"
-import { useNavigate, Link } from "react-router-dom"
 
 import { UseGoogleAccount } from "../../Components/AuthMethods"
 import { LoginForm } from "../../Components/Forms"
 import '../../Styles/Auth/Login.css'
-import { auth } from "../../../services/firebaseConfig"
-import { UserContext } from "../../Context/Context"
 
 export function Login() {
     return (
