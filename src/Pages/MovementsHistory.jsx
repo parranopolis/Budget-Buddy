@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom"
 import { useContext, useEffect, useState } from "react"
-
+import {PropTypes } from 'prop-types'
 import { monthlyCollectionContext } from "../Context/ExpensesContext"
 import { TimeContext } from "../Context/Context"
 import { MonthlyIncomeContext } from "../Context/IncomeContext"
 
-import {NavBarTest, TopNavBar } from "../Components/NavBar"
+import {NavBarTest} from "../Components/NavBar"
 
 import { filterDataBy, TotalSum2 } from "../Logic/functions"
 
@@ -68,10 +68,32 @@ export function Activity() {
 //aqui esta el problema -> <TopNavBar title={'Records'} />
     return (
         <>
-            <TopNavBar title='Records' />
-            <div className="container">
-                <article>
-                    <section>
+        <main className="mx-8 my-8">
+                <h1 className='text-3xl font-medium'>Movement History</h1>
+                <section className="flex flex-col gap-8 mt-4">
+                    <article className="border-Cborder border rounded-lg bg-bg-form px-4 py-2 w-full flex justify-between items-center">
+                        <span className="text-3xl">←</span><span className="text-2xl font-extralight">Today</span><span className="text-3xl">→</span>
+                    </article>
+                    <article className="border-Cborder border rounded-lg bg-bg-form px-4 py-2 w-full flex justify-between text-2xl font-extralight">
+                        <span className="isActive">1W</span>
+                        <span>1M</span>
+                        <span>6M</span>
+                        <span>1Y</span>
+                        <span>5Y</span>
+                    </article>
+                    <article className="w-full bg-[rgba(129_230_217_/_0.43)] h-42 rounded-2xl"></article>
+                    <article className="flex justify-between gap-4">
+                        <div className="w-8 flex flex-col gap-2 my-auto ml-2">
+                            <div className="p-0 m-0 border"></div>
+                            <div className="p-0 m-0 border"></div>
+                            <div className="p-0 m-0 border"></div>
+                        </div>
+                        <div className="border-Cborder border rounded-lg bg-bg-form px-4 py-2 w-full text-center">
+                            Filters
+                        </div>
+                    </article>
+                {/*     filtro de semana, mes, año
+                <section>
                         <div className="center period">
                             <span
                                 id="W"
@@ -97,7 +119,7 @@ export function Activity() {
                         </div>
                         <br />
                         <div>
-                            {/* <span className="h3">{currentMonth} {currentYear}</span> */}
+                            <span className="h3">{currentMonth} {currentYear}</span>
                             {status.period === 'W' ? (
                                 <span className="h3"> {q}</span>
                             ) : status.period === 'M' ? (
@@ -113,56 +135,59 @@ export function Activity() {
                                 <div className='h2 totalAmount'>{status.totalThisPeriod}</div>
                                 <span className="h6">Total Transactions in this period {status.map.length}</span>
                             </section>
-                            {/* <section>
-                                charts
-                            </section> */}
                         </div>
-                    </section>
-                </article>
-                <hr />
-                <br />
-                <article>
-                    <section>
-                        <div>
-                            <span className="h4">{status.category}</span>
-                            <span onClick={handleShowCategory} className="p-large right" style={{ color: '#f36c9c' }}>Show {status.category === "Income" ? 'Expense' : "Income"}<ion-icon name="chevron-forward-outline"></ion-icon></span>
-                        </div>
-                        {/* <div>
-                            <span className="">filter : Category</span>
-                        </div> */}
-                    </section>
-                    <section>
-                        <DataList data={status.map} category={status.category}></DataList>
-                    </section>
-                </article>
-            </div>
+                    </section>  */}
+                </section>
+                <section className="mt-4">
+                    <div className="flex justify-between items-center">
+                        <span className="text-3xl">{status.category}</span>
+                        <span onClick={handleShowCategory} className="p-large right" style={{ color: '#f36c9c' }}>Show {status.category === "Income" ? 'Expense' : "Income"}<ion-icon name="chevron-forward-outline"></ion-icon></span>
+                    </div>
+                    <DataList data={status.map} category={status.category}></DataList>
+                </section>
             {/* <NavBar /> */}
+        </main>
+        <aside>
             <NavBarTest />
+        </aside>
         </>
     )
 }
+DataList.propTypes = {
+      data: PropTypes.array.isRequired,
+      category: PropTypes.string,
+    };
+
 
 function DataList( {data, category} ) {
     return (
         <>
+                <article className="flex flex-col gap-4 mt-8">
+
             {data != 0 ? data.map(data => {
                 return (
-                    <div key={data.id} className="transactionList">
-                        {/* <Link to={`/transactionDetail/:${data.id}`}> */}
-                        <Link to={`/MerchanDetail/${data.store}`} state={{ store: data.store }}> {/* Merchan detail */}
-
-                            <div className="itemA">
-                                <span className="h4">{category === 'Income' ? data.from : data.store}</span>
-                                <span className="h5 price">${data.amount} <ion-icon name="chevron-forward-outline"></ion-icon></span>
-                            </div>
-                            <div className="itemB">
-                                <span className="p-large price">{data.date}</span>
-                                <span className="h6">{data.field}</span>
-                            </div>
-                        </Link>
-                    </div>
+                    <Link key={data.id} to={`/MerchanDetail/${data.store}`} state={{ store: data.store }}> {/* Merchan detail */}
+                        <article className="text-black flex items-center justify-between gap-4 border-2 rounded-3xl p-6">
+                            <div className="flex items-center gap-4 min-w-0 flex-1">
+                                    {/* Avatar / icono */}
+                                    <div className="bg-category rounded-full w-16 h-16 shrink-0" />
+                                    {/* Texto */}
+                                    <div className="flex flex-col min-w-0">
+                                        <span className="text-base font-medium truncate">
+                                            {category === 'Income' ? data.from : data.store}
+                                        </span>
+                                    <span className="text-base font-extralight truncate">{data.date}</span>
+                                    </div>
+                                </div>
+                                {/* Importe */}
+                                <div className="text-right shrink-0">
+                                    <span className="text-xl font-medium">$ {data.amount}</span>
+                                </div>
+                        </article>
+                    </Link>
                 )
             }) : <h4>No data To Show</h4>}
+            </article>
         </>
     )
 }
