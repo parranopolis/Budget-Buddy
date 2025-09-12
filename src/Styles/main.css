@@ -33,9 +33,14 @@ html {
 
 @theme {
   --color-highlight: #96fff1;
+  --color-primary: #38a169;
   --color-main: rgba(56, 161, 105, 0.72);
   --color-accent: #2f855a;
+  --color-bg-form: #f0f0f0;
+  --color-Cborder: #4a5568;
+  --color-category: rgba(149, 153, 151, 0.47);
 }
+
 /* ----------- paragraph ----------- */
 .p-small {
   font-size: var(--p-small);

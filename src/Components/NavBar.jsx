@@ -59,7 +59,6 @@ export function NavBar() {
         }
     }
 
-
     return (
         <>
             <section className={`navBar shadow z-depth-3 ${navBarState}`}>

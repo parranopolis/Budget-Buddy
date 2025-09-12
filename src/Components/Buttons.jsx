@@ -43,6 +43,7 @@ export function GoogleButton({ text }) {
 
 export function Submit({ text }) {
     return (
-        <button className="btn waves-effect waves-light SubmitButton SubmitButton-PrimaryColor p-large" type="submit" name="action">{text}</button>
+        // <button className="btn waves-effect waves-light SubmitButton SubmitButton-PrimaryColor p-large" type="submit" name="action">{text}</button>
+        <button className="bg-primary w-full px-4 py-2 text-white font-medium rounded-lg" type="submit" name="action">{text}</button>
     )
 }

@@ -1,23 +1,38 @@
 import '../Styles/pages/Movements.css'
 
-import { NavBar, NavBarTest, TopNavBar } from "../Components/NavBar";
+import {NavBarTest, TopNavBar } from "../Components/NavBar";
 import { Submit } from "../Components/Buttons";
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 
 import { addDoc, collection } from 'firebase/firestore';
-import { db, auth } from '../../services/firebaseConfig';
+import { db } from '../../services/firebaseConfig';
 import { UserContext } from '../Context/Context';
 import { AddIncomeForm } from '../Components/Forms';
 
-
-
 export function DailyExpense() {
+    // extract info from data base
     const expenseCollectionRef = collection(db, 'monthlyExpenses')
     const { userId } = useContext(UserContext)
+    const [todayDate,setTodayDate] = useState(()=>{
+
+        // Create a new Date object for today
+        const today = new Date();
+
+        // Get year, month, and day
+        const year = today.getFullYear();
+        // Month is 0-indexed, so add 1
+        const month = (today.getMonth() + 1).toString().padStart(2, '0');
+        const day = today.getDate().toString().padStart(2, '0');
+
+        // Format the date as YYYY-MM-DD
+        const formattedDate = `${year}-${month}-${day}`;
+
+        return formattedDate
+    })
 
     const [formData, setFormData] = useState({
         amount: '',
-        date: '',
+        date: todayDate,
         field: '',
         payMethod: '',
         store: '',
@@ -25,7 +40,6 @@ export function DailyExpense() {
     })
     const [formError, setFormError] = useState('')
     const [succesMessage, setSuccessMessage] = useState('')
-
     const handleChange = (e) => {
         const { name, value } = e.target
         setFormData((prevData) => ({
@@ -69,111 +83,123 @@ export function DailyExpense() {
         }
     }
 
-
     return (
         <>
-            <TopNavBar title='Daily Expense' />
-            <article className="container">
-                <div className='center'>
-                    <br />
-                    {formError && <span className='formError'>{formError}</span>}
-                    {succesMessage && <span className='formSucces'>{succesMessage}</span>}
-                </div>
-                <section>
-                    <form action="" id='testForm' className='DailyExpensiveForm' onSubmit={sendForm}>
-                        <section className="authForm col">
-                            <div className="row">
-                                <div className="input-field col s12">
-                                    <input
-                                        name='amount'
-                                        value={formData.amount}
-                                        onChange={handleChange}
-                                        type="number"
-                                        pattern="[0-9]*"
-                                        inputMode="decimal"
-                                        id='amount'
-                                        required
-                                        className='validate'
-                                    />
-                                    <label className="active" htmlFor='amount'>Amount *</label>
-                                </div>
-
-                                <div className="input-field col s12">
-                                    <input
-                                        name='date'
-                                        value={formData.date}
-                                        onChange={handleChange}
-                                        type="date"
-                                        id='date'
-                                        required
-                                        className='validate date'
-                                    />
-                                    <label className="active" htmlFor="date">Date *</label>
-                                </div>
-
-                                <div className="input-field col s12">
-                                    <select
-                                        name='field'
-                                        onChange={handleChange}
-                                        value={formData.field}
-                                        className="browser-default validate"
-                                        required
-                                    >
-                                        <option value="" disabled>
-                                            Field *
-                                        </option>
-                                        <option value="Food">Food</option>
-                                        <option value="Gas">Gas</option>
-                                        <option value="General">General</option>
-                                        <option value="Necesary">Necesary</option>
-                                        <option value="Other">Other</option>
-                                    </select>
-                                </div>
-                                <div className="input-field col s12">
-                                    <select
-                                        name='payMethod'
-                                        value={formData.payMethod}
-                                        onChange={handleChange}
-                                        id='payMethod'
-                                        className="browser-default validate"
-                                    >
-                                        <option value="" disabled>
-                                            Pay method
-                                        </option>
-                                        <option value="Cash">Cash</option>
-                                        <option value="Card">Card</option>
-                                    </select>
-                                </div>
+            {/* <TopNavBar title='Daily Expense' /> */}
+            <main className='mx-8 my-8'>
+                <h3 className='text-3xl font-medium'>Add Expense</h3>
+                
+                <section className="">
+                    <article className='center'>
+                        <br />
+                        {formError && <span className='formError'>{formError}</span>}
+                        {succesMessage && <span className='formSucces'>{succesMessage}</span>}
+                    </article>
+                    <article className=''>
+                        <form action="" id='testForm' className='grid grid-cols-6 gap-4'   onSubmit={sendForm}>
+                             <div className="col-start-1 col-end-6">
+                                <input
+                                    name='amount'
+                                    value={formData.amount}
+                                    onChange={handleChange}
+                                    type="number"
+                                    pattern="[0-9]*"
+                                    inputMode="decimal"
+                                    id='amount'
+                                    required
+                                    className='border-Cborder border rounded-lg bg-bg-form px-4 py-2 w-full'
+                                    placeholder='$ 12,87'
+                                />
+                                <label className="sr-only" htmlFor='amount'>Amount *</label>
                             </div>
-                            <div className="input-field col s12">
+                            <img src="/Scan-Receipt.webp" alt="" className='col-start-6'/>
+                            <div className="col-start-1 col-end-4">
+                                <input
+                                    name='date'
+                                    value={formData.date}
+                                    onChange={handleChange}
+                                    type="date"
+                                    id='date'
+                                    required
+                                    className='text-gray-400 border-Cborder border rounded-lg bg-bg-form px-4 py-2 w-full'
+                                />
+                                <label className="sr-only" htmlFor="date">Date *</label>
+                            </div>
+                            {/* payment method */}
+                            <div className="col-start-4 col-end-7">
+                                <select
+                                    name='payMethod'
+                                    value={formData.payMethod}
+                                    onChange={handleChange}
+                                    id='payMethod'
+                                    className="border-Cborder border rounded-lg bg-bg-form px-4 py-2 w-full text-gray-400"
+                                >
+                                    <option value="Card">Card</option>
+                                    <option value="Cash">Cash</option>
+                                </select>
+                            </div>
+                            {/* Store Name */}
+                            <div className="col-start-1 col-end-7">
                                 <input
                                     name='store'
                                     value={formData.store}
                                     onChange={handleChange}
                                     type="text"
                                     id='store'
+                                    className='border-Cborder border rounded-lg bg-bg-form px-4 py-2 w-full'
+                                    placeholder='Store Name'
                                 />
-                                <label className="active" htmlFor="store">Store</label>
+                                <label className="sr-only" htmlFor="store">Date *</label>
                             </div>
-                            <div className="input-field col s12" onChange={handleChange}>
+                            {/* Categories */}
+                            {/* rgba(149, 153, 151, 0.47) */}
+                            <div className="flex col-start-1 col-end-7 gap-6 overflow-x-auto overscroll-x-contain snap-x snap-mandatory">
+                                <div className='w-18 shrink-0 snap-start h-18 bg-category rounded-full relative'></div>
+                                <div className='w-18 shrink-0 snap-start h-18 bg-category rounded-full relative'></div>
+                                <div className='w-18 shrink-0 snap-start h-18 bg-category rounded-full relative'></div>
+                                <div className='w-18 shrink-0 snap-start h-18 bg-category rounded-full relative'></div>
+                            </div>
+                                
+                                {/* <select
+                                    name='field'
+                                    onChange={handleChange}
+                                    value={formData.field}
+                                    className="browser-default validate"
+                                    required
+                                >
+                                    <option value="" disabled>
+                                        Field *
+                                    </option>
+                                    <option value="Food">Food</option>
+                                    <option value="Gas">Gas</option>
+                                    <option value="General">General</option>
+                                    <option value="Necesary">Necesary</option>
+                                    <option value="Other">Other</option>
+                                </select> */}
+                            {/* Note Segment */}
+                            <div className="col-start-1 col-end-7" onChange={handleChange}>
                                 <textarea
                                     name='note'
                                     value={formData.note}
                                     onChange={handleChange}
                                     id="note"
-                                    className="materialize-textarea"
+                                    className="border-Cborder border rounded-lg bg-bg-form px-4 py-2 w-full"
+                                    placeholder='Additional Notes'
                                 ></textarea>
-                                <label className="active" htmlFor="note">Note</label>
+                                <label className="sr-only" htmlFor="note"></label>
                             </div>
-                            <div onClick={sendForm}>
+                            <div onClick={sendForm} className='col-start-1 col-end-7'>
                                 <Submit text="Send" />
                             </div>
-                        </section >
-                    </form>
+                        </form>
+                    </article>
                 </section>
-            </article>
+            </main>
             {/* <NavBar /> */}
-            <NavBarTest />
+            <aside>
+                <NavBarTest />
+            </aside>
+
         </>
     )
 }

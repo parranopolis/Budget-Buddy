@@ -1,6 +1,6 @@
 import "../Styles/pages/Home.css";
 import "../Styles/main.css";
-import { NavBar, TopNavBar } from "../Components/NavBar";
+import { NavBar } from "../Components/NavBar";
 
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../Context/Context";
