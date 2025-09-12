@@ -36,10 +36,21 @@ export function TotalSum({ title, collectionRef, date = 'test' }) {
     }, [monthlyExpense, monthlyIncome, collectionRef])
     return (
         <>
-            <section className="box">
+        <article className="bg-white flex rounded-2xl p-8 justify-between items-center">
+            <div className="flex flex-col">
+                <span className="text-base font-extralight">Today {title}</span>
+                <span className="text-3xl font-light">$ {totalAmount}</span>
+            </div>
+            <div className="flex flex-col text-center w-28">
+                <span className="text-3xl bg-accent text-white rounded-md">↑83%</span>
+                <span className="font-extralight text-sm">Last Tuesday</span>
+                {/* ↓ */}
+            </div>
+        </article>
+            {/* <section className="box">
                 <div className="h6">Total {title}</div>
                 <div className="h2 totalAmount">${totalAmount}</div>
-            </section>
+            </section> */}
         </>
     )
 }
@@ -83,46 +94,39 @@ export function Transactions({ date }) {
     }
     return (
         <>
-            <section>
-                <div>
-                    <span className="h3">{state.date}</span>
-                    <br />
-                    <span className='h5'>Resent Activity:</span>
+                <article>
+                    {/* <span className="h3">{state.date}</span> */}
+                    <hr className="my-4 text-gray-300" />
+                    <span className='text-3xl font-bold'>Activity</span>
                     {/* <span className='h4'>Resent Activity: {state.category === 'Income' ? "Income" : 'Expense'} </span> */}
                     {/* of {state.month}</span> */}
-                    <br />
-                    <span onClick={handleShowCategory} className="h6" style={{ color: '#f36c9c' }}>Show {state.category === "Income" ? 'Expense' : "Income"}<ion-icon name="chevron-forward-outline"></ion-icon></span>
-                    <br />
-                </div>
+                    {/* <span onClick={handleShowCategory} className="h6" style={{ color: '#f36c9c' }}>Show {state.category === "Income" ? 'Expense' : "Income"}<ion-icon name="chevron-forward-outline"></ion-icon></span> */}
+                </article>
+                <article className="flex flex-col gap-8 mt-8">
                 {state.transaction.map((item) => {
                     return (
                         <Link key={item.id} to={`./MerchanDetail/${item.store}`} state={{ store: item.store }}> {/* Merchan detail */}
-                            <section className="transactionCard">
-
-                                <section className="card-image">
-                                    <img src="#" alt="" />
-                                </section>
-                                <section className="card-title">
-                                    <div>
-                                        <span className="h5"><ion-icon name="storefront-outline"></ion-icon> {state.category === 'Income' ? item.from : item.store}</span>
+                            <article className="text-black flex items-center justify-between gap-4 border-2 rounded-3xl p-6">
+                                <div className="flex items-center gap-4 min-w-0 flex-1">
+                                    {/* Avatar / icono */}
+                                    <div className="bg-highlight rounded-full w-16 h-16 shrink-0" />
+                                    {/* Texto */}
+                                    <div className="flex flex-col min-w-0">
+                                    <span className="text-base font-medium truncate">
+                                        {state.category === 'Income' ? item.from : item.store}
+                                    </span>
+                                    <span className="text-base font-extralight truncate">{item.date}</span>
                                     </div>
-                                    <div>
-                                        <span><ion-icon name="calendar-number-outline"></ion-icon> {item.date}</span>
-                                    </div>
-                                </section>
-                                <section className="card-amount">
-                                    <div>
-                                        <span className="h6 price">$ {item.amount}</span>
-                                    </div>
-                                    <div>
-                                        <ion-icon name="chevron-forward-outline"></ion-icon>
-                                    </div>
-                                </section>
-                            </section>
+                                </div>
+                                {/* Importe */}
+                                <div className="text-right shrink-0">
+                                    <span className="text-xl font-medium">$ {item.amount}</span>
+                                </div>
+                            </article>
                         </Link>
                     )
                 })}
-            </section>
+                </article>
         </>
     )
 }

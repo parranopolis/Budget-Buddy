@@ -1,78 +1,81 @@
-import '../Styles/pages/Home.css'
-import '../Styles/main.css'
-import { NavBar, TopNavBar } from "../Components/NavBar"
+import "../Styles/pages/Home.css";
+import "../Styles/main.css";
+import { NavBar, TopNavBar } from "../Components/NavBar";
 
-import { useContext, useEffect, useState } from 'react'
-import { UserContext } from '../Context/Context'
-import { TotalSum, Transactions } from '../Components/Records'
-import { Link } from 'react-router-dom'
+import { useContext, useEffect, useState } from "react";
+import { UserContext } from "../Context/Context";
+import { TotalSum, Transactions } from "../Components/Records";
+import { Link } from "react-router-dom";
 
 export function Home() {
+  const [date, setDate] = useState("");
+  const { userName } = useContext(UserContext);
 
-    const [date, setDate] = useState('')
-    const { userName } = useContext(UserContext)
+  useEffect(() => {
+    const getDate = new Date();
 
-    useEffect(() => {
-        const getDate = new Date()
+    const year = getDate.getFullYear();
+    const month = String(getDate.getMonth() + 1).padStart(2, "0");
+    const day = String(getDate.getDate()).padStart(2, "0");
+    setDate(`${year}-${month}-${day}`);
+    // setDate('2024-11-03')
+  }, []);
 
-        const year = getDate.getFullYear()
-        const month = String(getDate.getMonth() + 1).padStart(2, '0')
-        const day = String(getDate.getDate()).padStart(2, '0')
-        setDate(`${year}-${month}-${day}`)
-        // setDate('2024-11-03')
-
-    }, [])
-
-    return (
-        <>
-            <TopNavBar title={'Home'} />
-            <article className='container'>
-                <section>
-                    <span className='h3' >Hi {userName}</span>
-
-                    <br />
-                    <br />
-                </section>
-                <section className='ShortRecords'>  {/*  Records */}
-                    {date != '' ? <>
-                        <TotalSum className='income' title='Income' collectionRef={'monthlyIncome'} date={date} />
-                        <TotalSum className='expense' title='Spend' collectionRef={'monthlyExpenses'} date={date} />
-                    </> : ''}
-
-                </section>
-                <hr />
-
-                <section className='action'>
-                    <h4 className='h4'>Actions</h4>
-                    <div>
-                        <Link className='first' to={'/addIncome'}>
-                            <div className='options'>
-                                <span className='optionIcon'><ion-icon name="add-outline"></ion-icon></span>
-                                <span>Income</span>
-                            </div>
-                        </Link>
-                        <Link className='second' to={'/DailyExpense'}>
-                            <div className='options'>
-                                <span className='optionIcon'><ion-icon name="sad-outline"></ion-icon></span>
-                                <span>Outcome</span>
-                            </div>
-                        </Link>
-                        {/* <div className='options'>
-                            <span className='optionIcon'><ion-icon name="calendar-outline"></ion-icon></span>
-                            <span>Monthly</span>
-                        </div> */}
-                    </div>
-                </section>
-                <br />
-                <hr />
-                <br />
-                <Transactions date={date} />
-            </article>
-            <aside>
-                {/* <NavBarTest /> */}
-
-                <NavBar />
-            </aside>
-        </>
-    )
+  return (
+    <>
+      <section className="bg-main py-8 px-8 flex flex-col gap-8 shadow">
+        {/* personal info */}
+        <article className="text-2xl grid grid-cols-[auto,1fr,auto] gap-4 items-center">
+          <div className="bg-white shadow rounded-full w-18 h-18 col-start-1"></div>
+          <span className="bg-white py-4 px-6 rounded-2xl shadow min-w-0 text-center">{userName}</span>
+          <span className="col-start-4">☐</span> 
+        </article>
+        {/*  Records */}
+        <article className="">
+          
+         <TotalSum
+                className="expense"
+                title="Outcome"
+                collectionRef={"monthlyExpenses"}
+                date={date}
+              />
+          {/* {date != "" ? (
+            <>
+              <TotalSum
+                className="income"
+                title="Income"
+                collectionRef={"monthlyIncome"}
+                date={date}
+              />
+              <TotalSum
+                className="expense"
+                title="Spend"
+                collectionRef={"monthlyExpenses"}
+                date={date}
+              />
+            </>
+          ) : (
+            ""
+          )} */}
+        </article>
+        {/* Action Buttons */}
+        <article className="bg-white shadow flex justify-around rounded-2xl mb-4">
+              <Link className="flex flex-col items-center justify-center text-lg bg-highlight m-4 rounded-lg shadow-2xl w-28 h-28" to={"/addIncome"}>                
+                    +<span>Income</span>
+              </Link>
+              <Link className="flex flex-col items-center justify-center text-white text-lg bg-accent m-4 rounded-lg shadow-2xl w-28 h-28" to={"/DailyExpense"}>                
+                    -<span>Outcome</span>
+              </Link>
+         </article>
+      </section>
+      {/* transactions */}
+      <section className="py-8 px-8">
+        <Transactions date={date} />
+      </section>
+      <aside>
+        {/* <NavBarTest /> */}
+        <NavBar />
+      </aside>
+    </>
+  );
 }

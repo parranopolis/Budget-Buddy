@@ -1,87 +1,90 @@
+@import "tailwindcss";
 body,
 html {
-    font-size: 14px;
-    font-family: "Montserrat";
-    font-style: normal;
-    padding: 0;
-    margin: 0;
-    height: 100%;
-    font-family: "Montserrat", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 200;
-    font-style: normal;
+  /* font-size: 14px; */
+  /* font-family: "Montserrat"; */
+  /* font-style: normal; */
+  font-family: "Montserrat", sans-serif;
+  /* font-optical-sizing: auto; */
+  /* font-weight: 200; */
+  /* font-style: normal; */
 }
 
 .container {
-    margin-top: 4rem;
+  /* margin-top: 4rem; */
 }
 
 :root {
-    --primary-color: #96C7A6;
-    --secondary-color: #50AB93;
-    --third-color: #FFFFFF;
-    --highlight-color: #f36c9c;
-    --dark-color: #011537;
-    --h1: 2.986rem;
-    --h2: 2.488rem;
-    --h3: 2.074rem;
-    --h4: 1.728rem;
-    --h5: 1.44rem;
-    --h6: 1.2rem;
-    --p-large: 1rem;
-    --p-medium: 0.883rem;
-    --p-small: 0.694rem;
+  --primary-color: #96c7a6;
+  --secondary-color: #50ab93;
+  --third-color: #ffffff;
+  --highlight-color: #96fff1;
+  --dark-color: #011537;
+  --h1: 2.986rem;
+  --h2: 2.488rem;
+  --h3: 2.074rem;
+  --h4: 1.728rem;
+  --h5: 1.44rem;
+  --h6: 1.2rem;
+  --p-large: 1rem;
+  --p-medium: 0.883rem;
+  --p-small: 0.694rem;
 }
 
+@theme {
+  --color-highlight: #96fff1;
+  --color-main: rgba(56, 161, 105, 0.72);
+  --color-accent: #2f855a;
+}
 /* ----------- paragraph ----------- */
 .p-small {
-    font-size: var(--p-small);
+  font-size: var(--p-small);
 }
 
 .p-medium {
-    font-size: var(--p-medium);
+  font-size: var(--p-medium);
 }
 
 .p-large {
-    font-size: var(--p-large);
+  font-size: var(--p-large);
 }
 
 /* ----------- headings ----------- */
 
 .h1 {
-    font-size: var(--h1);
+  font-size: var(--h1);
 }
 
 .h2 {
-    font-size: var(--h2);
+  font-size: var(--h2);
 }
 
 .h3 {
-    font-size: var(--h3);
+  font-size: var(--h3);
 }
 
 .h4 {
-    font-size: var(--h4);
+  font-size: var(--h4);
 }
 
 .h5 {
-    font-size: var(--h5);
+  font-size: var(--h5);
 }
 
 .h6 {
-    font-size: var(--h6);
+  font-size: var(--h6);
 }
 
 /* ---------- Shadows ----------- */
 
 .shadow {
-    /* box-shadow: 4px 9px 22px #414141; */
-    box-shadow: 4px 9px 22px var(--dark-color);
+  /* box-shadow: 4px 9px 22px #414141; */
+  box-shadow: 4px 9px 22px var(--dark-color);
 }
 
 .logo {
-    width: 3.5rem;
-    height: 3.5rem;
-    background-color: red;
-    margin-bottom: 2rem;
+  width: 3.5rem;
+  height: 3.5rem;
+  background-color: red;
+  margin-bottom: 2rem;
 }
