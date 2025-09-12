@@ -2,7 +2,7 @@ import '../Styles/pages/Movements.css'
 
 import {NavBarTest, TopNavBar } from "../Components/NavBar";
 import { Submit } from "../Components/Buttons";
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 
 import { addDoc, collection } from 'firebase/firestore';
 import { db } from '../../services/firebaseConfig';
@@ -113,6 +113,7 @@ export function DailyExpense() {
                                 <label className="sr-only" htmlFor='amount'>Amount *</label>
                             </div>
                             <img src="/Scan-Receipt.webp" alt="" className='col-start-6'/>
+                            {/* Date */}
                             <div className="col-start-1 col-end-4">
                                 <input
                                     name='date'
@@ -207,7 +208,7 @@ export function DailyExpense() {
 export function AddIncome() {
     return (
         <>
-            <TopNavBar title='Add Income' />
+            {/* <TopNavBar title='Add Income' /> */}
             <AddIncomeForm />
             {/* <NavBar /> */}
             <NavBarTest />

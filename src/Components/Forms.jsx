@@ -15,7 +15,7 @@ export function LoginForm() {
     const [email, setEmail] = useState()
     const [password, setPassword] = useState()
     const [loginError, setloginError] = useState('')
-    const { userId, setUserId } = useContext(UserContext)
+    // const { userId, setUserId } = useContext(UserContext)
     const reRoute = useNavigate()
 
     const logIn = async () => {
@@ -146,10 +146,25 @@ export function AddIncomeForm() {
 
     const expenseCollectionRef = collection(db, 'monthlyIncome')
     const { userId } = useContext(UserContext)
+    const [todayDate] = useState(()=>{
 
+            // Create a new Date object for today
+            const today = new Date();
+
+            // Get year, month, and day
+            const year = today.getFullYear();
+            // Month is 0-indexed, so add 1
+            const month = (today.getMonth() + 1).toString().padStart(2, '0');
+            const day = today.getDate().toString().padStart(2, '0');
+
+            // Format the date as YYYY-MM-DD
+            const formattedDate = `${year}-${month}-${day}`;
+
+            return formattedDate
+        })
     const [formData, setFormData] = useState({
         amount: '',
-        date: '',
+        date: todayDate,
         from: '',
         note: '',
     })
@@ -185,7 +200,7 @@ export function AddIncomeForm() {
             setSuccessMessage('Income Added successfully')
             setFormData({
                 amount: '',
-                date: '',
+                date: todayDate,
                 from: '',
                 note: '',
             })
@@ -197,68 +212,69 @@ export function AddIncomeForm() {
 
     return (
         <>
-            <article className="container">
-                <section className="center">
+        <main className="mx-8 my-8">
+            <h3 className='text-3xl font-medium'>Add Income</h3>
+            <section>
+                <article>
                     <br />
-                    <span className="formError">{formError}</span>
-                    <span className="formSucces">{successMessage}</span>
-                </section>
-                <section>
-                    <form action="" id="addIncomeForm" onSubmit={sendForm}>
-                        <section className="col">
-                            <div className="row">
-                                <div className="input-field col s12">
-                                    <input
-                                        name='amount'
-                                        value={formData.amount}
-                                        onChange={handleChange}
-                                        type="number"
-                                        pattern="[0-9]*"
-                                        inputMode="decimal"
-                                        id='amount'
-                                        required
-                                        className='validate'
-                                    // placeholder="123.45"
-                                    />
-                                    <label className="active" htmlFor='amount'>Amount *</label>
-                                </div>
-                                <div className="input-field col s12">
-                                    <input
-                                        name='date'
-                                        value={formData.date}
-                                        onChange={handleChange}
-                                        type="date"
-                                        id='date'
-                                        required
-                                        className='validate'
-                                    />
-                                    <label className="active" htmlFor='amount'>Date *</label>
-                                </div>
-                                <div className="input-field col s12">
-                                    <input
-                                        name='from'
-                                        value={formData.from}
-                                        onChange={handleChange}
-                                        type="text"
-                                        id='from'
-                                        required
-                                        className='validate'
-                                    // placeholder="Example: Amazon"
-                                    />
-                                    <label className="active" htmlFor='amount'>From *</label>
-                                </div>
-                                <div className="input-field col s12">
-                                    <input
-                                        name='note'
-                                        type="text"
-                                        value={formData.note}
-                                        onChange={handleChange}
-                                        id='note'
-                                    />
-                                    <label className="active" htmlFor='amount'>Note </label>
-                                </div>
-                            </div>
-                        </section>
+                    <span>{formError}</span>
+                    <span>{successMessage}</span>
+                </article>
+                <article>
+                    <form action="" id="addIncomeForm" onSubmit={sendForm}
+                    className="grid grid-cols-6 gap-4">
+                        <div className="col-start-1 col-end-4">
+                            <input
+                                name='amount'
+                                value={formData.amount}
+                                onChange={handleChange}
+                                type="number"
+                                pattern="[0-9]*"
+                                inputMode="decimal"
+                                id='amount'
+                                required
+                                className='border-Cborder border rounded-lg bg-bg-form px-4 py-2 w-full'
+                            placeholder="$ 123.45"
+                            />
+                            <label className="sr-only" htmlFor='amount'>Amount *</label>
+                        </div>
+                        <div className="col-start-4 col-end-7">
+                            <input
+                                name='date'
+                                value={formData.date}
+                                onChange={handleChange}
+                                type="date"
+                                id='date'
+                                required
+                                className='text-gray-400 border-Cborder border rounded-lg bg-bg-form px-4 py-2 w-full'
+                            />
+                            <label className="sr-only" htmlFor='amount'>Date *</label>
+                        </div>
+                        <div className="col-start-1 col-end-7">
+                            <input
+                                name='from'
+                                value={formData.from}
+                                onChange={handleChange}
+                                type="text"
+                                id='from'
+                                required
+                                className='border-Cborder border rounded-lg bg-bg-form px-4 py-2 w-full'
+                                placeholder="Where this money comes from?"
+                            />
+                            <label className="sr-only" htmlFor='amount'>From *</label>
+                        </div>
+                        <div className="col-start-1 col-end-7">
+                            <input
+                                name='note'
+                                type="text"
+                                value={formData.note}
+                                onChange={handleChange}
+                                id='note'
+                                className="border-Cborder border rounded-lg bg-bg-form px-4 py-2 w-full"
+                                placeholder="Additional Notes"
+                            />
+                            <label className="sr-only" htmlFor='amount'>Note </label>
+                        </div>
                         {/* <section>
                              <button>add persentage</button>
                             <div className="collection">
@@ -288,7 +304,7 @@ export function AddIncomeForm() {
                                 </a>
                             </div>
                             <div className="row disable">  Modal para agregar porcentage
-                                <div className="input-field col s12">
+                                <div className="">
                                     <input
                                         name='Category'
                                         type="text"
@@ -313,15 +329,16 @@ export function AddIncomeForm() {
                                 <Submit text={'add Division'} />
                             </div>
                         </section> */}
-                        <section>
-                            <Submit text='Add Income' />
+                        <section className="col-start-1 col-end-7">
+                            <Submit text='Send' />
                         </section>
                     </form>
-                </section>
+                </article>
                 <section>
 
                 </section>
-            </article>
+            </section>
+            </main>
         </>
     )
 }
