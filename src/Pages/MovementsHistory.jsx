@@ -4,6 +4,8 @@ import {PropTypes } from 'prop-types'
 import { monthlyCollectionContext } from "../Context/ExpensesContext"
 import { TimeContext } from "../Context/Context"
 import { MonthlyIncomeContext } from "../Context/IncomeContext"
+// import Chart from 'chart.js/auto'
+import ChartActivity from "../Components/Activity"
 
 import {NavBarTest} from "../Components/NavBar"
 
@@ -65,6 +67,35 @@ export function Activity() {
 
     const q = `${today.toLocaleString('en-US', { month: 'short' })} ${sundayOfCurrentWeek.toLocaleDateString('en-US', { day: '2-digit' })} - ${saturdayOfCurrentWeek.toLocaleDateString('en-US', { day: 'numeric' })}`
             
+
+    async function chart() {
+        const data = [
+        { year: 2010, count: 10 },
+        { year: 2011, count: 20 },
+        { year: 2012, count: 15 },
+        { year: 2013, count: 25 },
+        { year: 2014, count: 22 },
+        { year: 2015, count: 30 },
+        { year: 2016, count: 28 },
+        ];
+
+        new Chart(
+            document.getElementById('acquisitions'),
+            {
+                type: 'bar',
+                data: {
+                labels: data.map(row => row.year),
+                datasets: [
+                    {
+                    label: 'Acquisitions by year',
+                    data: data.map(row => row.count)
+                    }
+                ]
+                }
+            }
+        );    
+    }
+// chart()
 //aqui esta el problema -> <TopNavBar title={'Records'} />
     return (
         <>
@@ -81,13 +112,19 @@ export function Activity() {
                         <span>1Y</span>
                         <span>5Y</span>
                     </article>
-                    <article className="w-full bg-[rgba(129_230_217_/_0.43)] h-42 rounded-2xl"></article>
+                    {/* Charts */}
+                    <article className="w-full bg-[rgba(129_230_217_/_0.43)] h-42 rounded-2xl px-4 pt-2">
+                        {/* <div className="w-full px-4"><canvas id="acquisitions"></canvas></div> */}
+                        <ChartActivity/>
+                    </article>
                     <article className="flex justify-between gap-4">
+                        {/* hamburger menu */}
                         <div className="w-8 flex flex-col gap-2 my-auto ml-2">
                             <div className="p-0 m-0 border"></div>
                             <div className="p-0 m-0 border"></div>
                             <div className="p-0 m-0 border"></div>
                         </div>
+                        {/* Filters Button */}
                         <div className="border-Cborder border rounded-lg bg-bg-form px-4 py-2 w-full text-center">
                             Filters
                         </div>
@@ -150,6 +187,10 @@ export function Activity() {
         <aside>
             <NavBarTest />
         </aside>
+          {/* <!-- <div style="width: 500px;"><canvas id="dimensions"></canvas></div><br/> --> */}
+
+    {/* <!-- <script type="module" src="dimensions.js"></script> --> */}
+            {/* <script type="module" src="acquisitions.js"></script> */}
         </>
     )
 }
