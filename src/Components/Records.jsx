@@ -39,7 +39,7 @@ export function TotalSum({ title, collectionRef, date = 'test' }) {
         <article className="bg-white flex rounded-2xl p-8 justify-between items-center">
             <div className="flex flex-col">
                 <span className="text-base font-extralight">Today {title}</span>
-                <span className="text-3xl font-light">$ {totalAmount}</span>
+                <span className="text-3xl font-light">$ {totalAmount.toFixed(2)}</span>
             </div>
             <div className="flex flex-col text-center w-28">
                 <span className="text-3xl bg-accent text-white rounded-md">↑83%</span>

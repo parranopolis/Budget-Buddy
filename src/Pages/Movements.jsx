@@ -13,6 +13,7 @@ export function DailyExpense() {
     // extract info from data base
     const expenseCollectionRef = collection(db, 'monthlyExpenses')
     const { userId } = useContext(UserContext)
+    const categories = ["General", "Food", "Gas", "Necessary", "Other"];
     const [todayDate,setTodayDate] = useState(()=>{
 
         // Create a new Date object for today
@@ -83,6 +84,20 @@ export function DailyExpense() {
         }
     }
 
+    const handleActiveCategory = (e) =>{
+        const value = e.currentTarget.dataset.value
+        setFormData(prev => ({ ...prev, field: value }));
+         //  console.log(value)
+        //  setFormData((prevData) => ({
+        //      ...prevData,
+        //      'field': value
+        //     }))
+        console.log(value)
+    }
+
+    // const q = document.querySelectorAll('.category')
+
+    // console.log(q[0])
     return (
         <>
             {/* <TopNavBar title='Daily Expense' /> */}
@@ -100,7 +115,7 @@ export function DailyExpense() {
                              <div className="col-start-1 col-end-6">
                                 <input
                                     name='amount'
-                                    value={formData.amount}
+                                    // value={formData.amount}
                                     onChange={handleChange}
                                     type="number"
                                     pattern="[0-9]*"
@@ -149,16 +164,36 @@ export function DailyExpense() {
                                     id='store'
                                     className='border-Cborder border rounded-lg bg-bg-form px-4 py-2 w-full'
                                     placeholder='Store Name'
+
                                 />
                                 <label className="sr-only" htmlFor="store">Date *</label>
                             </div>
                             {/* Categories */}
                             {/* rgba(149, 153, 151, 0.47) */}
                             <div className="flex col-start-1 col-end-7 gap-6 overflow-x-auto overscroll-x-contain snap-x snap-mandatory">
-                                <div className='w-18 shrink-0 snap-start h-18 bg-category rounded-full relative'></div>
-                                <div className='w-18 shrink-0 snap-start h-18 bg-category rounded-full relative'></div>
-                                <div className='w-18 shrink-0 snap-start h-18 bg-category rounded-full relative'></div>
-                                <div className='w-18 shrink-0 snap-start h-18 bg-category rounded-full relative'></div>
+                                {/* <div onClick={handleActiveCategory} className='category w-18 shrink-0 snap-start h-18 bg-category rounded-full relative flex items-center justify-center'>General</div>
+                                <div onClick={handleActiveCategory} className='w-18 shrink-0 snap-start h-18 bg-category rounded-full relative flex items-center justify-center'>Food</div>
+                                <div onClick={handleActiveCategory} className='w-18 shrink-0 snap-start h-18 bg-category rounded-full relative flex items-center justify-center'>Gas</div>
+                                <div onClick={handleActiveCategory} className='w-18 shrink-0 snap-start h-18 bg-category rounded-full relative flex items-center justify-center'>Necesary</div>
+                                <div onClick={handleActiveCategory} className='w-18 shrink-0 snap-start h-18 bg-category rounded-full relative flex items-center justify-center'>Other</div> */}
+                                {categories.map(cat => {
+                                    const isCategodyActive = formData.field === cat
+                                    return (
+                                        <button 
+                                        key={cat}
+                                        type='button'
+                                        data-value={cat}
+                                        onClick={handleActiveCategory}
+                                        className={[
+                                            "w-18 shrink-0 snap-start h-18 rounded-full relative flex items-center justify-center",
+                                            "bg-category",
+                                            isCategodyActive ? "active-category-button ring-4 ring-white/70 shadow-lg scale-105" : "opacity-80 hover:opacity-100"
+                                        ].join(" ")}
+                                        >
+                                            {cat}
+                                        </button>
+                                    )
+                                })}
                             </div>
                                 
                                 {/* <select
