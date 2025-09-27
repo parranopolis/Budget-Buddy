@@ -19,6 +19,7 @@ import { MonthlyIncomeProvider } from './Context/IncomeContext'
 import { MerchanDetail } from './Components/Records'
 import { TransactionDetail } from './Pages/TransactionDetail'
 import { TestingComponent } from './Components/TestingComponent'
+import { Reports } from './Pages/Reports'
 
 
 const root = createRoot(document.getElementById('root'))
@@ -56,6 +57,10 @@ const router = createBrowserRouter([
       {
         path:'testing',
         element: <TestingComponent/>
+      },
+      {
+        path:'reports',
+        element: <Reports/>
       }
     ]
   },

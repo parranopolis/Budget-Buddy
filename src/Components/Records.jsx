@@ -242,6 +242,74 @@ function Actions({ item }) {
     )
 }
 
+// export function DateRange() {
+//     return(
+//         <>
+//             <section className="">
+//                 <article className="border-Cborder border rounded-lg bg-bg-form px-4 py-2 w-full text-center">
+//                     <span className="text-2xl font-extralight">Jul 01 - Jul 07 2025</span>
+//                 </article>            
+                
+//             </section>
+//         </>
+//     )
+// }
+
+//Crear el componente de rango de fecha. Ademas del formato ->  1w,1M,6M,1Y,5Y se debe poder seleccionar el rango de manera custom.
+//   <article className="border-Cborder border rounded-lg bg-bg-form px-4 py-2 w-full flex justify-between text-2xl font-extralight">
+//                         <span className="isActive">1W</span>
+//                         <span>1M</span>
+//                         <span>6M</span>
+//                         <span>1Y</span>
+//                         <span>5Y</span>
+//                     </article>
+
+//Reusarlo en "/reports" y en "/movementHistory"
+
+export function AnalyzedData (){
+
+    return(
+        <>
+        <section className="flex ">
+            <article className="text-8xl">
+                <ion-icon name="stats-chart-outline"></ion-icon>
+            </article>
+            <article className="
+            grid grid-rows-3 grid-flow-col
+            auto-cols-[minmax(8rem,1fr)] 
+            gap-2
+            h-27                            
+            w-full max-w-full
+            overflow-y-auto overflow-x-auto 
+            p-2
+            items-center
+            ">
+                <span>30% Food</span>
+                <span>2% Fun</span>
+                <span>6% Services</span>
+            
+                <span>3% Subcription</span>
+                <span>12% Gas</span>
+                <span>30% Rent</span>
+                <span>30% Rent</span>
+                
+                <span>16% Recurrent</span>
+                <span>5% Health</span>
+                <span>3% Insurance</span>
+                <span>16% Recurrent</span>
+                <span>5% Health</span>
+                <span>3% Insurance</span> 
+                <span>16% Recurrent</span>
+                <span>5% Health</span>
+                <span>3% Insurance</span>
+                
+            </article>
+        </section>
+
+        </>
+    )
+}
+
 {/* <article className="review">
                     <section>
                         <div>

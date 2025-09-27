@@ -151,11 +151,19 @@ export function NavBarTest() {
     }
 
     return (
+        //     <section className="navBar shadow z-depth-3">
+        //     {/* <section className="navBar shadow z-depth-3"> */}
+        //         <div><Link to={'/'}><ion-icon name="home-outline"></ion-icon></Link></div>
+        //         <div><Link to={'/movementHistory'}><ion-icon name="stats-chart-outline"></ion-icon></Link></div>
+        //         {/* <div><Link><ion-icon name="person-outline"></ion-icon></Link></div> */}
+        //         <div><Link onClick={logAuth}><ion-icon name="log-out-outline"></ion-icon></Link></div>
+        //     </section>
         <>
-            <section className="navBar shadow z-depth-3">
-                <div><Link to={'/'}><ion-icon name="home-outline"></ion-icon></Link></div>
+            <section className="bg-NavBar text-white flex justify-around py-8 text-2xl fixed bottom-0 inset-x-0 w-full z-50 ">
+            {/* <section className="navBar shadow z-depth-3"> */}
+                <div><Link className="" to={'/'}><ion-icon name="home-outline"></ion-icon></Link></div>
                 <div><Link to={'/movementHistory'}><ion-icon name="stats-chart-outline"></ion-icon></Link></div>
-                {/* <div><Link><ion-icon name="person-outline"></ion-icon></Link></div> */}
+                <div><Link to={'/reports'}><ion-icon name="analytics-outline"></ion-icon></Link></div>
                 <div><Link onClick={logAuth}><ion-icon name="log-out-outline"></ion-icon></Link></div>
             </section>
         </>

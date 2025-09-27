@@ -39,6 +39,7 @@ html {
     --color-bg-form: #f0f0f0;
     --color-Cborder: #4a5568;
     --color-category: rgba(149, 153, 151, 0.47);
+    --color-NavBar: #011537;
 }
 .active-category-button{
     background-color: rgba(56, 161, 105, 0.52);
