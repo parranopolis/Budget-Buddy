@@ -11,10 +11,6 @@ html {
   /* font-style: normal; */
 }
 
-.container {
-  /* margin-top: 4rem; */
-}
-
 :root {
   --primary-color: #96c7a6;
   --secondary-color: #50ab93;
@@ -32,18 +28,21 @@ html {
   --p-small: 0.694rem;
 }
 @theme {
-    --color-highlight: #96fff1;
-    --color-primary: #38a169;
-    --color-main: rgba(56, 161, 105, 0.72);
-    --color-accent: #2f855a;
-    --color-bg-form: #f0f0f0;
-    --color-Cborder: #4a5568;
-    --color-category: rgba(149, 153, 151, 0.47);
-    --color-NavBar: #011537;
+  --color-highlight: #96fff1;
+  --color-primary: #38a169;
+  --color-main: rgba(56, 161, 105, 0.72);
+  --color-accent: #2f855a;
+  --color-bg-form: #f0f0f0;
+  --color-Cborder: #4a5568;
+  --color-category: rgba(149, 153, 151, 0.47);
+  --color-NavBar: #011537;
 }
-.active-category-button{
-    background-color: rgba(56, 161, 105, 0.52);
+.active-category-button {
+  background-color: rgba(56, 161, 105, 0.52);
+}
 
+.FilterActivated {
+  background: #c1c1c1;
 }
 /* ----------- paragraph ----------- */
 .p-small {
