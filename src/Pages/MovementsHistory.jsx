@@ -107,7 +107,7 @@ export function Activity() {
                     {/* Tienes que sacar el rango de tiempo y en base a eso hacer el fetching de datos. */}
                     {/* osea devolver un rango de fecha para usarlo luego. */}
                     {/* usa un callback para traer los rangos de las fechas. */}
-                    <TimeFrames onChange={handleTimeFrame}/>
+                    <TimeFrames onChange={handleTimeFrame} activeTimeFrame={status.period}/>
                     
                     {/* Charts */}
                     <article className="w-full bg-[rgba(129_230_217_/_0.43)] h-42 rounded-2xl px-4 pt-2">

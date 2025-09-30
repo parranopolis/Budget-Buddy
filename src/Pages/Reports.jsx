@@ -1,6 +1,6 @@
 import { NavBarTest } from "../Components/NavBar";
 import { AnalyzedData } from "../Components/Records";
-import { TimeFrames } from "../Logic/functions";
+import { TimeFrames, TotalSum2 } from "../Logic/functions";
 import { useState, useCallback,useEffect,useContext } from "react";
 import { FilterByCriteria } from "../Logic/functions";
 import { MonthlyIncomeContext } from "../Context/IncomeContext";
@@ -16,8 +16,10 @@ export function Reports (){
     const [status, setStatus] = useState({
         category: 'Expense',
         map: [],                // mapa de datos filtrados listos para la UI
-        period: '1W',
-        totalThisPeriod: 0
+        period: '1M',
+        incomeTotalPeriod: 0,
+        expenseTotalPeriod: 0,
+        totalThisPeriod: 0,
     })
 
      useEffect(() => {
@@ -28,15 +30,27 @@ export function Reports (){
             // const input = filterDataBy([data, status.category, currentMonth, currentYear, status.period])
             // const q = 
             
-            const filteredData = FilterByCriteria(data, status.period)
+            const expense = FilterByCriteria(monthlyExpense, status.period)
+            const income = FilterByCriteria(monthlyIncome, status.period)
+            
 
             setStatus(prevStatus => ({
                 ...prevStatus,
-                map: filteredData,
-                // totalThisPeriod: TotalSum2(input)
+                map: [expense,income],
+                incomeTotalPeriod: TotalSum2(income),
+                expenseTotalPeriod: TotalSum2(expense),
+                // (gastado / ganado) * 100
+
             }))
         }, [monthlyExpense, monthlyIncome, status.category, status.period])
-        
+        const calcPercentage = (a,b) =>{
+            if(a == 0 ){
+                return <span className="text-red-700">No se calcula porcentaje sobre ingreso porque fue ${a}</span>
+            }
+            const result = (b/a) * 100
+            // console.log(b)
+        return <span>Gastaste {result.toFixed(2)}% de tu ingreso total en este peridodo</span>
+        }
         
     const handleTimeFrame = useCallback((frame) => {
         setStatus((s) => ({...s,period:frame}))
@@ -48,30 +62,38 @@ export function Reports (){
         <main className="m-8">
             <h3 className='text-3xl font-medium pb-8'>Analysis</h3>
             <section className="flex flex-col gap-8 mt-4">
-            <TimeFrames onChange={handleTimeFrame}/>
+            <TimeFrames onChange={handleTimeFrame} activeTimeFrame={status.period}/>
                 <article className="w-full bg-[rgba(129_230_217_/_0.43)] h-42 rounded-2xl px-4 pt-2">
-                                                {/* <div className="w-full px-4"><canvas id="acquisitions"></canvas></div> */}
-                                                {/* <ChartActivity/> */}
+                    {/* <div className="w-full px-4"><canvas id="acquisitions"></canvas></div> */}
+                    {/* <ChartActivity/> */}
                 </article>
                 <AnalyzedData/>
                 <article className="flex flex-col gap-4 text-xl font-extralight">
                     <div className="flex justify-between">
-                        <span>Ganado:</span><span>$ 3293,17</span>
+                        <span>Ganado:</span><span>$ {status.incomeTotalPeriod}</span>
                     </div>
+                    {status.incomeTotalPeriod == 0 ? 
                     <div className="flex justify-between">
                         <span>Gastado:</span>
-                        <span>$ 2123,87</span>
-                    </div>
-                    <div className="flex justify-between">
-                        <span>Restante:</span><span>$ 1169,30</span>
-                    </div>
+                        <span>$ {status.expenseTotalPeriod}</span>
+                    </div> : 
+                    <>
+                        <div className="flex justify-between">
+                            <span>Gastado:</span>
+                            <span>$ {status.expenseTotalPeriod}</span>
+                        </div>
+                        <hr />
+                        <div className="flex justify-between">
+                            <span>Restante:</span><span>$ {(status.incomeTotalPeriod - status.expenseTotalPeriod).toFixed(2)}</span>    
+                        </div>
+                    </>
+                    }
                 </article>
                 {/* Este deberia estar completamente al fondo, justo arriba de la barra de navegacion */}
-                <article className="">
-                    En este Periodo Gastaste 30% de tu ingreso neto
+                <article className="text-center text-xl font-medium">
+                    {status.incomeTotalPeriod == 0 && status.expenseTotalPeriod == 0 ? '' : calcPercentage(status.incomeTotalPeriod, status.expenseTotalPeriod) }
                 </article>
             </section>
-            
         </main>
         <aside>
                 <NavBarTest/>

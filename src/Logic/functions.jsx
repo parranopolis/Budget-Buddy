@@ -231,10 +231,10 @@ export function FilterByCriteria(data,criteria){
  * debe ser todo aca para que realmente sea reutilizable y no se sobreescriba codigo en ningun lado relacionado al tema. 
  * 
  */
-export function TimeFrames({onChange}){
+export function TimeFrames({onChange,activeTimeFrame}){
     // const timeFrameOpt = ['W','M','Y']
     const timeFrameOpt = ['1W','1M','6M','1Y','5Y','all']
-    const [active, setActive] = useState(timeFrameOpt[0])
+    const [active, setActive] = useState(activeTimeFrame)
     const baseItem =
     " w-12 text-center rounded-lg px-2 cursor-pointer select-none";
   const activeItem =
@@ -277,6 +277,7 @@ export function TimeFrames({onChange}){
 
 TimeFrames.propTypes = {
     onChange: PropTypes.func.isRequired,
+    activeTimeFrame : PropTypes.string.isRequired
 }
 
 {/* filtro de semana, mes, año  */}
