@@ -1,6 +1,6 @@
-import { useContext, useEffect, useState } from "react"
+import { useContext, useEffect, useState, useRef } from "react"
 import { Link, useLocation } from "react-router-dom"
-
+import PropTypes from 'prop-types'
 import { doc, deleteDoc } from 'firebase/firestore'
 
 import { monthlyCollectionContext } from "../Context/ExpensesContext"
@@ -8,6 +8,11 @@ import { MonthlyIncomeContext } from "../Context/IncomeContext"
 import './../Styles/components/Records.css'
 import { NavBar, TopNavBar } from "./NavBar"
 import { db } from "../../services/firebaseConfig"
+// import { Chart, ArcElement, Tooltip, Legend } from 'chart.js';
+import { Chart } from "chart.js/auto";
+import { DoughnutChart } from "./Activity"
+
+// import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 export function TotalSum({ title, collectionRef, date = 'test' }) {
     const { monthlyIncome } = useContext(MonthlyIncomeContext)
@@ -266,15 +271,48 @@ function Actions({ item }) {
 
 //Reusarlo en "/reports" y en "/movementHistory"
 
-export function AnalyzedData (){
+AnalyzedData.propTypes = {
+    expense : PropTypes.array
+}
 
+// Chart.register(ArcElement, Tooltip, Legend, ChartDataLabels);
+
+
+export function AnalyzedData ({expense}){
+  const [categoryStats, setCategoryStats] = useState([]);
+
+  useEffect(()=> {
+
+        if (!expense || expense.length === 0) return; // corta aquí si aún no hay datos
+
+        // total de todos los gastos
+        const total = expense.reduce((acc, e) => acc + (e.amount || 0), 0);
+
+        // agrupamos por categoría
+        const map = new Map();
+        for (const e of expense) {
+            const cat = e?.field?.trim();
+            if (!cat) continue;
+            const current = map.get(cat) || 0;
+            map.set(cat, current + (e.amount || 0));
+        }
+
+         // convertimos en array con porcentaje
+        const stats = Array.from(map.entries()).map(([cat, sum]) => ({
+            category: cat,
+            amount: sum,
+            percentage: total > 0 ? ((sum / total) * 100).toFixed(1) : 0,
+        }));    
+        setCategoryStats(stats);
+    },[expense])
     return(
         <>
-        <section className="flex ">
+        <section className="">
             <article className="text-8xl">
-                <ion-icon name="stats-chart-outline"></ion-icon>
+                {/* <ion-icon name="stats-chart-outline"></ion-icon> */}
+                <DoughnutChart dataSet={categoryStats}/>
             </article>
-            <article className="
+            {/* <article className="
             grid grid-rows-3 grid-flow-col
             auto-cols-[minmax(8rem,1fr)] 
             gap-2
@@ -284,26 +322,16 @@ export function AnalyzedData (){
             p-2
             items-center
             ">
-                <span>30% Food</span>
-                <span>2% Fun</span>
-                <span>6% Services</span>
-            
-                <span>3% Subcription</span>
-                <span>12% Gas</span>
-                <span>30% Rent</span>
-                <span>30% Rent</span>
-                
-                <span>16% Recurrent</span>
-                <span>5% Health</span>
-                <span>3% Insurance</span>
-                <span>16% Recurrent</span>
-                <span>5% Health</span>
-                <span>3% Insurance</span> 
-                <span>16% Recurrent</span>
-                <span>5% Health</span>
-                <span>3% Insurance</span>
-                
-            </article>
+            {categoryStats.length === 0 ? (
+                <span>No hay datos</span>
+                ) : (
+                categoryStats.map(stat => (
+                    <span key={stat.category}>
+                    {stat.percentage}% {stat.category}
+                    </span>
+                ))
+            )}
+            </article> */}
         </section>
 
         </>

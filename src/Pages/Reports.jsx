@@ -6,10 +6,6 @@ import { FilterByCriteria } from "../Logic/functions";
 import { MonthlyIncomeContext } from "../Context/IncomeContext";
 import { monthlyCollectionContext } from "../Context/ExpensesContext";
 
-
-
-
-
 export function Reports (){
     const { monthlyIncome } = useContext(MonthlyIncomeContext)
     const { monthlyExpense } = useContext(monthlyCollectionContext)
@@ -20,8 +16,9 @@ export function Reports (){
         incomeTotalPeriod: 0,
         expenseTotalPeriod: 0,
         totalThisPeriod: 0,
+        categories: []
     })
-
+    const [q, setQ] = useState(null)
      useEffect(() => {
             // todos los datos separados por categoria "Expense/Income" extraidos de los contextos respectivos
             const data = status.category === 'Expense' ? monthlyExpense : monthlyIncome
@@ -32,13 +29,20 @@ export function Reports (){
             
             const expense = FilterByCriteria(monthlyExpense, status.period)
             const income = FilterByCriteria(monthlyIncome, status.period)
-            
-
+            setQ(expense)
+            const categories = Array.from(
+            new Set(
+                expense
+                .map(e => e?.field?.trim())
+                .filter(Boolean)
+            )
+            );
             setStatus(prevStatus => ({
                 ...prevStatus,
                 map: [expense,income],
                 incomeTotalPeriod: TotalSum2(income),
                 expenseTotalPeriod: TotalSum2(expense),
+                categories : categories
                 // (gastado / ganado) * 100
 
             }))
@@ -63,11 +67,13 @@ export function Reports (){
             <h3 className='text-3xl font-medium pb-8'>Analysis</h3>
             <section className="flex flex-col gap-8 mt-4">
             <TimeFrames onChange={handleTimeFrame} activeTimeFrame={status.period}/>
-                <article className="w-full bg-[rgba(129_230_217_/_0.43)] h-42 rounded-2xl px-4 pt-2">
-                    {/* <div className="w-full px-4"><canvas id="acquisitions"></canvas></div> */}
-                    {/* <ChartActivity/> */}
-                </article>
-                <AnalyzedData/>
+                {/* <article className="w-full bg-[rgba(129_230_217_/_0.43)] h-42 rounded-2xl px-4 pt-2">
+                     <div className="w-full px-4"><canvas id="acquisitions"></canvas></div>
+                     <ChartActivity/>
+                    
+                </article> */}
+                <h4 className="text-center text-xl font-extralight">What you have spent in this period</h4>
+                <AnalyzedData expense={q}/>
                 <article className="flex flex-col gap-4 text-xl font-extralight">
                     <div className="flex justify-between">
                         <span>Ganado:</span><span>$ {status.incomeTotalPeriod}</span>
