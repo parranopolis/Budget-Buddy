@@ -76,7 +76,6 @@ export function Reports (){
                     {/* <div className="w-full px-4"><canvas id="acquisitions"></canvas></div> */}
                     {/* <ChartActivity/>
                 </article> */}
-                <AnalyzedData expense={q}/>
                 <article className="flex flex-col gap-4 text-xl font-extralight">
                     <div className="flex justify-between">
                         <span>Income:</span><span>$ {status.incomeTotalPeriod}</span>
@@ -102,6 +101,8 @@ export function Reports (){
                 <article className="text-center text-xl font-medium">
                     {status.incomeTotalPeriod == 0 && status.expenseTotalPeriod == 0 ? '' : calcPercentage(status.incomeTotalPeriod, status.expenseTotalPeriod) }
                 </article>
+                <AnalyzedData expense={q}/>
+
             </section>
                     }
         </main>
