@@ -69,62 +69,11 @@ export function DoughnutChart({dataSet}){
 	// console.log(dataSet)
 	const canvasRef = useRef(null)
 	const chartRef = useRef(null)
-	const expenses =[
-		{
-			category: "General", // nombre del label
-			amount: 107.2, // dato del label
-			percentage: 8.5
-		},
-		{
-			category: "Food",
-			amount: 55.2,
-			percentage: 4.4
-		},
-		{
-			category: "Other",
-			amount: 735.5,
-			percentage: 58.6
-		},
-		{
-			category: "Gas",
-			amount: 130,
-			percentage: 10.3
-		},
-		{
-			category: "Necessary",
-			amount: 128.22,
-			percentage: 10.2
-		},
-		{
-			category: "Necesary",
-			amount: 100,
-			percentage: 8.0
-		}
-	]
-	// const expenses2 = [
-	// 	{
-	// 		id: '1',
-	// 		field: 'General',
-	// 		amount: 2,
-	// 	},
-	// 	{
-	// 		id: '2',
-	// 		field: 'Comida',
-	// 		amount: 8,
-	// 	},
-	// 	{
-	// 		id: '3',
-	// 		field: 'General',
-	// 		amount: 10,
-	// 	},
-	// ];
-	// const DATA_COUNT = 10;
-	// const NUMBER_CFG = {count: DATA_COUNT, min: 0, max: 100};
 const [data,setData] = useState({
 		labels: [],
 		datasets: [{
 			data: [], // datos que se agregaran
-			label: 'Gastaste %', // nombre del dataSet -> nombre que se muestra cuando se hace click en la parte del circulo
+			label: 'You spent %', // nombre del dataSet -> nombre que se muestra cuando se hace click en la parte del circulo
 			backgroundColor: [ // colores que representan cada categoria
 				'#A8E6CF', // Verde pastel (ahorros)
 				'#DCEDC1', // Verde claro pastel (supermercado)
@@ -193,7 +142,7 @@ const [data,setData] = useState({
 			}
 		}
 		})
-	},[expenses])
+	})
 	return(
 		<>
 			<div className=""> 

@@ -49,11 +49,11 @@ export function Reports (){
         }, [monthlyExpense, monthlyIncome, status.category, status.period])
         const calcPercentage = (a,b) =>{
             if(a == 0 ){
-                return <span className="text-red-700">No se calcula porcentaje sobre ingreso porque fue ${a}</span>
+                return <span className="text-red-700">Percentage on income is not calculated because it was ${a}</span>
             }
             const result = (b/a) * 100
             // console.log(b)
-        return <span>Gastaste {result.toFixed(2)}% de tu ingreso total en este peridodo</span>
+        return <span>You spent {result.toFixed(2)}% of your total income in this period</span>
         }
         
     const handleTimeFrame = useCallback((frame) => {
@@ -76,21 +76,21 @@ export function Reports (){
                 <AnalyzedData expense={q}/>
                 <article className="flex flex-col gap-4 text-xl font-extralight">
                     <div className="flex justify-between">
-                        <span>Ganado:</span><span>$ {status.incomeTotalPeriod}</span>
+                        <span>Income:</span><span>$ {status.incomeTotalPeriod}</span>
                     </div>
                     {status.incomeTotalPeriod == 0 ? 
                     <div className="flex justify-between">
-                        <span>Gastado:</span>
+                        <span>Outcome:</span>
                         <span>$ {status.expenseTotalPeriod}</span>
                     </div> : 
                     <>
                         <div className="flex justify-between">
-                            <span>Gastado:</span>
+                            <span>Outcome:</span>
                             <span>$ {status.expenseTotalPeriod}</span>
                         </div>
                         <hr />
                         <div className="flex justify-between">
-                            <span>Restante:</span><span>$ {(status.incomeTotalPeriod - status.expenseTotalPeriod).toFixed(2)}</span>    
+                            <span>Remaining:</span><span>$ {(status.incomeTotalPeriod - status.expenseTotalPeriod).toFixed(2)}</span>    
                         </div>
                     </>
                     }
