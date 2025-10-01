@@ -18,7 +18,7 @@ export function Reports (){
         totalThisPeriod: 0,
         categories: []
     })
-    const [q, setQ] = useState(null)
+    const [q, setQ] = useState([])
      useEffect(() => {
             // todos los datos separados por categoria "Expense/Income" extraidos de los contextos respectivos
             const data = status.category === 'Expense' ? monthlyExpense : monthlyIncome
@@ -47,12 +47,12 @@ export function Reports (){
 
             }))
         }, [monthlyExpense, monthlyIncome, status.category, status.period])
+        
         const calcPercentage = (a,b) =>{
             if(a == 0 ){
                 return <span className="text-red-700">Percentage on income is not calculated because it was ${a}</span>
             }
             const result = (b/a) * 100
-            // console.log(b)
         return <span>You spent {result.toFixed(2)}% of your total income in this period</span>
         }
         
@@ -65,14 +65,17 @@ export function Reports (){
     <>
         <main className="m-8">
             <h3 className='text-3xl font-medium pb-8'>Analysis</h3>
-            <section className="flex flex-col gap-8 mt-4">
             <TimeFrames onChange={handleTimeFrame} activeTimeFrame={status.period}/>
+            {status.expenseTotalPeriod == 0 && status.incomeTotalPeriod == 0 ? 
+            <div className="text-red-700 text-center text-xl font-medium w-full my-8">
+                <h2 className="text-2xl">There is no data to display <br/>Please change the search criteria.</h2>
+            </div> 
+            :
+            <section className="flex flex-col gap-8 mt-4">
                 {/* <article className="w-full bg-[rgba(129_230_217_/_0.43)] h-42 rounded-2xl px-4 pt-2">
-                     <div className="w-full px-4"><canvas id="acquisitions"></canvas></div>
-                     <ChartActivity/>
-                    
+                    {/* <div className="w-full px-4"><canvas id="acquisitions"></canvas></div> */}
+                    {/* <ChartActivity/>
                 </article> */}
-                <h4 className="text-center text-xl font-extralight">What you have spent in this period</h4>
                 <AnalyzedData expense={q}/>
                 <article className="flex flex-col gap-4 text-xl font-extralight">
                     <div className="flex justify-between">
@@ -100,6 +103,7 @@ export function Reports (){
                     {status.incomeTotalPeriod == 0 && status.expenseTotalPeriod == 0 ? '' : calcPercentage(status.incomeTotalPeriod, status.expenseTotalPeriod) }
                 </article>
             </section>
+                    }
         </main>
         <aside>
                 <NavBarTest/>
