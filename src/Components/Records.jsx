@@ -1,8 +1,8 @@
 import { useContext, useEffect, useState, useRef } from "react"
 import { Link, useLocation } from "react-router-dom"
-import PropTypes from 'prop-types'
-import { doc, deleteDoc } from 'firebase/firestore'
-
+import PropTypes, { string } from 'prop-types'
+import { doc, deleteDoc, collection } from 'firebase/firestore'
+import { TotalSum2 } from "../Logic/functions"
 import { monthlyCollectionContext } from "../Context/ExpensesContext"
 import { MonthlyIncomeContext } from "../Context/IncomeContext"
 import './../Styles/components/Records.css'
@@ -14,11 +14,21 @@ import { DoughnutChart } from "./Activity"
 
 // import ChartDataLabels from 'chartjs-plugin-datalabels';
 
+TotalSum.propTypes = {
+    title : PropTypes.string,
+    collectionRef: PropTypes.string,
+    date: PropTypes.string
+}
+
 export function TotalSum({ title, collectionRef, date = 'test' }) {
     const { monthlyIncome } = useContext(MonthlyIncomeContext)
     const { monthlyExpense } = useContext(monthlyCollectionContext)
     const [totalAmount, setTotalAmount] = useState(0)
-
+    const [compareLastWeek,setCompareLastWeek] = useState({
+        percetage: '0%',
+        day:'',
+        signal:''
+    })
     // const calcTotal = (collectionName) => {
     //     const total = collectionName.reduce((sum, entry) => {
     //         return sum + (typeof entry.amount === 'string' ? parseFloat(entry.amount) : entry.amount)
@@ -37,18 +47,81 @@ export function TotalSum({ title, collectionRef, date = 'test' }) {
                 .filter((element) => element.date === date)
                 .reduce((acc, element) => acc + parseFloat(element.amount), 0);
         }
+
+
+        const results = itemsFromLastWeekSameDay(collectionRef === 'monthlyExpense' ? monthlyExpense : monthlyIncome);
+        const q = TotalSum2(results)
+        console.log(results)
+        const w = porcentajeComparadoConHoyCapped(q,total)
+        const weekday = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+        const d = new Date();
+        let day = weekday[d.getDay()];
+        setCompareLastWeek(prev =>({
+           ...prev,
+            percetage : w.value,
+            signal : w.signo,
+            day: day
+        }))
         setTotalAmount(total)
-    }, [monthlyExpense, monthlyIncome, collectionRef])
+    }, [monthlyExpense, monthlyIncome, collectionRef,date])
+
+    function lastWeekSameWeekdayKey(today = new Date()) {
+        // normalize to noon to avoid rare DST issues
+        const d = new Date(today);
+        d.setHours(12, 0, 0, 0);
+        d.setDate(d.getDate() - 7);
+
+        const y = d.getFullYear();
+        const m = String(d.getMonth() + 1).padStart(2, "0");
+        const day = String(d.getDate()).padStart(2, "0");
+        return `${y}-${m}-${day}`; // "YYYY-MM-DD"
+    }
+
+    function itemsFromLastWeekSameDay(items) {
+        const targetKey = lastWeekSameWeekdayKey(); // e.g. "2025-10-08"
+        return items.filter(it => it.date === targetKey);
+    }
+
+    // usage    
+function porcentajeComparadoConHoyCapped(montoDiaX, montoHoy) {
+  // Casos con hoy = 0
+  console.log(montoDiaX)
+  if (montoHoy === 0) {
+    if (montoDiaX === 0) return { value: 0, signo: "=" };
+    // cualquier gasto frente a 0 hoy = +100% (cap)
+    return { value: 100, signo: "↓" };
+  }
+  const ratio = montoDiaX / montoHoy;
+
+  if (ratio === 1) {
+    return { value: 0, signo: "=" };
+  }
+
+  if (ratio > 1) {
+    let pct = Math.round((1 - ratio) * 100);
+    if(pct < 1) pct = pct * (-1)
+    return { value: pct, signo: "↓" };
+}
+
+  const pctMas = Math.min((ratio - 1) * 100, 100);
+
+  let redondeado = Math.round(pctMas);
+  if(redondeado < 1) redondeado = redondeado * (-1)
+  return { value: redondeado, signo: "↑" };
+// arreglar el numero negativo en el porcentaje
+
+}
     return (
         <>
         <article className="bg-white flex rounded-2xl p-8 justify-between items-center">
-            <div className="flex flex-col">
+            <div className="flex flex-col gap-2">
                 <span className="text-base font-extralight">Today {title}</span>
                 <span className="text-3xl font-light">$ {totalAmount.toFixed(2)}</span>
             </div>
-            <div className="flex flex-col text-center w-28">
-                <span className="text-3xl bg-accent text-white rounded-md">↑83%</span>
-                <span className="font-extralight text-sm">Last Tuesday</span>
+            <div className="flex flex-col text-center w-30 gap-2">
+                {/* ↑ */}
+                <span className="text-3xl bg-accent text-white rounded-md">{compareLastWeek.signal}{compareLastWeek.percetage}%</span>
+                <span className="font-extralight text-sm">Last {compareLastWeek.day}</span>
                 {/* ↓ */}
             </div>
         </article>
@@ -60,36 +133,40 @@ export function TotalSum({ title, collectionRef, date = 'test' }) {
     )
 }
 
-export function Transactions({ date }) {
+Transactions.propTypes = {
+    date : PropTypes.string,
+    collectionRef: PropTypes.string
+}
+
+export function Transactions({ date, collectionRef }) {
+
     const { monthlyExpense } = useContext(monthlyCollectionContext)
     const { monthlyIncome } = useContext(MonthlyIncomeContext)
 
     const [state, setState] = useState({
         date: '',
         transaction: [],
-        category: 'Expense'
+        category: collectionRef
     })
-    const [element, setElement] = useState([])
 
     useEffect(() => {
-        const data = state.category === 'Expense' ? monthlyExpense : monthlyIncome
+        const data = state.category === 'monthlyExpenses' ? monthlyExpense : monthlyIncome
         let filterElement = []
         data.forEach(element => {
             if (element.date === date) {
                 filterElement.push(element)
             }
         });
-
-        setElement(filterElement)
         let q = new Date()
 
         setState(prevState => ({
             ...prevState,
             date: q.toDateString(),
-            transaction: filterElement
+            transaction: filterElement,
+            category : collectionRef
         }))
 
-    }, [monthlyExpense, monthlyIncome, state.category, setElement])
+    }, [monthlyExpense, monthlyIncome, state.category, collectionRef, date])
 
     const handleShowCategory = (e) => {
         setState(prevState => ({

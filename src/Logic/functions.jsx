@@ -88,9 +88,9 @@ const twelveMonthsAgoStart = startOfDay(monthsAgoClamped(todayEnd, 12));
 function filterDataByWeek(data) {
     
     const filteredData = data.filter(entry => {
-  const entryDate = parseLocalDate(entry.date);
-  return entryDate >= weekStart && entryDate <= weekEnd;
-});
+        const entryDate = parseLocalDate(entry.date);
+        return entryDate >= weekStart && entryDate <= weekEnd;
+    });
    
 // const today = new Date()
 
@@ -131,9 +131,7 @@ function filterDataByMonth(data) {
         }
         return false
     })
-
     const sortedData = Sort(filteredData)
-
     return sortedData
 }
 
@@ -144,7 +142,9 @@ function filterDataBySixMonths(data){
         const entryDate = parseLocalDate(entry.date);
         return entryDate >= sixMonthsAgoStart && entryDate <= todayEnd;
     });
-return filtered6M
+    const sortedData = Sort(filtered6M)
+
+return sortedData
 }
 
 function filterDataByYear(data) {
@@ -217,7 +217,7 @@ export function FilterByCriteria(data,criteria){
         result = data
     }
 
-    return result
+    return Sort(result)
 }
 
 /**

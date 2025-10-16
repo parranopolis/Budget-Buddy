@@ -23,7 +23,7 @@ export function Activity() {
     const [status, setStatus] = useState({
             category: 'Expense',
             map: [],                // mapa de datos filtrados listos para la UI
-            period: '1W',
+            period: '1M',
             totalThisPeriod: 0
         })
 
@@ -46,6 +46,7 @@ export function Activity() {
         // console.log(status.period)
 
         const filteredData = FilterByCriteria(data, status.period)
+        // console.log(filteredData)
         setStatus(prevStatus => ({
             ...prevStatus,
             map: filteredData,
