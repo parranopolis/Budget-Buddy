@@ -23,7 +23,7 @@ export function Activity() {
     const [status, setStatus] = useState({
             category: 'Expense',
             map: [],                // mapa de datos filtrados listos para la UI
-            period: '1M',
+            period: '1W',
             totalThisPeriod: 0
         })
 

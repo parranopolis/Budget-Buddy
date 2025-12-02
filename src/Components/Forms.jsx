@@ -2,7 +2,7 @@ import { useState, useContext } from "react"
 import { useNavigate, Link } from "react-router-dom"
 
 import { auth, db } from "../../services/firebaseConfig"
-import { addDoc, collection } from "firebase/firestore"
+import { addDoc, collection, Timestamp } from "firebase/firestore"
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth"
 
 import { UserContext } from "../Context/Context"
@@ -10,6 +10,7 @@ import { UserContext } from "../Context/Context"
 import { Submit } from "./Buttons"
 import '../Styles/components/Forms.css'
 import '../Styles/main.css'
+import { useMemo } from "react"
 
 export function LoginForm() {
     const [email, setEmail] = useState()
@@ -144,7 +145,7 @@ export function SignIn() {
 
 export function AddIncomeForm() {
 
-    const expenseCollectionRef = collection(db, 'monthlyIncome')
+    // const expenseCollectionRef = collection(db, 'monthlyIncome')
     const { userId } = useContext(UserContext)
     const [todayDate] = useState(()=>{
 
@@ -179,6 +180,13 @@ export function AddIncomeForm() {
         }))
     }
 
+const incomeCollectionRef = useMemo(() => {
+    if(!userId) return null;
+    const monthKey = (formData.date || todayDate).slice(0,7); // "YYYY-MM"
+    // return collection(db, `users/${userId}/monthlyIncome/${monthKey}/incomeItems`);
+    return collection(db, "newMonthlyIncomeV2", userId, "months", monthKey, "income");
+},[userId, formData.date, todayDate]);
+
     const sendForm = async (e) => {
         e.preventDefault()
 
@@ -187,15 +195,20 @@ export function AddIncomeForm() {
             setFormError('Please fill in all require fields')
             return
         }
+
+    const dateTs = Timestamp.fromDate(new Date(`${date}T00:00:00.000Z`));
+
         setFormError('')
         try {
-            await addDoc(expenseCollectionRef, {
+            await addDoc(incomeCollectionRef, {
                 uid: userId,
                 amount: Number(amount),
-                date,
+                date: dateTs,
                 from,
                 note,
-                time: new Date().toLocaleDateString()
+                time: new Date().toLocaleDateString(),
+                dateStr: date,
+                monthKey: date.slice(0,7),
             })
             setSuccessMessage('Income Added successfully')
             setFormData({

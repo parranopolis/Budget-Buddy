@@ -12,9 +12,7 @@ export const UserProvider = ({ children }) => {
     const [userName, setUserName] = useState('')
 
     useEffect(() => {
-        const data = async () => {
-
-            await onAuthStateChanged(auth, (user) => {
+            const unsubscribe = onAuthStateChanged(auth, (user) => {
                 if (user) {
                     setUserId(user.uid)
                     setUserName(user.displayName)
@@ -22,8 +20,9 @@ export const UserProvider = ({ children }) => {
                     console.log('user is signed out')
                 }
             })
+        return () => {
+            unsubscribe()
         }
-        data()
     }, [])
 
     return <UserContext.Provider value={{ userId, setUserId, userName, setUserName }}>

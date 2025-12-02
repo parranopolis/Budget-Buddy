@@ -51,7 +51,7 @@ export function TotalSum({ title, collectionRef, date = 'test' }) {
 
         const results = itemsFromLastWeekSameDay(collectionRef === 'monthlyExpense' ? monthlyExpense : monthlyIncome);
         const q = TotalSum2(results)
-        console.log(results)
+        // console.log(results)
         const w = porcentajeComparadoConHoyCapped(q,total)
         const weekday = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
         const d = new Date();
@@ -85,7 +85,7 @@ export function TotalSum({ title, collectionRef, date = 'test' }) {
     // usage    
 function porcentajeComparadoConHoyCapped(montoDiaX, montoHoy) {
   // Casos con hoy = 0
-  console.log(montoDiaX)
+//   console.log(montoDiaX)
   if (montoHoy === 0) {
     if (montoDiaX === 0) return { value: 0, signo: "=" };
     // cualquier gasto frente a 0 hoy = +100% (cap)

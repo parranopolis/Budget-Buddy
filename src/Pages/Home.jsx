@@ -7,6 +7,8 @@ import { UserContext } from "../Context/Context";
 import { TotalSum, Transactions } from "../Components/Records";
 import { Link } from "react-router-dom";
 
+import { monthlyCollectionContext } from "../Context/ExpensesContext";
+
 export function Home() {
   const [date, setDate] = useState("");
   const { userName } = useContext(UserContext);
@@ -15,6 +17,8 @@ export function Home() {
     icon: <ion-icon name="contrast-outline"></ion-icon>,
   })
 
+// const expenseData = useContext(UserContext)
+    const { monthlyExpense } = useContext(monthlyCollectionContext)
 const handleShowCategory = () =>{
   setCategory(prevStatus => ({
     ...prevStatus,
@@ -24,6 +28,9 @@ const handleShowCategory = () =>{
   }))
 }
 
+useEffect(() => {
+  if (monthlyExpense.length > 0) console.log(monthlyExpense)
+}, [monthlyExpense])
   useEffect(() => {
     const getDate = new Date();
 

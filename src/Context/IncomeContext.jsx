@@ -11,23 +11,25 @@ export const MonthlyIncomeProvider = ({ children }) => {
     const { userId } = useContext(UserContext)
     const [monthlyIncome, setMonthlyIncome] = useState([])
 
-    const incomeCollectionRef = collection(db, 'monthlyIncome')
+    // const incomeCollectionRef = collection(db, 'monthlyIncome')
 
     useEffect(() => {
         const getMonthlyIncomeList = async () => {
-            try {
-                if (userId !== '') {
-                    const setQuery = await query(incomeCollectionRef, where('uid', '==', userId));
-                    const data = (await getDocs(setQuery))
-                    const incomeData = data.docs.map(item => ({
-                        id: item.id,
-                        ...item.data()
-                    }))
-                    setMonthlyIncome(incomeData)
-                }
-            } catch (error) {
-                console.log(error)
-            }
+            
+            // get Income from Firebase Data base
+            // try {
+            //     if (userId !== '') {
+            //         const setQuery = await query(incomeCollectionRef, where('uid', '==', userId));
+            //         const data = (await getDocs(setQuery))
+            //         const incomeData = data.docs.map(item => ({
+            //             id: item.id,
+            //             ...item.data()
+            //         }))
+            //         setMonthlyIncome(incomeData)
+            //     }
+            // } catch (error) {
+            //     console.log(error)
+            // }
         }
         getMonthlyIncomeList()
     }, [userId])

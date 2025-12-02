@@ -1,4 +1,3 @@
-import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import {
   createBrowserRouter,
@@ -20,7 +19,7 @@ import { MerchanDetail } from './Components/Records'
 import { TransactionDetail } from './Pages/TransactionDetail'
 import { TestingComponent } from './Components/TestingComponent'
 import { Reports } from './Pages/Reports'
-
+import { UploadRecords} from './Pages/uploadRecords'
 
 const root = createRoot(document.getElementById('root'))
 // actualizar el estado luego de hacer cambios en el ingreso o egreso de dinero
@@ -61,6 +60,10 @@ const router = createBrowserRouter([
       {
         path:'reports',
         element: <Reports/>
+      },
+      {
+        path:'uploadRecords',
+        element: <UploadRecords/>
       }
     ]
   },
@@ -75,7 +78,11 @@ const router = createBrowserRouter([
   {
     path: 'Signin',
     element: <CreateAccount />
-  }
+  },
+  // {
+  //   path: 'updateRecords',
+  //   element:<UpdateRecords/>
+  // }
 ])
 
 root.render(
