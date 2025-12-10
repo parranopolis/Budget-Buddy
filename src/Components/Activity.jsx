@@ -49,7 +49,7 @@ return () => {
         chartRef.current = null;
       }
     };
-  }, [data]); // re-create chart if data changes
+  }, []); // re-create chart if data changes
 
   return (
     <>

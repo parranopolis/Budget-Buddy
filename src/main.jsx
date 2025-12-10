@@ -1,5 +1,6 @@
 import { createRoot } from 'react-dom/client'
 import {
+  BrowserRouter,
   createBrowserRouter,
   RouterProvider,
 } from 'react-router-dom'
@@ -50,7 +51,8 @@ const router = createBrowserRouter([
         element: <MerchanDetail />
       },
       {
-        path: 'transactionDetail/:id',
+        // path: 'transactionDetail/:id',
+        path: 'transactionDetail/companyName',
         element: <TransactionDetail />
       },
       {
@@ -86,14 +88,15 @@ const router = createBrowserRouter([
 ])
 
 root.render(
-
-  <UserProvider>
+<UserProvider>
     <MonthlyCollectionProvider>
+{/* <BrowserRouter> */}
       <MonthlyIncomeProvider>
         <TimeProvider>
           <RouterProvider router={router} />
         </TimeProvider>
       </MonthlyIncomeProvider>
+{/* </BrowserRouter> */}
     </MonthlyCollectionProvider>
   </UserProvider>
 )

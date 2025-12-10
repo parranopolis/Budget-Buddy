@@ -1,28 +1,28 @@
 import { Link } from "react-router-dom"
-import { useCallback,useContext, useEffect, useMemo, useState } from "react"
+import { useCallback,useContext, useEffect, useState } from "react"
 import {PropTypes } from 'prop-types'
 import { monthlyCollectionContext } from "../Context/ExpensesContext"
-import { TimeContext } from "../Context/Context"
+// import { TimeContext } from "../Context/Context"
 import { MonthlyIncomeContext } from "../Context/IncomeContext"
 // import Chart from 'chart.js/auto'
 import ChartActivity from "../Components/Activity"
 
 import {NavBarTest} from "../Components/NavBar"
 
-import { FilterByCriteria, TimeFrames, TotalSum2 } from "../Logic/functions"
+import { TimeFrames } from "../Logic/functions"
 
 import './../Styles/pages/MovementsHistory.css'
+import { Transactions } from "../Components/Records"
 
 export function Activity() {
-
     const { monthlyIncome } = useContext(MonthlyIncomeContext)
-    const { monthlyExpense } = useContext(monthlyCollectionContext)
-    const { currentMonth, currentYear, currentMonthName } = useContext(TimeContext)
+    const { monthlyExpense, exampleValue } = useContext(monthlyCollectionContext)
+    // const { currentMonth, currentYear, currentMonthName } = useContext(TimeContext)
 
     // console.log(currentMonth, currentMonthName, currentYear)
     const [status, setStatus] = useState({
             category: 'Expense',
-            map: [],                // mapa de datos filtrados listos para la UI
+            map: [],  // mapa de datos filtrados listos para la UI
             period: '1W',
             totalThisPeriod: 0
         })
@@ -35,30 +35,32 @@ export function Activity() {
         }))
     }
 
-//Eleminar el console.log en Movement.jsx 95
-    useEffect(() => {
+useEffect(() => {
+    if(monthlyExpense.length === 0 || monthlyIncome.length === 0) return
+    
+        // setStatus.map(monthlyExpense)
+        
         // todos los datos separados por categoria "Expense/Income" extraidos de los contextos respectivos
-        const data = status.category === 'Expense' ? monthlyExpense : monthlyIncome
-         if (!data || data.length === 0) return; // corta aquí si aún no hay datos
-        // usa los datos de data para filtrar por el critero seleccionado en status.period, por defecto esta en W, y toma otros 2 campos validos como M y Y
-        // const input = filterDataBy([data, status.category, currentMonth, currentYear, status.period])
-        // const q = 
-        // console.log(status.period)
-
-        const filteredData = FilterByCriteria(data, status.period)
+        // const data = status.category === 'Expense' ? monthlyExpense : monthlyIncome
+      
+        // const filteredData = FilterByCriteria(data, status.period)
         // console.log(filteredData)
         setStatus(prevStatus => ({
             ...prevStatus,
-            map: filteredData,
+            map: monthlyExpense,
             // totalThisPeriod: TotalSum2(input)
         }))
-    }, [monthlyExpense, monthlyIncome, status.category, status.period])
-    
+    }, [monthlyExpense,monthlyIncome])
+
+
     const handleTimeFrame = useCallback((frame) => {
         setStatus((s) => ({...s,period:frame}))
-        
+        // exampleValue.setFilter(frame)
     },[])
 
+   useEffect(()=>{
+    exampleValue.setFilter(status.period)
+   },[exampleValue,status.period])
 
     // Mover a otros componentes  --->
 
@@ -110,18 +112,20 @@ export function Activity() {
                     {/* usa un callback para traer los rangos de las fechas. */}
                     <TimeFrames onChange={handleTimeFrame} activeTimeFrame={status.period}/>
                     
-                    {/* Charts */}
-                    <article className="w-full bg-[rgba(129_230_217_/_0.43)] h-42 rounded-2xl px-4 pt-2">
+                    {/* Charts  activar cuando tengas los datos completos. */}
+                    {/* <article className="w-full bg-[rgba(129_230_217_/_0.43)] h-42 rounded-2xl px-4 pt-2">
                         {/* <div className="w-full px-4"><canvas id="acquisitions"></canvas></div> */}
                         <ChartActivity/>
-                    </article>
+                    {/* </article> */}
+                    
+                    {/* activar cuando tengas los datos completos y puedas filtrar */}
                     <article className="flex justify-between gap-4">
                         {/* hamburger menu */}
                         <div className="w-8 flex flex-col gap-2 my-auto ml-2">
                             <div className="p-0 m-0 border"></div>
                             <div className="p-0 m-0 border"></div>
                             <div className="p-0 m-0 border"></div>
-                        </div>
+                        </div> 
                         {/* Filters Button */}
                         <div className="border-Cborder border rounded-lg bg-bg-form px-4 py-2 w-full text-center">
                             Filters
@@ -178,7 +182,8 @@ export function Activity() {
                         <span className="text-3xl">{status.category}</span>
                         <span onClick={handleShowCategory} className="p-large right" style={{ color: '#f36c9c' }}>Show {status.category === "Income" ? 'Expense' : "Income"}<ion-icon name="chevron-forward-outline"></ion-icon></span>
                     </div>
-                    <DataList data={status.map} category={status.category}></DataList>
+                    {/* <DataList data={status.map} category={status.category}></DataList> */}
+                    <Transactions date={null} collectionRef={'monthlyExpenses'} />
                 </section>
             {/* <NavBar /> */}
         </main>

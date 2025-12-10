@@ -1,24 +1,22 @@
 import "../Styles/pages/Home.css";
 import "../Styles/main.css";
-import { NavBar, NavBarTest} from "../Components/NavBar";
+import { NavBarTest} from "../Components/NavBar";
 
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../Context/Context";
 import { TotalSum, Transactions } from "../Components/Records";
 import { Link } from "react-router-dom";
-
-import { monthlyCollectionContext } from "../Context/ExpensesContext";
+// import { TodayExpenseData } from "../Logic/fetchData";
 
 export function Home() {
-  const [date, setDate] = useState("");
+
   const { userName } = useContext(UserContext);
+  const [date, setDate] = useState("");
   const [category, setCategory] = useState({
     category: 'monthlyExpenses',
     icon: <ion-icon name="contrast-outline"></ion-icon>,
   })
 
-// const expenseData = useContext(UserContext)
-    const { monthlyExpense } = useContext(monthlyCollectionContext)
 const handleShowCategory = () =>{
   setCategory(prevStatus => ({
     ...prevStatus,
@@ -28,17 +26,14 @@ const handleShowCategory = () =>{
   }))
 }
 
-useEffect(() => {
-  if (monthlyExpense.length > 0) console.log(monthlyExpense)
-}, [monthlyExpense])
   useEffect(() => {
     const getDate = new Date();
-
     const year = getDate.getFullYear();
     const month = String(getDate.getMonth() + 1).padStart(2, "0");
     const day = String(getDate.getDate()).padStart(2, "0");
     setDate(`${year}-${month}-${day}`);
     // setDate('2024-11-03')
+    // console.log(TodayExpenseData())
   }, []);
 
   return (
@@ -59,24 +54,6 @@ useEffect(() => {
                 collectionRef={category.category}
                 date={date}
               />
-          {/* {date != "" ? (
-            <>
-              <TotalSum
-                className="income"
-                title="Income"
-                collectionRef={"monthlyIncome"}
-                date={date}
-              />
-              <TotalSum
-                className="expense"
-                title="Spend"
-                collectionRef={"monthlyExpenses"}
-                date={date}
-              />
-            </>
-          ) : (
-            ""
-          )} */}
         </article>
         {/* Action Buttons */}
         <article className="bg-white shadow flex justify-around rounded-2xl mb-4">
@@ -90,7 +67,7 @@ useEffect(() => {
       </section>
       {/* transactions */}
       <section className="py-8 px-8">
-        <Transactions date={date} collectionRef={category.category} />
+        <Transactions date={date} collectionRef={category.category} range={'today'} />
       </section>
       <aside>
         <NavBarTest />

@@ -14,7 +14,12 @@ export const MonthlyIncomeProvider = ({ children }) => {
     // const incomeCollectionRef = collection(db, 'monthlyIncome')
 
     useEffect(() => {
-        const getMonthlyIncomeList = async () => {
+        if(!userId) return
+        const fetchTodayIncome = async () => {
+            const income = await getTodayIncome(userId)
+            setMonthlyIncome(income)
+        }
+        // const getMonthlyIncomeList = async () => {
             
             // get Income from Firebase Data base
             // try {
@@ -30,11 +35,39 @@ export const MonthlyIncomeProvider = ({ children }) => {
             // } catch (error) {
             //     console.log(error)
             // }
-        }
-        getMonthlyIncomeList()
+        // }
+        // getMonthlyIncomeList()
+        fetchTodayIncome()
     }, [userId])
 
     return <MonthlyIncomeContext.Provider value={{ monthlyIncome, setMonthlyIncome }}>
         {children}
     </MonthlyIncomeContext.Provider>
+}
+// refactorizar funciones. se repite el mismo codigo en expenses context
+function todayStrLocal() {
+  const d = new Date();
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`; // "YYYY-MM-DD"
+}
+
+async function getTodayIncome(uid) {
+  const today = todayStrLocal();
+  const monthKey = today.slice(0, 7); // "YYYY-MM"
+
+  const colRef = collection(
+    db,
+    "newMonthlyIncomeV2",
+    uid,
+    "months",
+    monthKey,
+    "income"
+  );
+
+  const q = query(colRef, where("dateStr", "==", today));
+  const snap = await getDocs(q);
+
+  return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
 }

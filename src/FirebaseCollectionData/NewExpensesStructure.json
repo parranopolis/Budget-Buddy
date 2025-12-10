@@ -1,5 +1,6 @@
 {
   "IZHKPC1jZ1MQGJ0iaSGUTWGjIYC2": {
+    "expenses": {
     "07tnFGClkSc32gUSBryy": {
       "id": "07tnFGClkSc32gUSBryy",
       "time": "11:01:34 PM",
@@ -5978,8 +5979,11 @@
       "uid": "IZHKPC1jZ1MQGJ0iaSGUTWGjIYC2",
       "payMethod": "Card"
     }
-  },
+  
+  }
+},
   "P0C5Gfv2twNlQNZvQxXkdF0plXo1": {
+    "expenses" : {
     "090dhszvritLIwUuseif": {
       "id": "090dhszvritLIwUuseif",
       "time": "12:45:26 AM",
@@ -7751,8 +7755,9 @@
       "date": "2025-07-19",
       "payMethod": "Card"
     }
-  },
+  }},
   "": {
+    "expenses": {
     "1ID0cqxNISK0d2DpLZLQ": {
       "id": "1ID0cqxNISK0d2DpLZLQ",
       "time": "1:55:31 PM",
@@ -7857,8 +7862,9 @@
       "note": "Olvidé descongelar la comida, no cocine nada porque me levanté tarde ",
       "date": "2025-10-11"
     }
-  },
+  }},
   "XzxEeKoj3sZrJhdEysjXzX7TRww1": {
+    "expenses":{
     "4xWV0xReKVPGQEq44v5C": {
       "id": "4xWV0xReKVPGQEq44v5C",
       "uid": "XzxEeKoj3sZrJhdEysjXzX7TRww1",
@@ -8025,8 +8031,9 @@
       "date": "",
       "uid": "XzxEeKoj3sZrJhdEysjXzX7TRww1"
     }
-  },
+  }},
   "kPyp37fhdKUaOpWpM1rIv2iltb82": {
+    "expenses":{
     "54dKUsOa5emwY5ZRUpBa": {
       "id": "54dKUsOa5emwY5ZRUpBa",
       "uid": "kPyp37fhdKUaOpWpM1rIv2iltb82",
@@ -8037,8 +8044,8 @@
       "field": "Food",
       "note": "Test 8 With sergiolparra666 account"
     }
-  },
-  "MwMUoxhAWiU7YJ8g8yupwA1kJly1": {
+  }},
+  "MwMUoxhAWiU7YJ8g8yupwA1kJly1": {"expenses":{
     "6NOetY2I6VL5kMhX3oxl": {
       "id": "6NOetY2I6VL5kMhX3oxl",
       "store": "Rent",
@@ -8259,8 +8266,8 @@
       "time": "5:39:53 PM",
       "uid": "MwMUoxhAWiU7YJ8g8yupwA1kJly1"
     }
-  },
-  "p109bjvt5mPBxtgT7DoqiBP6kXk1": {
+  }},
+  "p109bjvt5mPBxtgT7DoqiBP6kXk1": {"expenses":{
     "7G9DdnqRZkJLbyOV49Sh": {
       "id": "7G9DdnqRZkJLbyOV49Sh",
       "amount": 4,
@@ -8316,8 +8323,8 @@
       "store": "Test outcome 3",
       "amount": 2
     }
-  },
-  "RBIMUNTrd0blVYwuXwC0IvzHORM2": {
+  }},
+  "RBIMUNTrd0blVYwuXwC0IvzHORM2": {"expenses":{
     "HT8Q6m3pDNpi75MIrtCC": {
       "id": "HT8Q6m3pDNpi75MIrtCC",
       "amount": 10,
@@ -8362,8 +8369,8 @@
       "amount": 80,
       "date": "2025-03-15"
     }
-  },
-  "GKznd9kSQ3N4sws72g1c0UPBefo1": {
+  }},
+  "GKznd9kSQ3N4sws72g1c0UPBefo1": {"expenses":{
     "SwlG8jpLPE7B5Cn5myLY": {
       "id": "SwlG8jpLPE7B5Cn5myLY",
       "store": "King Soopers",
@@ -8395,5 +8402,5 @@
       "date": "2024-10-01",
       "field": "Food"
     }
-  }
+  }}
 }

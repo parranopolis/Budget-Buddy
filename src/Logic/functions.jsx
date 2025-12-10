@@ -1,7 +1,6 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import '../Styles/main.css'
 import PropTypes from 'prop-types'
-
 /**
  * Filtra un conjunto de datos según el periodo indicado en `data[4]`.
  *
@@ -38,7 +37,7 @@ const startOfDay = d => new Date(d.getFullYear(), d.getMonth(), d.getDate(), 0, 
 const endOfDay   = d => new Date(d.getFullYear(), d.getMonth(), d.getDate(), 23, 59, 59, 999);
 
 // Parse "YYYY-MM-DD" (or "YYYY/MM/DD") as LOCAL date (not UTC)
-function parseLocalDate(input) {
+export function parseLocalDate(input) {
   if (input instanceof Date) return startOfDay(input);
   if (typeof input === 'string') {
     const [y, m, d] = input.split(/[-/]/).map(Number);
@@ -231,20 +230,30 @@ export function FilterByCriteria(data,criteria){
  * debe ser todo aca para que realmente sea reutilizable y no se sobreescriba codigo en ningun lado relacionado al tema. 
  * 
  */
+TimeFrames.propTypes = {
+    onChange: PropTypes.func.isRequired,
+    activeTimeFrame : PropTypes.string.isRequired
+}
+
 export function TimeFrames({onChange,activeTimeFrame}){
     // const timeFrameOpt = ['W','M','Y']
-    const timeFrameOpt = ['1W','1M','6M','1Y','5Y','all']
+    
+    const timeFrameOpt = ['1W','1M','6M','1Y','5Y']
     const [active, setActive] = useState(activeTimeFrame)
-    const baseItem =
-    " w-12 text-center rounded-lg px-2 cursor-pointer select-none";
-  const activeItem =
-    "bg-primary ring-1 ring-white/40 text-white cursor-default shadow-xl";
-  const inactiveItem = "opacity-80 hover:opacity-100";
+    
+    //styles
+    const baseItem ="w-12 text-center rounded-lg px-2 cursor-pointer select-none";
+    const activeItem = "bg-primary ring-1 ring-white/40 text-white cursor-default shadow-xl";
+    const inactiveItem = "opacity-80 hover:opacity-100";
+    
+    useEffect(() => {
+        setActive(activeTimeFrame)
+    }, [activeTimeFrame])
 
     const handleActivate = (item) => {
-    if (item === active) return;        // ⬅️ evita set y onChange si ya está activo
-    setActive(item);
-    onChange?.(item);
+        if (item === active) return;        // ⬅️ evita set y onChange si ya está activo
+        setActive(item);
+        onChange?.(item);
   };
     return(
         <>
@@ -275,10 +284,6 @@ export function TimeFrames({onChange,activeTimeFrame}){
     )
 }
 
-TimeFrames.propTypes = {
-    onChange: PropTypes.func.isRequired,
-    activeTimeFrame : PropTypes.string.isRequired
-}
 
 {/* filtro de semana, mes, año  */}
 // <section>

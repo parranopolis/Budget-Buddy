@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState, useRef } from "react"
 import { Link, useLocation } from "react-router-dom"
-import PropTypes, { string } from 'prop-types'
+import PropTypes, { element, string } from 'prop-types'
 import { doc, deleteDoc, collection } from 'firebase/firestore'
 import { TotalSum2 } from "../Logic/functions"
 import { monthlyCollectionContext } from "../Context/ExpensesContext"
@@ -17,7 +17,7 @@ import { DoughnutChart } from "./Activity"
 TotalSum.propTypes = {
     title : PropTypes.string,
     collectionRef: PropTypes.string,
-    date: PropTypes.string
+    date: PropTypes.string,
 }
 
 export function TotalSum({ title, collectionRef, date = 'test' }) {
@@ -29,33 +29,23 @@ export function TotalSum({ title, collectionRef, date = 'test' }) {
         day:'',
         signal:''
     })
-    // const calcTotal = (collectionName) => {
-    //     const total = collectionName.reduce((sum, entry) => {
-    //         return sum + (typeof entry.amount === 'string' ? parseFloat(entry.amount) : entry.amount)
-
-    //     }, 0)
-    //     return total.toFixed(2)
-    // }
+    
     useEffect(() => {
+        if(monthlyExpense.length === 0 && monthlyIncome.length === 0) return
         let total = 0
-        if (collectionRef === 'monthlyIncome') {
-            total = monthlyIncome
-                .filter((element) => element.date === date)
-                .reduce((acc, element) => acc + parseFloat(element.amount), 0);
-        } else if (collectionRef === 'monthlyExpenses') {
-            total = monthlyExpense
-                .filter((element) => element.date === date)
-                .reduce((acc, element) => acc + parseFloat(element.amount), 0);
-        }
+        const data = collectionRef === 'monthlyExpenses' ? monthlyExpense : monthlyIncome
+        data.forEach((element) => total = total + parseFloat(element.amount))
 
-
+        // calcula el total de hoy con el de la semana pasada. esta configuracion es para la estructura de la BD anterior
         const results = itemsFromLastWeekSameDay(collectionRef === 'monthlyExpense' ? monthlyExpense : monthlyIncome);
         const q = TotalSum2(results)
-        // console.log(results)
+        
         const w = porcentajeComparadoConHoyCapped(q,total)
         const weekday = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
         const d = new Date();
         let day = weekday[d.getDay()];
+
+        
         setCompareLastWeek(prev =>({
            ...prev,
             percetage : w.value,
@@ -63,7 +53,7 @@ export function TotalSum({ title, collectionRef, date = 'test' }) {
             day: day
         }))
         setTotalAmount(total)
-    }, [monthlyExpense, monthlyIncome, collectionRef,date])
+    }, [monthlyExpense,monthlyIncome,collectionRef,])
 
     function lastWeekSameWeekdayKey(today = new Date()) {
         // normalize to noon to avoid rare DST issues
@@ -82,53 +72,48 @@ export function TotalSum({ title, collectionRef, date = 'test' }) {
         return items.filter(it => it.date === targetKey);
     }
 
-    // usage    
-function porcentajeComparadoConHoyCapped(montoDiaX, montoHoy) {
-  // Casos con hoy = 0
-//   console.log(montoDiaX)
-  if (montoHoy === 0) {
-    if (montoDiaX === 0) return { value: 0, signo: "=" };
-    // cualquier gasto frente a 0 hoy = +100% (cap)
-    return { value: 100, signo: "↓" };
-  }
-  const ratio = montoDiaX / montoHoy;
+    function porcentajeComparadoConHoyCapped(montoDiaX, montoHoy) {
+    // Casos con hoy = 0
+    //   console.log(montoDiaX)
+    if (montoHoy === 0) {
+        if (montoDiaX === 0) return { value: 0, signo: "=" };
+        // cualquier gasto frente a 0 hoy = +100% (cap)
+        return { value: 100, signo: "↓" };
+    }
+    const ratio = montoDiaX / montoHoy;
 
-  if (ratio === 1) {
-    return { value: 0, signo: "=" };
-  }
+    if (ratio === 1) {
+        return { value: 0, signo: "=" };
+    }
 
-  if (ratio > 1) {
-    let pct = Math.round((1 - ratio) * 100);
-    if(pct < 1) pct = pct * (-1)
-    return { value: pct, signo: "↓" };
-}
+    if (ratio > 1) {
+        let pct = Math.round((1 - ratio) * 100);
+        if(pct < 1) pct = pct * (-1)
+        return { value: pct, signo: "↓" };
+    }
 
-  const pctMas = Math.min((ratio - 1) * 100, 100);
+    const pctMas = Math.min((ratio - 1) * 100, 100);
 
-  let redondeado = Math.round(pctMas);
-  if(redondeado < 1) redondeado = redondeado * (-1)
-  return { value: redondeado, signo: "↑" };
-// arreglar el numero negativo en el porcentaje
+    let redondeado = Math.round(pctMas);
+    if(redondeado < 1) redondeado = redondeado * (-1)
+    return { value: redondeado, signo: "↑" };
+    // arreglar el numero negativo en el porcentaje
 
-}
+    }
     return (
         <>
-        <article className="bg-white flex rounded-2xl p-8 justify-between items-center">
-            <div className="flex flex-col gap-2">
-                <span className="text-base font-extralight">Today {title}</span>
-                <span className="text-3xl font-light">$ {totalAmount.toFixed(2)}</span>
-            </div>
-            <div className="flex flex-col text-center w-30 gap-2">
-                {/* ↑ */}
-                <span className="text-3xl bg-accent text-white rounded-md">{compareLastWeek.signal}{compareLastWeek.percetage}%</span>
-                <span className="font-extralight text-sm">Last {compareLastWeek.day}</span>
-                {/* ↓ */}
-            </div>
-        </article>
-            {/* <section className="box">
-                <div className="h6">Total {title}</div>
-                <div className="h2 totalAmount">${totalAmount}</div>
-            </section> */}
+            <article className="bg-white flex rounded-2xl p-8 justify-between items-center">
+                <div className="flex flex-col gap-2">
+                    <span className="text-base font-extralight">Today {title}</span>
+                    <span className="text-3xl font-light">$ {totalAmount.toFixed(2)}</span>
+                </div>
+                <div className="flex flex-col text-center w-30 gap-2">
+                    {/* ↑ */}
+                    <span className="text-3xl bg-accent text-white rounded-md">{compareLastWeek.signal}{compareLastWeek.percetage}%</span>
+                    <span className="font-extralight text-sm">Last {compareLastWeek.day}</span>
+                    {/* ↓ */}
+                </div>
+            </article>
         </>
     )
 }
@@ -150,64 +135,49 @@ export function Transactions({ date, collectionRef }) {
     })
 
     useEffect(() => {
-        const data = state.category === 'monthlyExpenses' ? monthlyExpense : monthlyIncome
-        let filterElement = []
-        data.forEach(element => {
-            if (element.date === date) {
-                filterElement.push(element)
-            }
-        });
+        if(monthlyExpense.length === 0 && monthlyIncome.length === 0) return
+        const data = collectionRef === 'monthlyExpenses' ? monthlyExpense : monthlyIncome
+        
         let q = new Date()
 
         setState(prevState => ({
             ...prevState,
             date: q.toDateString(),
-            transaction: filterElement,
+            transaction: data,
             category : collectionRef
         }))
-
-    }, [monthlyExpense, monthlyIncome, state.category, collectionRef, date])
-
-    const handleShowCategory = (e) => {
-        setState(prevState => ({
-            ...prevState,
-            category: prevState.category === 'Expense' ? 'Income' : 'Expense'
-        }))
-    }
+    }, [monthlyExpense, monthlyIncome, collectionRef])
     return (
         <>
                 <article>
-                    {/* <span className="h3">{state.date}</span> */}
                     <hr className="my-4 text-gray-300" />
                     <span className='text-3xl font-bold'>Activity</span>
-                    {/* <span className='h4'>Resent Activity: {state.category === 'Income' ? "Income" : 'Expense'} </span> */}
-                    {/* of {state.month}</span> */}
-                    {/* <span onClick={handleShowCategory} className="h6" style={{ color: '#f36c9c' }}>Show {state.category === "Income" ? 'Expense' : "Income"}<ion-icon name="chevron-forward-outline"></ion-icon></span> */}
                 </article>
                 <article className="flex flex-col gap-8 mt-8">
-                {state.transaction.map((item) => {
-                    return (
-                        <Link key={item.id} to={`./MerchanDetail/${item.store}`} state={{ store: item.store }}> {/* Merchan detail */}
-                            <article className="text-black flex items-center justify-between gap-4 border-2 rounded-3xl p-6">
-                                <div className="flex items-center gap-4 min-w-0 flex-1">
-                                    {/* Avatar / icono */}
-                                    <div className="bg-highlight rounded-full w-16 h-16 shrink-0" />
-                                    {/* Texto */}
-                                    <div className="flex flex-col min-w-0">
-                                    <span className="text-base font-medium truncate">
-                                        {state.category === 'Income' ? item.from : item.store}
-                                    </span>
-                                    <span className="text-base font-extralight truncate">{item.date}</span>
+                    {state.transaction.map((item) => {
+                        return (
+                            <Link key={item.id} to={`./MerchanDetail/${item.store}`} state={{ store: item.store }}> {/* Merchan detail */}
+                                <article className="text-black flex items-center justify-between gap-4 border-2 rounded-3xl p-6">
+                                    <div className="flex items-center gap-4 min-w-0 flex-1">
+                                        {/* Avatar / icono */}
+                                        <div className="bg-highlight rounded-full w-16 h-16 shrink-0" />
+                                        {/* Texto */}
+                                        <div className="flex flex-col min-w-0">
+                                        <span className="text-base font-medium truncate">
+                                            {state.category === 'monthlyExpenses' ? item.store : item.from}
+                                            {/* {item.store} */}
+                                        </span>
+                                        <span className="text-base font-extralight truncate">{item.date}</span>
+                                        </div>
                                     </div>
-                                </div>
-                                {/* Importe */}
-                                <div className="text-right shrink-0">
-                                    <span className="text-xl font-medium">$ {item.amount}</span>
-                                </div>
-                            </article>
-                        </Link>
-                    )
-                })}
+                                    {/* Importe */}
+                                    <div className="text-right shrink-0">
+                                        <span className="text-xl font-medium">$ {item.amount}</span>
+                                    </div>
+                                </article>
+                            </Link>
+                        )
+                    })}
                 </article>
         </>
     )

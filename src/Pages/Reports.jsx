@@ -9,6 +9,7 @@ import { monthlyCollectionContext } from "../Context/ExpensesContext";
 export function Reports (){
     const { monthlyIncome } = useContext(MonthlyIncomeContext)
     const { monthlyExpense } = useContext(monthlyCollectionContext)
+    const { exampleValue} = useContext(monthlyCollectionContext)
     const [status, setStatus] = useState({
         category: 'Expense',
         map: [],                // mapa de datos filtrados listos para la UI
@@ -55,10 +56,14 @@ export function Reports (){
             const result = (b/a) * 100
         return <span>You spent {result.toFixed(2)}% of your total income in this period</span>
         }
-        
+
     const handleTimeFrame = useCallback((frame) => {
         setStatus((s) => ({...s,period:frame}))
     },[])
+    
+    useEffect(()=>{
+        exampleValue.setFilter(status.period)
+    },[exampleValue,status.period])
 
     return(
     //   <section className="bg-main py-8 px-8 flex flex-col gap-8 shadow"><section/>
