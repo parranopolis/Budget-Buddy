@@ -40,8 +40,6 @@ export function DailyExpense() {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
-  console.log(formData.date.slice(0,4))
-  
   const handleActiveCategory = (e) => {
     const value = e.currentTarget.dataset.value;
     setFormData((prev) => ({ ...prev, field: value }));
@@ -52,7 +50,7 @@ export function DailyExpense() {
     if (!userId) return null;
     // const monthKey = (formData.date || todayDate).slice(0, 7); // "YYYY-MM"
     return collection(db, "newMonthlyExpenses", userId, "expenses");
-  }, [userId, formData.date, todayDate]);
+  }, [userId]);
 
   const sendForm = async (e) => {
     e.preventDefault();

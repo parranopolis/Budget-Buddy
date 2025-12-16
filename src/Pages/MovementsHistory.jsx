@@ -16,9 +16,8 @@ import { Transactions } from "../Components/Records"
 
 export function Activity() {
     const { monthlyIncome } = useContext(MonthlyIncomeContext)
-    const { monthlyExpense, exampleValue } = useContext(monthlyCollectionContext)
+    const { monthlyExpense, exampleValue, incomeData } = useContext(monthlyCollectionContext)
     // const { currentMonth, currentYear, currentMonthName } = useContext(TimeContext)
-
     // console.log(currentMonth, currentMonthName, currentYear)
     const [status, setStatus] = useState({
             category: 'Expense',
@@ -36,8 +35,7 @@ export function Activity() {
     }
 
 useEffect(() => {
-    if(monthlyExpense.length === 0 || monthlyIncome.length === 0) return
-    
+    if(monthlyExpense.length === 0 || incomeData.length === 0) return
         // setStatus.map(monthlyExpense)
         
         // todos los datos separados por categoria "Expense/Income" extraidos de los contextos respectivos
@@ -47,10 +45,10 @@ useEffect(() => {
         // console.log(filteredData)
         setStatus(prevStatus => ({
             ...prevStatus,
-            map: monthlyExpense,
+            map: status.category === 'Expenses' ? monthlyExpense : incomeData,
             // totalThisPeriod: TotalSum2(input)
         }))
-    }, [monthlyExpense,monthlyIncome])
+    }, [monthlyExpense,incomeData,status.category])
 
 
     const handleTimeFrame = useCallback((frame) => {
@@ -183,7 +181,7 @@ useEffect(() => {
                         <span onClick={handleShowCategory} className="p-large right" style={{ color: '#f36c9c' }}>Show {status.category === "Income" ? 'Expense' : "Income"}<ion-icon name="chevron-forward-outline"></ion-icon></span>
                     </div>
                     {/* <DataList data={status.map} category={status.category}></DataList> */}
-                    <Transactions date={null} collectionRef={'monthlyExpenses'} />
+                    <Transactions data={status.map} collectionRef={status.category} />
                 </section>
             {/* <NavBar /> */}
         </main>

@@ -8,20 +8,28 @@ export const monthlyCollectionContext = createContext();
 export const MonthlyCollectionProvider = ({ children }) => {
     const { userId } = useContext(UserContext)
     const [monthlyExpense, setMonthlyExpense] = useState([])
+    const [incomeData,setIncomeData] = useState([])
     const [itemId, setItemId] = useState('')
     const [locationRef, setLocationRef] = useState(null)
     const [filter, setFilter] = useState(locationRef === 'movementHistory' ? '1W' : '1M')
     // const location = useLocation()
     const example = useCallback(async (f,id) => {
-    return await getExpensesByTimeFrame(id, f);
+        //el filtro de 1 mes no se activa en /reports | en 6 meses funciona pero no estoy seguro de que sea accurate.
+        // datos del income hace falta conectarlo a todos lados (income form | pedir datos de income y aplicar los filtros)
+        // al cambiar de ruta no se limpia el estado de monthlyexpense
+        // al no tener datos en home el porcentaje queda en 0%%
+    const expense = await getExpensesByTimeFrame(id, f,'newMonthlyExpenses','expenses');
+    const income = await getExpensesByTimeFrame(id, f,'newMonthlyIncome','incomes');
+    return [expense,income]
     },[])
 
     useEffect(() => {
         if(!userId || !locationRef) return
         const fetchTodayExpenses = async () => {
             const expenses = await getTodayExpenses(userId, 'newMonthlyExpenses','expenses');
+            const income = await getTodayExpenses(userId, 'newMonthlyIncome','Incomes');
+            console.log(income)
             setMonthlyExpense(expenses);
-            console.log(expenses)
         }
         if(locationRef === '/'){
             console.log(`filtro: ${filter}, ruta:/home`)
@@ -31,18 +39,19 @@ export const MonthlyCollectionProvider = ({ children }) => {
         
         if(locationRef === '/movementHistory' || locationRef === '/reports'){
             example(filter,userId).then((result) => {
-                setMonthlyExpense(result)
+                setMonthlyExpense(result[0])
+                setIncomeData(result[1])
             })
             
         }
-    }, [userId,locationRef,example,filter,setMonthlyExpense])
+    }, [userId,locationRef,example,filter,setIncomeData])
 
     const exampleValue = useMemo(() => ({
         filter,
         setFilter,
         refetch : () =>  example(filter)
     }),[filter,setFilter,example])
-    return <monthlyCollectionContext.Provider value={{ monthlyExpense, setMonthlyExpense, setItemId, itemId, exampleValue, filter, setFilter, refetch : () => example(filter), setLocationRef }}>
+    return <monthlyCollectionContext.Provider value={{ monthlyExpense, setMonthlyExpense,setIncomeData, incomeData,  setItemId, itemId, exampleValue, filter, setFilter, refetch : () => example(filter), setLocationRef }}>
         {children}
     </monthlyCollectionContext.Provider>
 }
@@ -154,7 +163,7 @@ function monthsBetweenInclusive(start, end) {
  * Gets expenses for a time frame.
  * frame: '1W','1M','3M','6M','1Y','5Y','all'
  */
-export async function getExpensesByTimeFrame(uid, frame) {
+export async function getExpensesByTimeFrame(uid, frame, collectionName, subCollectionName) {
   const { start, end } = startDateFromFrame(frame);
 
     // End date is always today
@@ -197,7 +206,7 @@ export async function getExpensesByTimeFrame(uid, frame) {
     // inicio y fin del rango de filtrando
     const [startTimeFrame,endTimeFrame] = monthsBetweenInclusive(start, end);
 
-      const colRef = collection(db,"newMonthlyExpenses",uid, "expenses");
+      const colRef = collection(db,collectionName,uid,subCollectionName);
 
       //   Range query using lexicographic YYYY-MM-DD
     //   IMPORTANT: If you use where range + orderBy, Firestore may require an index.

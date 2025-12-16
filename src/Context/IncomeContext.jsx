@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { UserContext } from "./Context";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../services/firebaseConfig";
+import { getExpensesByTimeFrame } from "./ExpensesContext";
 
 
 
@@ -10,6 +11,8 @@ export const MonthlyIncomeContext = createContext();
 export const MonthlyIncomeProvider = ({ children }) => {
     const { userId } = useContext(UserContext)
     const [monthlyIncome, setMonthlyIncome] = useState([])
+    
+    // const []
 
     // const incomeCollectionRef = collection(db, 'monthlyIncome')
 
@@ -19,6 +22,7 @@ export const MonthlyIncomeProvider = ({ children }) => {
             const income = await getTodayIncome(userId)
             setMonthlyIncome(income)
         }
+
         // const getMonthlyIncomeList = async () => {
             
             // get Income from Firebase Data base
@@ -59,7 +63,7 @@ async function getTodayIncome(uid) {
 
   const colRef = collection(
     db,
-    "newMonthlyIncomeV2",
+    "newMonthlyIncome",
     uid,
     "months",
     monthKey,

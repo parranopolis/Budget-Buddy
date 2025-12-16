@@ -7,6 +7,7 @@ import { UserContext } from "../Context/Context";
 import { TotalSum, Transactions } from "../Components/Records";
 import { Link } from "react-router-dom";
 // import { TodayExpenseData } from "../Logic/fetchData";
+import { getExpensesByTimeFrame } from "../Context/ExpensesContext";
 
 export function Home() {
 

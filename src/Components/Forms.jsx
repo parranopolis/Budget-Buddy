@@ -184,7 +184,7 @@ const incomeCollectionRef = useMemo(() => {
     if(!userId) return null;
     const monthKey = (formData.date || todayDate).slice(0,7); // "YYYY-MM"
     // return collection(db, `users/${userId}/monthlyIncome/${monthKey}/incomeItems`);
-    return collection(db, "newMonthlyIncomeV2", userId, "months", monthKey, "income");
+    return collection(db, "newMonthlyIncome", userId, "incomes");
 },[userId, formData.date, todayDate]);
 
     const sendForm = async (e) => {
@@ -196,18 +196,18 @@ const incomeCollectionRef = useMemo(() => {
             return
         }
 
-    const dateTs = Timestamp.fromDate(new Date(`${date}T00:00:00.000Z`));
-
+        const dateTs = Timestamp.fromDate(new Date(`${date}T00:00:00.000Z`));
+console.log(date)
         setFormError('')
         try {
             await addDoc(incomeCollectionRef, {
                 uid: userId,
                 amount: Number(amount),
-                date: dateTs,
+                date: date,
                 from,
                 note,
                 time: new Date().toLocaleDateString(),
-                dateStr: date,
+                dateStr: dateTs,
                 monthKey: date.slice(0,7),
             })
             setSuccessMessage('Income Added successfully')

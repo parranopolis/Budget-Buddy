@@ -46,7 +46,7 @@ export const TimeProvider = ({ children }) => {
         setCurrentMonthName(getMonthName())
         setCurrentMonth(getCurrentMonth)
         setCurrentYear(parseInt(getCurrentYear))
-    })
+    },[])
 
     return <TimeContext.Provider value={{ currentMonth, currentYear, currentMonthName }}>
         {children}
