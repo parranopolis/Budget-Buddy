@@ -3,7 +3,6 @@ import { useCallback,useContext, useEffect, useState } from "react"
 import {PropTypes } from 'prop-types'
 import { monthlyCollectionContext } from "../Context/ExpensesContext"
 // import { TimeContext } from "../Context/Context"
-import { MonthlyIncomeContext } from "../Context/IncomeContext"
 // import Chart from 'chart.js/auto'
 import ChartActivity from "../Components/Activity"
 
@@ -15,12 +14,11 @@ import './../Styles/pages/MovementsHistory.css'
 import { Transactions } from "../Components/Records"
 
 export function Activity() {
-    const { monthlyIncome } = useContext(MonthlyIncomeContext)
-    const { monthlyExpense, exampleValue, incomeData } = useContext(monthlyCollectionContext)
+    const { monthlyExpense, exampleValue, incomeData, categoryRef, setCategoryRef } = useContext(monthlyCollectionContext)
     // const { currentMonth, currentYear, currentMonthName } = useContext(TimeContext)
     // console.log(currentMonth, currentMonthName, currentYear)
     const [status, setStatus] = useState({
-            category: 'Expense',
+            category: categoryRef,
             map: [],  // mapa de datos filtrados listos para la UI
             period: '1W',
             totalThisPeriod: 0
@@ -28,24 +26,19 @@ export function Activity() {
 
     // Cambia entre categorias
     const handleShowCategory = () => {
+        const nextCategory = status.category === 'Expenses' ? 'Income' : 'Expenses'
         setStatus(prevStatus => ({
             ...prevStatus,
-            category: prevStatus.category === 'Expense' ? 'Income' : "Expense",
+            category: nextCategory
         }))
+        setCategoryRef(nextCategory)
     }
 
-useEffect(() => {
-    if(monthlyExpense.length === 0 || incomeData.length === 0) return
-        // setStatus.map(monthlyExpense)
-        
-        // todos los datos separados por categoria "Expense/Income" extraidos de los contextos respectivos
-        // const data = status.category === 'Expense' ? monthlyExpense : monthlyIncome
-      
-        // const filteredData = FilterByCriteria(data, status.period)
-        // console.log(filteredData)
+    useEffect(() => {
+        if(monthlyExpense.length === 0) return
         setStatus(prevStatus => ({
             ...prevStatus,
-            map: status.category === 'Expenses' ? monthlyExpense : incomeData,
+            map: monthlyExpense
             // totalThisPeriod: TotalSum2(input)
         }))
     }, [monthlyExpense,incomeData,status.category])
@@ -58,44 +51,8 @@ useEffect(() => {
 
    useEffect(()=>{
     exampleValue.setFilter(status.period)
-   },[exampleValue,status.period])
+   },[exampleValue,status.period,setCategoryRef,status.category])
 
-    // Mover a otros componentes  --->
-
-
-
-    // async function chart() {
-    //     const data = [
-    //     { year: 2010, count: 10 },
-    //     { year: 2011, count: 20 },
-    //     { year: 2012, count: 15 },
-    //     { year: 2013, count: 25 },
-    //     { year: 2014, count: 22 },
-    //     { year: 2015, count: 30 },
-    //     { year: 2016, count: 28 },
-    //     ];
-
-    //     new Chart(
-    //         document.getElementById('acquisitions'),
-    //         {
-    //             type: 'bar',
-    //             data: {
-    //             labels: data.map(row => row.year),
-    //             datasets: [
-    //                 {
-    //                 label: 'Acquisitions by year',
-    //                 data: data.map(row => row.count)
-    //                 }
-    //             ]
-    //             }
-    //         }
-    //     );    
-    // }
-
-    
-
-// chart()
-//aqui esta el problema -> <TopNavBar title={'Records'} />
     return (
         <>
         <main className="mx-8 my-8">
@@ -178,7 +135,7 @@ useEffect(() => {
                 <section className="mt-4">
                     <div className="flex justify-between items-center">
                         <span className="text-3xl">{status.category}</span>
-                        <span onClick={handleShowCategory} className="p-large right" style={{ color: '#f36c9c' }}>Show {status.category === "Income" ? 'Expense' : "Income"}<ion-icon name="chevron-forward-outline"></ion-icon></span>
+                        <span onClick={handleShowCategory} className="p-large right" style={{ color: '#f36c9c' }}>Show {status.category === "Income" ? 'Expenses' : "Income"}<ion-icon name="chevron-forward-outline"></ion-icon></span>
                     </div>
                     {/* <DataList data={status.map} category={status.category}></DataList> */}
                     <Transactions data={status.map} collectionRef={status.category} />

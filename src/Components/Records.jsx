@@ -4,7 +4,6 @@ import PropTypes, { element, string } from 'prop-types'
 import { doc, deleteDoc, collection } from 'firebase/firestore'
 import { TotalSum2 } from "../Logic/functions"
 import { monthlyCollectionContext } from "../Context/ExpensesContext"
-import { MonthlyIncomeContext } from "../Context/IncomeContext"
 import './../Styles/components/Records.css'
 import { NavBar, TopNavBar } from "./NavBar"
 import { db } from "../../services/firebaseConfig"
@@ -17,12 +16,11 @@ import { DoughnutChart } from "./Activity"
 TotalSum.propTypes = {
     title : PropTypes.string,
     collectionRef: PropTypes.string,
-    date: PropTypes.string,
+    data: PropTypes.array,
 }
 
-export function TotalSum({ title, collectionRef, date = 'test' }) {
-    const { monthlyIncome } = useContext(MonthlyIncomeContext)
-    const { monthlyExpense, incomeData } = useContext(monthlyCollectionContext)
+export function TotalSum({ title, collectionRef, data }) {
+    // const { monthlyExpense, incomeData } = useContext(monthlyCollectionContext)
     const [totalAmount, setTotalAmount] = useState(0)
     const [compareLastWeek,setCompareLastWeek] = useState({
         percetage: '0%',
@@ -31,13 +29,14 @@ export function TotalSum({ title, collectionRef, date = 'test' }) {
     })
     
     useEffect(() => {
-        if(monthlyExpense.length === 0 && incomeData.length === 0) return
+        // if(monthlyExpense.length === 0 && incomeData.length === 0) return
+
         let total = 0
-        const data = collectionRef === 'monthlyExpenses' ? monthlyExpense : incomeData
+        // const data = collectionRef === 'monthlyExpenses' ? monthlyExpense : incomeData
         data.forEach((element) => total = total + parseFloat(element.amount))
 
         // calcula el total de hoy con el de la semana pasada. esta configuracion es para la estructura de la BD anterior
-        const results = itemsFromLastWeekSameDay(collectionRef === 'monthlyExpense' ? monthlyExpense : incomeData);
+        const results = itemsFromLastWeekSameDay(data);
         const q = TotalSum2(results)
         
         const w = porcentajeComparadoConHoyCapped(q,total)
@@ -53,8 +52,8 @@ export function TotalSum({ title, collectionRef, date = 'test' }) {
             day: day
         }))
         setTotalAmount(total)
-    }, [monthlyExpense,incomeData,collectionRef,])
-
+        
+    }, [data,collectionRef])
     function lastWeekSameWeekdayKey(today = new Date()) {
         // normalize to noon to avoid rare DST issues
         const d = new Date(today);
@@ -124,27 +123,24 @@ Transactions.propTypes = {
 }
 
 export function Transactions({ data, collectionRef }) {
-    const { monthlyExpense, incomeData } = useContext(monthlyCollectionContext)
-    // const { monthlyIncome } = useContext(MonthlyIncome
     const [state, setState] = useState({
-        date: '',
-        transaction: [],
+        date: new Date().toDateString(),
+        transaction: data,
         category: collectionRef
     })
     
     useEffect(() => {
-        // const data = collectionRef === 'Expenses' ? monthlyExpense : incomeData
-        if(monthlyExpense.length === 0 && incomeData.length === 0) return
-        
-        let q = new Date()
-
+        // console.log('----------')
+        // console.log('record')
+        // console.log(data)
+        // console.log('----------')
         setState(prevState => ({
             ...prevState,
-            date: q.toDateString(),
-            transaction: collectionRef === "Expense" ? monthlyExpense : incomeData,
-            category : collectionRef
+            transaction: data,
+            category: collectionRef
         }))
-    }, [monthlyExpense, incomeData, collectionRef])
+    }, [data,collectionRef])
+
     return (
         <>
                 <article>
@@ -152,7 +148,7 @@ export function Transactions({ data, collectionRef }) {
                     <span className='text-3xl font-bold'>Activity</span>
                 </article>
                 <article className="flex flex-col gap-8 mt-8">
-                    {state.transaction.map((item) => {
+                    {state.transaction?.map((item) => {
                         return (
                             <Link key={item.id} to={`./MerchanDetail/${item.store}`} state={{ store: item.store }}> {/* Merchan detail */}
                                 <article className="text-black flex items-center justify-between gap-4 border-2 rounded-3xl p-6">
@@ -162,7 +158,7 @@ export function Transactions({ data, collectionRef }) {
                                         {/* Texto */}
                                         <div className="flex flex-col min-w-0">
                                         <span className="text-base font-medium truncate">
-                                            {state.category === 'Expense' ? item.store : item.from}
+                                            {collectionRef === 'Expenses' ? item.store: item.from}
                                             {/* {item.store} */}
                                         </span>
                                         <span className="text-base font-extralight truncate">{item.date}</span>

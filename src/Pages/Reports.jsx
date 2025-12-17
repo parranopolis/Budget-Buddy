@@ -3,13 +3,12 @@ import { AnalyzedData } from "../Components/Records";
 import { TimeFrames, TotalSum2 } from "../Logic/functions";
 import { useState, useCallback,useEffect,useContext } from "react";
 import { FilterByCriteria } from "../Logic/functions";
-import { MonthlyIncomeContext } from "../Context/IncomeContext";
+// import { MonthlyIncomeContext } from "../Context/IncomeContext";
 import { monthlyCollectionContext } from "../Context/ExpensesContext";
 
 export function Reports (){
     // const { monthlyIncome } = useContext(MonthlyIncomeContext)
-    const { monthlyExpense, incomeData } = useContext(monthlyCollectionContext)
-    const { exampleValue} = useContext(monthlyCollectionContext)
+    const { monthlyExpense, exampleValue,categoryRef,setCategoryRef, incomeData } = useContext(monthlyCollectionContext)
     const [status, setStatus] = useState({
         category: 'Expense',
         map: [],                // mapa de datos filtrados listos para la UI
@@ -20,15 +19,12 @@ export function Reports (){
         categories: []
     })
     const [q, setQ] = useState([])
-     useEffect(() => {
+     
+    useEffect(() => {
          // todos los datos separados por categoria "Expense/Income" extraidos de los contextos respectivos
-         const data = status.category === 'Expense' ? monthlyExpense : incomeData
-         if (!data || data.length === 0) return; // corta aquí si aún no hay datos
-         console.log(incomeData)
-            // usa los datos de data para filtrar por el critero seleccionado en status.period, por defecto esta en W, y toma otros 2 campos validos como M y Y
-            // const input = filterDataBy([data, status.category, currentMonth, currentYear, status.period])
-            // const q = 
-            
+         const source = status.category === 'Expense' ? monthlyExpense : incomeData
+         if (source.length === 0) return; // corta aquí si aún no hay datos
+         
             const expense = FilterByCriteria(monthlyExpense, status.period)
             const income = FilterByCriteria(incomeData, status.period)
             setQ(expense)

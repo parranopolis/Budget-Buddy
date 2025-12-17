@@ -12,49 +12,77 @@ export const MonthlyCollectionProvider = ({ children }) => {
     const [itemId, setItemId] = useState('')
     const [locationRef, setLocationRef] = useState(null)
     const [filter, setFilter] = useState(locationRef === 'movementHistory' ? '1W' : '1M')
+    const [categoryRef,setCategoryRef] = useState('Expenses')
     // const location = useLocation()
-    const example = useCallback(async (f,id) => {
+    const example = useCallback(async (f,id, c) => {
         //el filtro de 1 mes no se activa en /reports | en 6 meses funciona pero no estoy seguro de que sea accurate.
         // datos del income hace falta conectarlo a todos lados (income form | pedir datos de income y aplicar los filtros)
         // al cambiar de ruta no se limpia el estado de monthlyexpense
         // al no tener datos en home el porcentaje queda en 0%%
-    const expense = await getExpensesByTimeFrame(id, f,'newMonthlyExpenses','expenses');
-    const income = await getExpensesByTimeFrame(id, f,'newMonthlyIncome','incomes');
-    return [expense,income]
+        // if(categoryRef === 'Expenses'){
+        // console.log(c)
+        if(c === "Expenses")return await getExpensesByTimeFrame(id, f,'newMonthlyExpenses','expenses');
+        if(c === "Income") return await getExpensesByTimeFrame(id, f,'newMonthlyIncome','incomes');
+        // }else if(c === 'Income'){
+// return []
+        // }
+        // return await connectToDB(f,id,c)
     },[])
 
     useEffect(() => {
         if(!userId || !locationRef) return
-        const fetchTodayExpenses = async () => {
-            const expenses = await getTodayExpenses(userId, 'newMonthlyExpenses','expenses');
-            const income = await getTodayExpenses(userId, 'newMonthlyIncome','Incomes');
-            console.log(income)
-            setMonthlyExpense(expenses);
+        const fetchTodayExpenses = async (category) => {
+          if(category === 'Expenses') return  await getTodayExpenses(userId, 'newMonthlyExpenses','expenses');
+          if(category === 'Income') return  await getTodayExpenses(userId, 'newMonthlyIncome','incomes');
         }
         if(locationRef === '/'){
-            console.log(`filtro: ${filter}, ruta:/home`)
-            fetchTodayExpenses();
-            return
+          setMonthlyExpense([])
+            fetchTodayExpenses(categoryRef).then(result =>{
+              setMonthlyExpense(result)
+            });
         }
         
-        if(locationRef === '/movementHistory' || locationRef === '/reports'){
-            example(filter,userId).then((result) => {
-                setMonthlyExpense(result[0])
-                setIncomeData(result[1])
+        if(locationRef === '/movementHistory'){
+          setMonthlyExpense([])
+          example(filter,userId,categoryRef).then((result) => {
+            setMonthlyExpense(result)
             })
-            
         }
-    }, [userId,locationRef,example,filter,setIncomeData])
+        if(locationRef ==='/reports'){
+          setMonthlyExpense([])
+          example(filter,userId,'Expenses').then((result) => {
+            setMonthlyExpense(result)
+          })
+          example(filter,userId,'Income').then((result) => {
+            setIncomeData(result)
+          })
+        }
+    }, [userId,locationRef,filter,categoryRef,example,setMonthlyExpense])
 
     const exampleValue = useMemo(() => ({
         filter,
         setFilter,
         refetch : () =>  example(filter)
     }),[filter,setFilter,example])
-    return <monthlyCollectionContext.Provider value={{ monthlyExpense, setMonthlyExpense,setIncomeData, incomeData,  setItemId, itemId, exampleValue, filter, setFilter, refetch : () => example(filter), setLocationRef }}>
+
+    return <monthlyCollectionContext.Provider value={{ 
+        categoryRef, setCategoryRef,
+        monthlyExpense, setMonthlyExpense,setIncomeData, incomeData,  
+        setItemId, itemId, 
+        exampleValue, filter, setFilter, refetch : () => example(filter), 
+        setLocationRef,
+      }}>
         {children}
     </monthlyCollectionContext.Provider>
 }
+
+async function connectToDB (f,id,c){
+  console.log(c)
+  if(c==='Expenses'){
+    return await getExpensesByTimeFrame(id, f,'newMonthlyExpenses','expenses');
+  }
+}
+
 
 // refactorizar funciones. se repite el mismo codigo en income context
 function todayStrLocal() {

@@ -8,34 +8,37 @@ import { TotalSum, Transactions } from "../Components/Records";
 import { Link } from "react-router-dom";
 // import { TodayExpenseData } from "../Logic/fetchData";
 import { getExpensesByTimeFrame } from "../Context/ExpensesContext";
+import { monthlyCollectionContext } from "../Context/ExpensesContext";
 
 export function Home() {
 
   const { userName } = useContext(UserContext);
-  const [date, setDate] = useState("");
-  const [category, setCategory] = useState({
-    category: 'monthlyExpenses',
-    icon: <ion-icon name="contrast-outline"></ion-icon>,
+  const { monthlyExpense, categoryRef, setCategoryRef } = useContext(monthlyCollectionContext)
+  const [state,setState] = useState({
+    category: categoryRef,
+    map : [],
+    icon :<ion-icon name="contrast-outline"></ion-icon>
   })
 
 const handleShowCategory = () =>{
-  setCategory(prevStatus => ({
-    ...prevStatus,
-    category: prevStatus.category === 'monthlyExpenses' ? 'monthlyIncome' : 'monthlyExpenses',
-    icon : prevStatus.category === 'monthlyExpenses' ? <ion-icon name="contrast"></ion-icon> : <ion-icon name="contrast-outline"></ion-icon>,
+  const nextCategory = state.category === "Expenses" ? 'Income' : 'Expenses'
 
+  setState(prevStatus => ({
+    ...prevStatus,
+    category : nextCategory,
+    icon : prevStatus.category === 'Expenses' ? <ion-icon name="contrast"></ion-icon> : <ion-icon name="contrast-outline"></ion-icon>,
   }))
+  setCategoryRef(nextCategory)
 }
 
-  useEffect(() => {
-    const getDate = new Date();
-    const year = getDate.getFullYear();
-    const month = String(getDate.getMonth() + 1).padStart(2, "0");
-    const day = String(getDate.getDate()).padStart(2, "0");
-    setDate(`${year}-${month}-${day}`);
-    // setDate('2024-11-03')
-    // console.log(TodayExpenseData())
-  }, []);
+useEffect(() => {
+  if(monthlyExpense.length === 0) return
+  setState(prevStatus => ({
+    ...prevStatus,
+    map:monthlyExpense
+  }))
+
+},[monthlyExpense,categoryRef])
 
   return (
     <>
@@ -44,16 +47,16 @@ const handleShowCategory = () =>{
         <article className="text-2xl grid grid-cols-[auto,1fr,auto] gap-4 items-center">
           <div className="bg-white shadow rounded-full w-18 h-18 col-start-1"></div>
           <span className="bg-white py-4 px-6 rounded-2xl shadow min-w-0 text-center">{userName}</span>
-          <span className="col-start-4" onClick={handleShowCategory}>{category.icon}</span> 
+          <span className="col-start-4" onClick={handleShowCategory}>{state.icon}</span> 
         </article>
         {/*  Records */}
         <article className="">
           
          <TotalSum
                 className=""
-                title={category.category === 'monthlyExpenses' ? 'Outcome' : 'Income'}
-                collectionRef={category.category}
-                date={date}
+                title={state.category === 'Expenses' ? 'Outcome' : 'Income'}
+                collectionRef={state.category}
+                data={state.map}
               />
         </article>
         {/* Action Buttons */}
@@ -68,7 +71,7 @@ const handleShowCategory = () =>{
       </section>
       {/* transactions */}
       <section className="py-8 px-8">
-        <Transactions date={date} collectionRef={category.category} range={'today'} />
+        <Transactions data={state.map} collectionRef={state.category} range={'today'} />
       </section>
       <aside>
         <NavBarTest />
