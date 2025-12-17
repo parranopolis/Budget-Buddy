@@ -70,22 +70,22 @@ export function Activity() {
                     {/* Charts  activar cuando tengas los datos completos. */}
                     {/* <article className="w-full bg-[rgba(129_230_217_/_0.43)] h-42 rounded-2xl px-4 pt-2">
                         {/* <div className="w-full px-4"><canvas id="acquisitions"></canvas></div> */}
-                        <ChartActivity/>
+                        {/* <ChartActivity/> */}
                     {/* </article> */}
                     
                     {/* activar cuando tengas los datos completos y puedas filtrar */}
-                    <article className="flex justify-between gap-4">
+                    {/* <article className="flex justify-between gap-4"> */}
                         {/* hamburger menu */}
-                        <div className="w-8 flex flex-col gap-2 my-auto ml-2">
+                        {/* <div className="w-8 flex flex-col gap-2 my-auto ml-2">
                             <div className="p-0 m-0 border"></div>
                             <div className="p-0 m-0 border"></div>
                             <div className="p-0 m-0 border"></div>
-                        </div> 
+                        </div>  */}
                         {/* Filters Button */}
-                        <div className="border-Cborder border rounded-lg bg-bg-form px-4 py-2 w-full text-center">
-                            Filters
-                        </div>
-                    </article>
+                        {/* <div className="border-Cborder border rounded-lg bg-bg-form px-4 py-2 w-full text-center"> */}
+                            {/* Filters */}
+                        {/* </div> */}
+                    {/* </article> */}
                 {/*     filtro de semana, mes, año  */}
                 {/* <section>
                         <div className="center period">
