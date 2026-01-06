@@ -131,16 +131,14 @@ export function Transactions({ data, collectionRef }) {
     
     useEffect(() => {
         // console.log('----------')
-        // console.log('record')
-        // console.log(data)
         // console.log('----------')
         setState(prevState => ({
             ...prevState,
             transaction: data,
             category: collectionRef
         }))
+        // console.log(state.transaction[1].id)
     }, [data,collectionRef])
-
     return (
         <>
                 <article>
@@ -148,9 +146,10 @@ export function Transactions({ data, collectionRef }) {
                     <span className='text-3xl font-bold'>Activity</span>
                 </article>
                 <article className="flex flex-col gap-8 mt-8">
+
                     {state.transaction?.map((item) => {
                         return (
-                            <Link key={item.id} to={`./MerchanDetail/${item.store}`} state={{ store: item.store }}> {/* Merchan detail */}
+                            <Link key={item.id} to={`/transactionDetail/${collectionRef}/${item.id}`} state={item} amount={item}> {/* Merchan detail */}
                                 <article className="text-black flex items-center justify-between gap-4 border-2 rounded-3xl p-6">
                                     <div className="flex items-center gap-4 min-w-0 flex-1">
                                         {/* Avatar / icono */}

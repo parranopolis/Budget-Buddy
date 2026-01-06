@@ -35,6 +35,8 @@ const router = createBrowserRouter([
         element: <Home />
       },
       {
+        //se activa desde movementHistory, pero da error.
+        // ruta entera: http://localhost:5173/movementHistory/MerchanDetail/Pepinos%20Pizza
         path: 'movementHistory',
         element: <Activity />
       },
@@ -42,17 +44,29 @@ const router = createBrowserRouter([
         path: 'DailyExpense',
         element: <DailyExpense />
       },
+        {
+        path: 'DailyExpense/:id',
+        element: <DailyExpense />
+      },
       {
         path: 'addIncome',
         element: <AddIncome />
       },
+       {
+        path: 'addIncome/:id',
+        element: <AddIncome />
+      },
       {
+        // se activa desde home. funciona pero la UI esta incompleta. 
+        // ruta http://localhost:5173/MerchanDetail/Pepinos%20Pizza
+        // los estilos de esta estan reconstruidos en transactionDetail/companyName..
+        // cambiar el companyName por el iD de la transaccion que debe mostrarse.
         path: 'merchanDetail/:id',
         element: <MerchanDetail />
       },
       {
         // path: 'transactionDetail/:id',
-        path: 'transactionDetail/companyName',
+        path: '/transactionDetail/:type/:id',
         element: <TransactionDetail />
       },
       {

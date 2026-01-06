@@ -2,19 +2,20 @@ import '../Styles/pages/Movements.css'
 
 import {NavBarTest } from "../Components/NavBar";
 import { Submit } from "../Components/Buttons";
-import { useContext, useState } from 'react';
-
-import { addDoc, collection } from 'firebase/firestore';
+import { useContext, useEffect, useState } from 'react';
+import { addDoc, collection, serverTimestamp, updateDoc,doc } from 'firebase/firestore';
 import { db } from '../../services/firebaseConfig';
 import { UserContext } from '../Context/Context';
 import { AddIncomeForm } from '../Components/Forms';
 
 import { useMemo } from "react";
 import {Timestamp } from "firebase/firestore";
+import { useLocation, useParams } from 'react-router-dom';
 
 export function DailyExpense() {
   const { userId } = useContext(UserContext);
   const categories = ["General", "Food", "Gas", "Necessary", "Other"];
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [todayDate] = useState(() => {
     const today = new Date();
@@ -24,6 +25,13 @@ export function DailyExpense() {
     return `${year}-${month}-${day}`; // YYYY-MM-DD
   });
 
+
+  const { state } = useLocation()
+
+  const {id} = useParams()
+  const isEditMode = Boolean(id)
+
+  // console.log(id)
   const [formData, setFormData] = useState({
     amount: "",
     date: todayDate, // string YYYY-MM-DD
@@ -32,6 +40,21 @@ export function DailyExpense() {
     store: "",
     note: "",
   });
+
+  useEffect(() => {
+    if(!isEditMode || !state) return
+
+    setFormData((prev) => ({
+      ...prev,
+      amount: state.amount ?? "",
+      date: state.date ?? todayDate,
+      field: state.field ?? "",
+      payMethod: state.payMethod ?? "Card",
+      store: state.store ?? "",
+      note: state.note ?? "",
+    }))
+  },[isEditMode,state,todayDate])
+
 
   const [formError, setFormError] = useState("");
   const [succesMessage, setSuccessMessage] = useState("");
@@ -48,7 +71,6 @@ export function DailyExpense() {
   // ✅ ruta destino: newMonthlyExpensesV2/{uid}/months/{yyyy-MM}/expenses
   const expenseCollectionRef = useMemo(() => {
     if (!userId) return null;
-    // const monthKey = (formData.date || todayDate).slice(0, 7); // "YYYY-MM"
     return collection(db, "newMonthlyExpenses", userId, "expenses");
   }, [userId]);
 
@@ -70,24 +92,46 @@ export function DailyExpense() {
     const dateTs = Timestamp.fromDate(new Date(`${date}T00:00:00.000Z`));
 
     setFormError("");
+    setIsSubmitting(true)
     try {
-      if (!expenseCollectionRef) throw new Error("No se pudo construir la ruta de Firestore.");
-
-      await addDoc(expenseCollectionRef, {
-        uid: userId,
-        amount: Number(amount),
-        field,
-        payMethod,
-        store,
-        note,
-        time: new Date().toLocaleTimeString(),
-        dateStr: dateTs,     // ✅ string para query exacta (hoy)
-        date: date,      // ✅ Timestamp para rangos
-        monthKey: date.slice(0, 7),
-        yearKey:date.slice(0,4)
-      });
-      console.log(formData)
-      setSuccessMessage("Expense added successfully!");
+      if(isEditMode){
+        await updateDoc(
+          doc(db, 'newMonthlyExpenses', userId, 'expenses', id), 
+          {
+            uid: userId,
+            amount: Number(amount),
+            field,
+            payMethod,
+            store,
+            note,
+            time: new Date().toLocaleTimeString(),
+            dateStr: dateTs,     // ✅ string para query exacta (hoy)
+            date: date,      // ✅ Timestamp para rangos
+            monthKey: date.slice(0, 7),
+            yearKey:date.slice(0,4)
+          }
+        )
+      setSuccessMessage("Expense Updated successfully!");
+      }else {
+      // }else if(!expenseCollectionRef) throw new Error("No se pudo construir la ruta de Firestore.");
+        await addDoc(
+          expenseCollectionRef, 
+          {
+            uid: userId,
+            amount: Number(amount),
+            field,
+            payMethod,
+            store,
+            note,
+            time: new Date().toLocaleTimeString(),
+            dateStr: dateTs,     // ✅ string para query exacta (hoy)
+            date: date,      // ✅ Timestamp para rangos
+            monthKey: date.slice(0, 7),
+            yearKey:date.slice(0,4)
+          }
+        );
+        setSuccessMessage("Expense added successfully!");
+      }
       setFormData({
         amount: "",
         date: todayDate,
@@ -99,8 +143,11 @@ export function DailyExpense() {
     } catch (error) {
       console.log(error);
       setFormError("Failed to add expense. Try again later.");
+    }finally{
+      setIsSubmitting(false)
     }
   };
+
 // {
 //     "amount": "0.20",
 //     "date": "2025-12-09",
@@ -109,10 +156,11 @@ export function DailyExpense() {
 //     "store": "pizza rica",
 //     "note": ""
 // }
+
   return (
     <>
       <main className="mx-8 my-8">
-        <h3 className="text-3xl font-medium">Add Expense</h3>
+        <h3 className="text-3xl font-medium">{isEditMode ? 'Update Expense' : 'Add Expense'}</h3>
 
         <section>
           <article className="center">
@@ -134,6 +182,7 @@ export function DailyExpense() {
                   required
                   className="border-Cborder border rounded-lg bg-bg-form px-4 py-2 w-full"
                   placeholder="$ 12,87"
+                  value={formData.amount}
                 />
                 <label className="sr-only" htmlFor="amount">Amount *</label>
               </div>
@@ -215,7 +264,7 @@ export function DailyExpense() {
               </div>
 
               <div onClick={sendForm} className='col-start-1 col-end-7'>
-                  <Submit text="Send" />
+                  <Submit text={isSubmitting ? "Saving..." : "Send"} disable={isSubmitting} />
               </div>
             </form>
           </article>

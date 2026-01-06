@@ -1,8 +1,8 @@
-import { useState, useContext } from "react"
-import { useNavigate, Link } from "react-router-dom"
+import { useState, useContext, useEffect } from "react"
+import { useNavigate, Link, useParams, useLocation } from "react-router-dom"
 
 import { auth, db } from "../../services/firebaseConfig"
-import { addDoc, collection, Timestamp } from "firebase/firestore"
+import { addDoc, collection, Timestamp, updateDoc, doc } from "firebase/firestore"
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth"
 
 import { UserContext } from "../Context/Context"
@@ -147,6 +147,8 @@ export function AddIncomeForm() {
 
     // const expenseCollectionRef = collection(db, 'monthlyIncome')
     const { userId } = useContext(UserContext)
+  const [isSubmitting, setIsSubmitting] = useState(false);
+    
     const [todayDate] = useState(()=>{
 
             // Create a new Date object for today
@@ -172,6 +174,21 @@ export function AddIncomeForm() {
     const [formError, setFormError] = useState('')
     const [successMessage, setSuccessMessage] = useState('')
 
+    const { id} = useParams()
+    const isEditMode = Boolean(id)
+    const { state } = useLocation()
+    useEffect(() => {
+        if(!isEditMode) return
+
+        setFormData((prev) => ({
+            ...prev,
+            amount: state.amount ?? '',
+            date: state.date ?? todayDate,
+            from: state.from ?? '',
+            note: state.note ?? '',
+        }))
+    },[isEditMode, state, todayDate])
+
     const handleChange = (e) => {
         const { name, value } = e.target
         setFormData((prevData) => ({
@@ -180,12 +197,12 @@ export function AddIncomeForm() {
         }))
     }
 
-const incomeCollectionRef = useMemo(() => {
-    if(!userId) return null;
-    const monthKey = (formData.date || todayDate).slice(0,7); // "YYYY-MM"
-    // return collection(db, `users/${userId}/monthlyIncome/${monthKey}/incomeItems`);
-    return collection(db, "newMonthlyIncome", userId, "incomes");
-},[userId, formData.date, todayDate]);
+    const incomeCollectionRef = useMemo(() => {
+        if(!userId) return null;
+        // const monthKey = (formData.date || todayDate).slice(0,7); // "YYYY-MM"
+        // return collection(db, `users/${userId}/monthlyIncome/${monthKey}/incomeItems`);
+        return collection(db, "newMonthlyIncome", userId, "incomes");
+    },[userId]);
 
     const sendForm = async (e) => {
         e.preventDefault()
@@ -197,20 +214,40 @@ const incomeCollectionRef = useMemo(() => {
         }
 
         const dateTs = Timestamp.fromDate(new Date(`${date}T00:00:00.000Z`));
-console.log(date)
+        // console.log(date)
         setFormError('')
+        setIsSubmitting(true)
         try {
-            await addDoc(incomeCollectionRef, {
-                uid: userId,
-                amount: Number(amount),
-                date: date,
-                from,
-                note,
-                time: new Date().toLocaleDateString(),
-                dateStr: dateTs,
-                monthKey: date.slice(0,7),
-            })
-            setSuccessMessage('Income Added successfully')
+            if(isEditMode){
+                await updateDoc(
+                    doc(db, 'newMonthlyIncome', userId, 'incomes', id),
+                    {
+                       uid: userId,
+                        amount: Number(amount),
+                        date: date,
+                        from,
+                        note,
+                        time: new Date().toLocaleDateString(),
+                        dateStr: dateTs,
+                        monthKey: date.slice(0,7),
+                    }
+                )
+                setSuccessMessage('Income Updated successfully')
+            } else {
+                await addDoc(incomeCollectionRef, 
+                    {
+                        uid: userId,
+                        amount: Number(amount),
+                        date: date,
+                        from,
+                        note,
+                        time: new Date().toLocaleDateString(),
+                        dateStr: dateTs,
+                        monthKey: date.slice(0,7),
+                    }
+                )
+                setSuccessMessage('Income Added successfully')
+            }
             setFormData({
                 amount: '',
                 date: todayDate,
@@ -220,6 +257,8 @@ console.log(date)
         } catch (error) {
             console.log(error)
             setFormError('Failed to add expense. Try again later.')
+        }finally{
+            setIsSubmitting(false)
         }
     }
 
@@ -343,7 +382,7 @@ console.log(date)
                             </div>
                         </section> */}
                         <section className="col-start-1 col-end-7">
-                            <Submit text='Send' />
+                            <Submit text={isSubmitting ? "Saving..." : "Send"} disable={isSubmitting} />
                         </section>
                     </form>
                 </article>
