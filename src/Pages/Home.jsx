@@ -13,16 +13,15 @@ import { monthlyCollectionContext } from "../Context/ExpensesContext";
 export function Home() {
 
   const { userName } = useContext(UserContext);
-  const { monthlyExpense, categoryRef, setCategoryRef } = useContext(monthlyCollectionContext)
+  const { HomeData, categoryRef, setCategoryRef } = useContext(monthlyCollectionContext)
+  
   const [state,setState] = useState({
     category: categoryRef,
-    map : [],
     icon :<ion-icon name="contrast-outline"></ion-icon>
   })
 
 const handleShowCategory = () =>{
-  const nextCategory = state.category === "Expenses" ? 'Income' : 'Expenses'
-
+  const nextCategory = categoryRef === "Expenses" ? 'Income' : 'Expenses'
   setState(prevStatus => ({
     ...prevStatus,
     category : nextCategory,
@@ -30,15 +29,6 @@ const handleShowCategory = () =>{
   }))
   setCategoryRef(nextCategory)
 }
-
-useEffect(() => {
-  if(monthlyExpense.length === 0) return
-  setState(prevStatus => ({
-    ...prevStatus,
-    map:monthlyExpense
-  }))
-
-},[monthlyExpense,categoryRef])
 
   return (
     <>
@@ -51,12 +41,12 @@ useEffect(() => {
         </article>
         {/*  Records */}
         <article className="">
-          
-         <TotalSum
+      
+         <TotalSum        
                 className=""
-                title={state.category === 'Expenses' ? 'Outcome' : 'Income'}
-                collectionRef={state.category}
-                data={state.map}
+                title={categoryRef === 'Expenses' ? 'Outcome' : 'Income'}
+                collectionRef={categoryRef}
+                data={HomeData}
               />
         </article>
         {/* Action Buttons */}
@@ -71,7 +61,7 @@ useEffect(() => {
       </section>
       {/* transactions */}
       <section className="py-8 px-8">
-        <Transactions data={state.map} collectionRef={state.category} range={'today'} />
+        <Transactions data={HomeData} collectionRef={categoryRef} range={'today'} />
       </section>
       <aside>
         <NavBarTest />

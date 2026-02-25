@@ -1,17 +1,14 @@
-import { useContext, useEffect, useState, useRef } from "react"
+import { useContext, useEffect, useState } from "react"
 import { Link, useLocation } from "react-router-dom"
-import PropTypes, { element, string } from 'prop-types'
-import { doc, deleteDoc, collection } from 'firebase/firestore'
-import { TotalSum2 } from "../Logic/functions"
+import PropTypes from 'prop-types'
+import { where,query,doc, deleteDoc, collection, getDocs } from 'firebase/firestore'
 import { monthlyCollectionContext } from "../Context/ExpensesContext"
 import './../Styles/components/Records.css'
 import { NavBar, TopNavBar } from "./NavBar"
 import { db } from "../../services/firebaseConfig"
-// import { Chart, ArcElement, Tooltip, Legend } from 'chart.js';
-import { Chart } from "chart.js/auto";
 import { DoughnutChart } from "./Activity"
+import { UserContext } from "../Context/Context"
 
-// import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 TotalSum.propTypes = {
     title : PropTypes.string,
@@ -20,41 +17,77 @@ TotalSum.propTypes = {
 }
 
 export function TotalSum({ title, collectionRef, data }) {
-    // const { monthlyExpense, incomeData } = useContext(monthlyCollectionContext)
+    const { userId } = useContext(UserContext)
     const [totalAmount, setTotalAmount] = useState(0)
+    const d = new Date();
+    const weekday = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+    let day = weekday[d.getDay()];
+    
     const [compareLastWeek,setCompareLastWeek] = useState({
-        percetage: '0%',
-        day:'',
+        percetage: '0',
+        day:day,
         signal:''
     })
-    
     useEffect(() => {
-        // if(monthlyExpense.length === 0 && incomeData.length === 0) return
+        setTotalAmount(0)
+        if(data.length === 0) return
+        const test = async() => {
+            let totalToday = 0
+            let totalSameDayLastWeek = 0
+            const colRef = collection(db,'newMonthlyExpenses',userId, 'expenses')
 
-        let total = 0
-        // const data = collectionRef === 'monthlyExpenses' ? monthlyExpense : incomeData
-        data.forEach((element) => total = total + parseFloat(element.amount))
+            const qRange = query(
+                colRef,
+                where("date", "==", lastWeekSameWeekdayKey()),
+            )
+            
+            const snap = await getDocs(qRange)
+            const p = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+            
+            data.forEach((element) => totalToday = totalToday + parseFloat(element.amount))
+            p.forEach((element) => totalSameDayLastWeek = totalSameDayLastWeek + (element.amount))
+            // (v1 - v2) / v2 * 100 = % de cambio entre v1 y v2. 
+            // Si el resultado es positivo, v1 es mayor que v2; 
+            // si es negativo, v1 es menor que v2; y si es cero, ambos valores son iguales.
+            let rPercentDifference = 0
+            if(totalSameDayLastWeek === 0 || totalToday === 0){
+                rPercentDifference = 100
+            }else{
+                rPercentDifference = ((totalToday - totalSameDayLastWeek) / totalSameDayLastWeek) * 100
+            }
+            
+            setCompareLastWeek(prev =>({
+                ...prev,
+                percetage : rPercentDifference < 0 ? rPercentDifference.toFixed(2) * (-1) : rPercentDifference.toFixed(2) > 0 ? rPercentDifference.toFixed(2) : "Same",
+                signal : rPercentDifference > 0 ? "↑" : rPercentDifference < 0 ?"↓" : "",
+            }))
+            setTotalAmount(totalToday)
+        }
+        test()
+    }, [data,collectionRef,userId])
+    
+    return (
+        <>
+            <article className="bg-white flex rounded-2xl p-8 justify-between items-center">
+                <div className="flex flex-col gap-2">
+                    <span className="text-base font-extralight">Today {title}</span>
+                    <span className="text-3xl font-light">$ {totalAmount.toFixed(2)}</span>
+                </div>
+                {collectionRef === "Expenses" ? (
+                    <div className="flex flex-col text-center w-30 md:w-40 gap-2">
+                    {/* ↑ */}
+                    <span className="text-2xl md:text-3xl bg-accent text-white rounded-md">{compareLastWeek.signal}{compareLastWeek.percetage}%</span>
+                    <span className="font-extralight text-sm">Last {compareLastWeek.day}</span>
+                    {/* ↓ */}
+                </div>
+                ) : ""}
+            </article>
+        </>
+    )
+}
 
-        // calcula el total de hoy con el de la semana pasada. esta configuracion es para la estructura de la BD anterior
-        const results = itemsFromLastWeekSameDay(data);
-        const q = TotalSum2(results)
-        
-        const w = porcentajeComparadoConHoyCapped(q,total)
-        const weekday = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-        const d = new Date();
-        let day = weekday[d.getDay()];
 
-        
-        setCompareLastWeek(prev =>({
-           ...prev,
-            percetage : w.value,
-            signal : w.signo,
-            day: day
-        }))
-        setTotalAmount(total)
-        
-    }, [data,collectionRef])
-    function lastWeekSameWeekdayKey(today = new Date()) {
+function lastWeekSameWeekdayKey(today = new Date()) {
         // normalize to noon to avoid rare DST issues
         const d = new Date(today);
         d.setHours(12, 0, 0, 0);
@@ -65,57 +98,6 @@ export function TotalSum({ title, collectionRef, data }) {
         const day = String(d.getDate()).padStart(2, "0");
         return `${y}-${m}-${day}`; // "YYYY-MM-DD"
     }
-
-    function itemsFromLastWeekSameDay(items) {
-        const targetKey = lastWeekSameWeekdayKey(); // e.g. "2025-10-08"
-        return items.filter(it => it.date === targetKey);
-    }
-
-    function porcentajeComparadoConHoyCapped(montoDiaX, montoHoy) {
-    // Casos con hoy = 0
-    //   console.log(montoDiaX)
-    if (montoHoy === 0) {
-        if (montoDiaX === 0) return { value: 0, signo: "=" };
-        // cualquier gasto frente a 0 hoy = +100% (cap)
-        return { value: 100, signo: "↓" };
-    }
-    const ratio = montoDiaX / montoHoy;
-
-    if (ratio === 1) {
-        return { value: 0, signo: "=" };
-    }
-
-    if (ratio > 1) {
-        let pct = Math.round((1 - ratio) * 100);
-        if(pct < 1) pct = pct * (-1)
-        return { value: pct, signo: "↓" };
-    }
-
-    const pctMas = Math.min((ratio - 1) * 100, 100);
-
-    let redondeado = Math.round(pctMas);
-    if(redondeado < 1) redondeado = redondeado * (-1)
-    return { value: redondeado, signo: "↑" };
-    // arreglar el numero negativo en el porcentaje
-
-    }
-    return (
-        <>
-            <article className="bg-white flex rounded-2xl p-8 justify-between items-center">
-                <div className="flex flex-col gap-2">
-                    <span className="text-base font-extralight">Today {title}</span>
-                    <span className="text-3xl font-light">$ {totalAmount.toFixed(2)}</span>
-                </div>
-                <div className="flex flex-col text-center w-30 gap-2">
-                    {/* ↑ */}
-                    <span className="text-3xl bg-accent text-white rounded-md">{compareLastWeek.signal}{compareLastWeek.percetage}%</span>
-                    <span className="font-extralight text-sm">Last {compareLastWeek.day}</span>
-                    {/* ↓ */}
-                </div>
-            </article>
-        </>
-    )
-}
 
 Transactions.propTypes = {
     data : PropTypes.array,
@@ -128,20 +110,17 @@ export function Transactions({ data, collectionRef }) {
         transaction: data,
         category: collectionRef
     })
-    
     useEffect(() => {
-        // console.log('----------')
-        // console.log('----------')
         setState(prevState => ({
             ...prevState,
             transaction: data,
             category: collectionRef
         }))
-        // console.log(state.transaction[1].id)
     }, [data,collectionRef])
     return (
         <>
-                <article>
+        {data.length === 0 ? <span className='text-3xl font-bold'>No Activity</span> : (<>
+            <article>
                     <hr className="my-4 text-gray-300" />
                     <span className='text-3xl font-bold'>Activity</span>
                 </article>
@@ -172,6 +151,9 @@ export function Transactions({ data, collectionRef }) {
                         )
                     })}
                 </article>
+        </>
+        )
+            }
         </>
     )
 }

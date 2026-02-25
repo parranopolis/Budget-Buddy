@@ -11,6 +11,7 @@ export const MonthlyCollectionProvider = ({ children }) => {
     const [incomeData,setIncomeData] = useState([])
     const [itemId, setItemId] = useState('')
     const [locationRef, setLocationRef] = useState(null)
+    const [HomeData, setHomeData] = useState([])
     const [filter, setFilter] = useState(locationRef === 'movementHistory' ? '1W' : '1M')
     const [categoryRef,setCategoryRef] = useState('Expenses')
     // const location = useLocation()
@@ -30,7 +31,7 @@ export const MonthlyCollectionProvider = ({ children }) => {
     },[])
 
     useEffect(() => {
-        if(!userId || !locationRef) return
+      if(!userId || !locationRef) return
         const fetchTodayExpenses = async (category) => {
           if(category === 'Expenses') return  await getTodayExpenses(userId, 'newMonthlyExpenses','expenses');
           if(category === 'Income') return  await getTodayExpenses(userId, 'newMonthlyIncome','incomes');
@@ -38,7 +39,7 @@ export const MonthlyCollectionProvider = ({ children }) => {
         if(locationRef === '/'){
           setMonthlyExpense([])
             fetchTodayExpenses(categoryRef).then(result =>{
-              setMonthlyExpense(result)
+              setHomeData(result)
             });
         }
         
@@ -46,7 +47,7 @@ export const MonthlyCollectionProvider = ({ children }) => {
           setMonthlyExpense([])
           example(filter,userId,categoryRef).then((result) => {
             setMonthlyExpense(result)
-            })
+          })
         }
         if(locationRef ==='/reports'){
           setMonthlyExpense([])
@@ -57,7 +58,7 @@ export const MonthlyCollectionProvider = ({ children }) => {
             setIncomeData(result)
           })
         }
-    }, [userId,locationRef,filter,categoryRef,example,setMonthlyExpense])
+    }, [userId,locationRef,filter,categoryRef,example])
 
     const exampleValue = useMemo(() => ({
         filter,
@@ -70,18 +71,18 @@ export const MonthlyCollectionProvider = ({ children }) => {
         monthlyExpense, setMonthlyExpense,setIncomeData, incomeData,  
         setItemId, itemId, 
         exampleValue, filter, setFilter, refetch : () => example(filter), 
-        setLocationRef,
+        setLocationRef,locationRef,HomeData
       }}>
         {children}
     </monthlyCollectionContext.Provider>
 }
 
-async function connectToDB (f,id,c){
-  console.log(c)
-  if(c==='Expenses'){
-    return await getExpensesByTimeFrame(id, f,'newMonthlyExpenses','expenses');
-  }
-}
+// async function connectToDB (f,id,c){
+//   console.log(c)
+//   if(c==='Expenses'){
+//     return await getExpensesByTimeFrame(id, f,'newMonthlyExpenses','expenses');
+//   }
+// }
 
 
 // refactorizar funciones. se repite el mismo codigo en income context
@@ -95,7 +96,7 @@ function todayStrLocal() {
 
 async function getTodayExpenses(uid,collectionName,subCollection) {
   const today = todayStrLocal();
-  const monthKey = today.slice(0, 7); // "YYYY-MM"
+  // const monthKey = today.slice(0, 7); // "YYYY-MM"
 
   const colRef = collection(
     db,
@@ -198,8 +199,9 @@ export async function getExpensesByTimeFrame(uid, frame, collectionName, subColl
     const endStr = dateToStrLocal(end);
     // Start date is depends on the time frame
     const startStr = dateToStrLocal(start);
+    // console.log(startStr)
 
-// pendiente activar el filtro -> all transactions
+    // pendiente activar el filtro -> all transactions
     
     // "all" = read all months docs under /months and then each month's expenses
     // if (frame === "all") {
