@@ -285,6 +285,25 @@ export function TimeFrames({onChange,activeTimeFrame}){
 }
 
 
+
+//formatea el texto ingresado por el usuario haciendo mayuscula la primera letra de cada palabra y eliminando espacios innecesarios. 
+
+// Esta función se puede utilizar para formatear el nombre de la tienda o cualquier otro texto ingresado por el usuario antes de guardarlo o mostrarlo en la interfaz.
+
+
+export function FormatingText (string){
+    let capitalizedFirstLetter = ''
+    let words = string.toLowerCase().split(' ');
+    
+    for (let i = 0; i < words.length; i++) {
+        words[i] = words[i].charAt(0).toUpperCase() + words[i].slice(1);
+    }
+    capitalizedFirstLetter = words.join(' ');
+    const cleanText = capitalizedFirstLetter.trim().replace(/\s+/g, ' ');
+    return cleanText
+}
+
+
 {/* filtro de semana, mes, año  */}
 // <section>
 //         <div className="center period">

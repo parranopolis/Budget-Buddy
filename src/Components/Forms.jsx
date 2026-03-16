@@ -11,6 +11,7 @@ import { Submit } from "./Buttons"
 import '../Styles/components/Forms.css'
 import '../Styles/main.css'
 import { useMemo } from "react"
+import { FormatingText } from "../Logic/functions"
 
 export function LoginForm() {
     const [email, setEmail] = useState()
@@ -225,8 +226,8 @@ export function AddIncomeForm() {
                        uid: userId,
                         amount: Number(amount),
                         date: date,
-                        from,
-                        note,
+                        from: FormatingText(from),
+                        note: FormatingText(note),
                         time: new Date().toLocaleDateString(),
                         dateStr: dateTs,
                         monthKey: date.slice(0,7),
@@ -239,8 +240,8 @@ export function AddIncomeForm() {
                         uid: userId,
                         amount: Number(amount),
                         date: date,
-                        from,
-                        note,
+                        from: FormatingText(from),
+                        note: FormatingText(note),
                         time: new Date().toLocaleDateString(),
                         dateStr: dateTs,
                         monthKey: date.slice(0,7),

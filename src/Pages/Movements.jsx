@@ -11,6 +11,7 @@ import { AddIncomeForm } from '../Components/Forms';
 import { useMemo } from "react";
 import {Timestamp } from "firebase/firestore";
 import { useLocation, useParams } from 'react-router-dom';
+import { FormatingText } from '../Logic/functions';
 
 export function DailyExpense() {
   const { userId } = useContext(UserContext);
@@ -79,6 +80,7 @@ export function DailyExpense() {
 
     const { amount, date, field, payMethod, store, note } = formData;
 
+    // capitalizeFirstLetter(store)
     if (!userId) {
       setFormError("No userId disponible.");
       return;
@@ -102,8 +104,8 @@ export function DailyExpense() {
             amount: Number(amount),
             field,
             payMethod,
-            store,
-            note,
+            store : FormatingText(store),
+            note: FormatingText(note),
             time: new Date().toLocaleTimeString(),
             dateStr: dateTs,     // ✅ string para query exacta (hoy)
             date: date,      // ✅ Timestamp para rangos
@@ -121,8 +123,8 @@ export function DailyExpense() {
             amount: Number(amount),
             field,
             payMethod,
-            store,
-            note,
+            store: FormatingText(store),
+            note: FormatingText(note),
             time: new Date().toLocaleTimeString(),
             dateStr: dateTs,     // ✅ string para query exacta (hoy)
             date: date,      // ✅ Timestamp para rangos
@@ -156,7 +158,6 @@ export function DailyExpense() {
 //     "store": "pizza rica",
 //     "note": ""
 // }
-
   return (
     <>
       <main className="mx-8 my-8">
@@ -224,6 +225,8 @@ export function DailyExpense() {
                   id="store"
                   className="border-Cborder border rounded-lg bg-bg-form px-4 py-2 w-full"
                   placeholder="Store Name"
+                  autoCapitalize='words'
+                  
                 />
                 <label className="sr-only" htmlFor="store">Store</label>
               </div>
@@ -263,7 +266,7 @@ export function DailyExpense() {
                 <label className="sr-only" htmlFor="note"></label>
               </div>
 
-              <div onClick={sendForm} className='col-start-1 col-end-7'>
+              <div className='col-start-1 col-end-7'>
                   <Submit text={isSubmitting ? "Saving..." : "Send"} disable={isSubmitting} />
               </div>
             </form>
