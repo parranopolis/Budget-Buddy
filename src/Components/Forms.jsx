@@ -274,8 +274,7 @@ export function AddIncomeForm() {
                     <span>{successMessage}</span>
                 </article>
                 <article>
-                    <form action="" id="addIncomeForm" onSubmit={sendForm}
-                    className="grid grid-cols-6 gap-4">
+                    <form action="" id="addIncomeForm" onSubmit={sendForm} className="grid grid-cols-6 gap-4">
                         <div className="col-start-1 col-end-4">
                             <input
                                 name='amount'
@@ -299,7 +298,7 @@ export function AddIncomeForm() {
                                 type="date"
                                 id='date'
                                 required
-                                className='text-gray-400 border-Cborder border rounded-lg bg-bg-form px-4 py-2 w-full'
+                                className='appearance-none block text-gray-400 border-Cborder border rounded-lg bg-bg-form px-4 py-2 w-full'
                             />
                             <label className="sr-only" htmlFor='amount'>Date *</label>
                         </div>

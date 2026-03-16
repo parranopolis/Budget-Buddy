@@ -172,7 +172,7 @@ export function DailyExpense() {
 
           <article>
             <form id="testForm" className="grid grid-cols-6 gap-4" onSubmit={sendForm}>
-              <div className="col-start-1 col-end-6">
+              <div className="col-span-5">
                 <input
                   name="amount"
                   onChange={handleChange}
@@ -188,9 +188,9 @@ export function DailyExpense() {
                 <label className="sr-only" htmlFor="amount">Amount *</label>
               </div>
 
-              <img src="/Scan-Receipt.webp" alt="" className="col-start-6" />
+              <img src="/Scan-Receipt.webp" alt="" className="col-span-1" />
 
-              <div className="col-start-1 col-end-4">
+              <div className="col-span-3">
                 <input
                   name="date"
                   value={formData.date}
@@ -198,12 +198,12 @@ export function DailyExpense() {
                   type="date"
                   id="date"
                   required
-                  className="text-gray-400 border-Cborder border rounded-lg bg-bg-form px-4 py-2 w-full"
+                  className="appearance-none block text-gray-400 border-Cborder border rounded-lg bg-bg-form px-4 py-2 w-full"
                 />
                 <label className="sr-only" htmlFor="date">Date *</label>
               </div>
 
-              <div className="col-start-4 col-end-7">
+              <div className="col-span-3">
                 <select
                   name="payMethod"
                   value={formData.payMethod}
@@ -216,7 +216,7 @@ export function DailyExpense() {
                 </select>
               </div>
 
-              <div className="col-start-1 col-end-7">
+              <div className="col-span-6">
                 <input
                   name="store"
                   value={formData.store}
@@ -231,7 +231,7 @@ export function DailyExpense() {
                 <label className="sr-only" htmlFor="store">Store</label>
               </div>
 
-              <div className="flex col-start-1 col-end-7 gap-6 overflow-x-auto overscroll-x-contain snap-x snap-mandatory">
+              <div className="flex col-span-6 gap-6 overflow-x-auto overscroll-x-contain snap-x snap-mandatory">
                 {categories.map((cat) => {
                   const isActive = formData.field === cat;
                   return (
@@ -254,7 +254,7 @@ export function DailyExpense() {
                 })}
               </div>
 
-              <div className="col-start-1 col-end-7">
+              <div className="col-span-6">
                 <textarea
                   name="note"
                   value={formData.note}
@@ -266,7 +266,7 @@ export function DailyExpense() {
                 <label className="sr-only" htmlFor="note"></label>
               </div>
 
-              <div className='col-start-1 col-end-7'>
+              <div className='col-span-6'>
                   <Submit text={isSubmitting ? "Saving..." : "Send"} disable={isSubmitting} />
               </div>
             </form>
