@@ -36,32 +36,20 @@ export function LoginForm() {
     }
 
     return (
-        <section className="authForm">
+        <section className="">
+            <form action=''></form>
             <div className="center formError h6">
                 <span>{loginError}</span>
             </div>
-            <div className="row">
-                <div className="input-field col s12">
-                    <input type="text"
-                        placeholder="email..."
-                        onChange={(e) => setEmail(e.target.value)}
-                    />
-                    <label className="active" htmlFor="first_name2">Email</label>
-                </div>
-            </div>
-            <div className="row">
-                <div className="input-field col s12">
-                    <input
-                        placeholder="*******"
-                        type="password"
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                    <label className="active" htmlFor="first_name2">Password</label>
-                </div>
-            </div>
-            <span onClick={logIn}>
-                <Submit text="Log in" />
-            </span>
+            <article className="flex flex-col gap-2 mb-8">
+                <label className="active" htmlFor="first_name2"></label>
+                <input type="text" className="rounded-lg border py-2 px-6 w-full" placeholder="Email..."onChange={(e) => setEmail(e.target.value)}/>
+                <label className="active" htmlFor="first_name2"></label>
+                <input placeholder="*******" className='rounded-lg border py-2 px-6 w-full'type="password" onChange={(e) => setPassword(e.target.value)}/>
+                <span onClick={logIn} className="mt-4">
+                    <Submit text="Log In" />
+                </span>
+            </article>
             <div className="authForm-options p-large">
                 {/* <Link to={`/password_recovery`}>Reset password</Link> */}
                 <span>No account? </span><Link to={`/signin`}> Create one</Link>
@@ -113,31 +101,18 @@ export function SignIn() {
     }
     const reRoute = useNavigate()
     return (
-        <section className="authForm">
+        <section className="">
             <div className="center formError h6">
                 <span>{sigInError}</span>
             </div>
-            <div className="row">
-                <div className="input-field col s12">
-                    <input type="text"
-                        placeholder="email..."
-                        onChange={(e) => setEmail(e.target.value)}
-                    />
-                    <label className="active" htmlFor="first_name2">Email</label>
-                </div>
-            </div>
-            <div className="row">
-                <div className="input-field col s12">
-                    <input
-                        placeholder="*******"
-                        type="password"
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                    <label className="active" htmlFor="first_name2">Password</label>
-                </div>
-            </div>
-            <span onClick={singIn}><Submit text="Create Account" /></span>
-            <div className="authForm-options p-large">
+            <article className="flex flex-col gap-2 mb-8">
+                <label className="active" htmlFor="first_name2"></label>
+                <input className="border rounded-lg py-2 px-6 w-full" type="text" placeholder="Email..." onChange={(e) => setEmail(e.target.value)}/>
+                <label className="active" htmlFor="first_name2"></label>
+                <input className="border rounded-lg py-2 px-6 w-full" placeholder="*******" type="password" onChange={(e) => setPassword(e.target.value)}/>
+                <span className="mt-4" onClick={singIn}><Submit text="Create Account" /></span>
+            </article>
+            <div className="">
                 <span>Already have one? </span><Link to={`/login`}>Log in</Link>
             </div>
         </section >

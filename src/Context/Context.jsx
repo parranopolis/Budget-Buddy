@@ -5,8 +5,6 @@ import { onAuthStateChanged } from "firebase/auth";
 export const UserContext = createContext();
 export const TimeContext = createContext();
 
-const UID = auth
-
 export const UserProvider = ({ children }) => {
     const [userId, setUserId] = useState('')
     const [userName, setUserName] = useState('')
@@ -16,8 +14,6 @@ export const UserProvider = ({ children }) => {
                 if (user) {
                     setUserId(user.uid)
                     setUserName(user.displayName)
-                } else {
-                    console.log('user is signed out')
                 }
             })
         return () => {

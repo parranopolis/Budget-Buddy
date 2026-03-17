@@ -7,15 +7,15 @@ export function CreateAccount() {
         <>
             <article className="login">
                 <section className="login-header">
-                    <div className="logo">Logo</div>
-                    <div className="center h3">Sign up for Budget Buddy</div>
+                    <img src="/logo.webp" alt="" className="" />
+                    {/* <div className="center h3">Sign up for Budget Buddy</div> */}
                 </section>
                 {/* <section className="formContainer"> */}
-                <section className="login-Form">
+                <section className="flex flex-col gap-4 text-center py-8">
                     <UseGoogleAccount text={'Continue with Google'} />
 
                     {/* <hr className="divisor" /> */}
-                    <span className="h6 center divisor">OR</span>
+                    <span className="text-2xl">OR</span>
                     <SignIn />
                 </section>
             </article>

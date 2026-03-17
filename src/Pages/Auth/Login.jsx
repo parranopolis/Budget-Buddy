@@ -8,12 +8,14 @@ export function Login() {
         <>
             <article className="login">
                 <section className="login-header">
-                    <div className="logo">Logo</div>
-                    <div className="center h3">Sign In to Budget Buddy</div>
+                    <img src="/logo.webp" alt="" className="" />
+
+                    {/* <div className="logo"></div> */}
+                    {/* <div className="text-center h3">Sign In</div> */}
                 </section>
-                <section className="login-Form">
+                <section className="flex flex-col gap-4 text-center py-8">
                     <UseGoogleAccount text={'Continue with Google'} />
-                    <span className="h6 center divisor">OR</span>
+                    <span className="text-2xl">OR</span>
                     <LoginForm />
                 </section>
             </article>
