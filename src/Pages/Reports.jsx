@@ -69,44 +69,46 @@ export function Reports (){
             <h3 className='text-3xl font-medium pb-8'>Analysis</h3>
             <TimeFrames onChange={handleTimeFrame} activeTimeFrame={status.period}/>
             {status.expenseTotalPeriod == 0 && status.incomeTotalPeriod == 0 ? 
-            <div className="text-red-700 text-center text-xl font-medium w-full my-8">
-                <h2 className="text-2xl">There is no data to display <br/>Please change the search criteria.</h2>
-            </div> 
+                <div className="text-red-700 text-center text-xl font-medium w-full my-8">
+                    <h2 className="text-2xl">There is no data to display <br/>Please change the search criteria.</h2>
+                </div> 
             :
-            <section className="flex flex-col gap-8 mt-4">
-                {/* <article className="w-full bg-[rgba(129_230_217_/_0.43)] h-42 rounded-2xl px-4 pt-2">
-                    {/* <div className="w-full px-4"><canvas id="acquisitions"></canvas></div> */}
-                    {/* <ChartActivity/>
-                </article> */}
-                <article className="flex flex-col gap-4 text-xl font-extralight">
-                    <div className="flex justify-between">
-                        <span>Income:</span><span>$ {status.incomeTotalPeriod}</span>
-                    </div>
-                    {status.incomeTotalPeriod == 0 ? 
-                    <div className="flex justify-between">
-                        <span>Outcome:</span>
-                        <span>$ {status.expenseTotalPeriod}</span>
-                    </div> : 
-                    <>
+                <section className="flex flex-col gap-8 mt-4">
+                    {/* <article className="w-full bg-[rgba(129_230_217_/_0.43)] h-42 rounded-2xl px-4 pt-2">
+                        {/* <div className="w-full px-4"><canvas id="acquisitions"></canvas></div> */}
+                        {/* <ChartActivity/>
+                    </article> */}
+                    <AnalyzedData expense={q}/>
+                    <article className="text-center text-xl font-medium">
+                        {status.incomeTotalPeriod == 0 && status.expenseTotalPeriod == 0 ? '' : calcPercentage(status.incomeTotalPeriod, status.expenseTotalPeriod) }
+                    </article>
+                    <article className="flex flex-col gap-4 text-xl font-extralight">
+                        <div className="flex justify-between">
+                            <span>Income:</span><span>$ {status.incomeTotalPeriod}</span>
+                        </div>
+                        {status.incomeTotalPeriod == 0 ? 
                         <div className="flex justify-between">
                             <span>Outcome:</span>
                             <span>$ {status.expenseTotalPeriod}</span>
-                        </div>
-                        <hr />
-                        <div className="flex justify-between">
-                            <span>Remaining:</span><span>$ {(status.incomeTotalPeriod - status.expenseTotalPeriod).toFixed(2)}</span>    
-                        </div>
-                    </>
-                    }
-                </article>
-                {/* Este deberia estar completamente al fondo, justo arriba de la barra de navegacion */}
-                <article className="text-center text-xl font-medium">
-                    {status.incomeTotalPeriod == 0 && status.expenseTotalPeriod == 0 ? '' : calcPercentage(status.incomeTotalPeriod, status.expenseTotalPeriod) }
-                </article>
-                <AnalyzedData expense={q}/>
-
-            </section>
-                    }
+                        </div> : 
+                        <>
+                            <div className="flex justify-between">
+                                <span>Outcome:</span>
+                                <span>$ {status.expenseTotalPeriod}</span>
+                            </div>
+                            <hr />
+                            <div className="flex justify-between">
+                                <span>Remaining:</span><span>$ {(status.incomeTotalPeriod - status.expenseTotalPeriod).toFixed(2)}</span>    
+                            </div>
+                        </>
+                        }
+                    </article>
+                    {/* <article>
+                        <h3 className="text-3xl">Category Breakdown</h3>
+                        {console.log(status.categories)}
+                    </article> */}
+                </section>
+            }
         </main>
         <aside>
                 <NavBarTest/>

@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom"
-import { useCallback,useContext, useEffect, useState } from "react"
+import { useCallback,useContext, useEffect, useMemo, useState } from "react"
 import {PropTypes } from 'prop-types'
 import { monthlyCollectionContext } from "../Context/ExpensesContext"
 // import { TimeContext } from "../Context/Context"
@@ -15,15 +15,17 @@ import { Transactions } from "../Components/Records"
 
 export function Activity() {
     const { monthlyExpense, exampleValue, categoryRef, setCategoryRef } = useContext(monthlyCollectionContext)
-    // const { currentMonth, currentYear, currentMonthName } = useContext(TimeContext)
-    // console.log(currentMonth, currentMonthName, currentYear)
     const [status, setStatus] = useState({
             category: categoryRef,
             map: [],  // mapa de datos filtrados listos para la UI
             period: '1W',
             totalThisPeriod: 0
         })
-
+    const [filterModal, setFilterModal] = useState({
+        showModal: true,
+        categoryFilterData: [],
+        activeCategories:[]
+    })
     // Cambia entre categorias
     const handleShowCategory = () => {
         const nextCategory = categoryRef === 'Expenses' ? 'Income' : 'Expenses'
@@ -39,17 +41,45 @@ export function Activity() {
         // exampleValue.setFilter(frame)
     },[])
 
+    // const [activeFilters, setActiveFilters ] = useState([])
+
    useEffect(()=>{
+        
     exampleValue.setFilter(status.period)
    },[exampleValue,status.period,setCategoryRef,status.category])
 
+
+   useMemo(() => {
+    const categoryFiltered = [...new Set(monthlyExpense.map( item => item.field))]
+    setFilterModal(prev => ({...prev, categoryFilterData: categoryFiltered}))
+   },[monthlyExpense])
+    
+    const handleFilterChange = (e) =>{
+        const {value, checked} = e.target
+        setFilterModal((prev) => {
+    if (checked) {
+      // Si está marcado, lo agregamos al array de checkboxes
+      return {
+        ...prev,
+        activeCategories: [...prev.activeCategories, value]
+      };
+    } else {
+      // Si se desmarca, filtramos para quitar ese valor
+      return {
+        ...prev,
+        activeCategories: prev.activeCategories.filter((item) => item !== value)
+      };
+    }
+  });
+    };
     return (
         <>
         <main className="mx-8 my-8">
                 <h1 className='text-3xl font-medium'>Movement History</h1>
                 <section className="flex flex-col gap-8 mt-4">
                     {/* <article className="border-Cborder border rounded-lg bg-bg-form px-4 py-2 w-full flex justify-between items-center">
-                        <span className="text-3xl">←</span><span className="text-2xl font-extralight">Today</span><span className="text-3xl">→</span>
+                        <span className="text-3xl">←</span><span className
+                        ="text-2xl font-extralight">Today</span><span className="text-3xl">→</span>
                     </article> */}
                   
                     {/* Tienes que sacar el rango de tiempo y en base a eso hacer el fetching de datos. */}
@@ -58,69 +88,29 @@ export function Activity() {
                     <TimeFrames onChange={handleTimeFrame} activeTimeFrame={status.period}/>
                     
                     {/* Charts  activar cuando tengas los datos completos. */}
-                    {/* <article className="w-full bg-[rgba(129_230_217_/_0.43)] h-42 rounded-2xl px-4 pt-2">
-                        {/* <div className="w-full px-4"><canvas id="acquisitions"></canvas></div> */}
+                    {/* <article className="w-full bg-[rgba(129_230_217_/_0.43)] h-42 rounded-2xl px-4 pt-2"> */}
+                     {/* <div className="w-full px-4"><canvas id="acquisitions"></canvas></div> */}
                         {/* <ChartActivity/> */}
                     {/* </article> */}
-                    
-                    {/* activar cuando tengas los datos completos y puedas filtrar */}
-                    {/* <article className="flex justify-between gap-4"> */}
-                        {/* hamburger menu */}
-                        {/* <div className="w-8 flex flex-col gap-2 my-auto ml-2">
-                            <div className="p-0 m-0 border"></div>
-                            <div className="p-0 m-0 border"></div>
-                            <div className="p-0 m-0 border"></div>
-                        </div>  */}
                         {/* Filters Button */}
-                        {/* <div className="border-Cborder border rounded-lg bg-bg-form px-4 py-2 w-full text-center"> */}
-                            {/* Filters */}
-                        {/* </div> */}
-                    {/* </article> */}
-                {/*     filtro de semana, mes, año  */}
-                {/* <section>
-                        <div className="center period">
-                            <span
-                                id="W"
-                                onClick={onPeriodState}
-                                className={`test ${status.period === 'W' ? 'isActive' : ''}`}
-                            >
-                                W
-                            </span>
-                            <span
-                                id="M"
-                                onClick={onPeriodState}
-                                className={`test ${status.period === 'M' ? 'isActive' : ''}`}
-                            >
-                                M
-                            </span>
-                            <span
-                                id="Y"
-                                onClick={onPeriodState}
-                                className={`test ${status.period === 'Y' ? 'isActive' : ''}`}
-                            >
-                                Y
-                            </span>
-                        </div>
-                        <br />
-                        <div>
-                            <span className="h3">{currentMonth} {currentYear}</span>
-                            {status.period === 'W' ? (
-                                <span className="h3"> {q}</span>
-                            ) : status.period === 'M' ? (
-                                <span className="h3" >{currentMonthName}</span>
-                            ) : (
-                                <span className="h3" >{currentYear}</span>
-                            )}
-                        </div>
-                        <br />
-                        <div>
-                            <section>
-                                <div>Total {status.category}</div>
-                                <div className='h2 totalAmount'>{status.totalThisPeriod}</div>
-                                <span className="h6">Total Transactions in this period {status.map.length}</span>
-                            </section>
-                        </div>
-                    </section>  */}
+                    {categoryRef === "Expenses" ?  <article className="border-Cborder border bg-bg-form px-4 py-2 w-full rounded-lg" >
+                        <h2 className="text-center text-2xl font-semibold" onClick={() => setFilterModal({...filterModal, showModal: !filterModal.showModal, activeCategories: []})}>Filters</h2>
+                        {filterModal.showModal == false ? "" : 
+                            <div className="w-full px-4 py-4">
+                                <form action="" className="flex flex-col gap-4">
+                                <h3 className="text-lg underline italic font-medium">Categories</h3>
+                                <div className="grid grid-cols-2 gap-2 py-4">
+                                    {filterModal.categoryFilterData.map((category) =>(
+                                    <label htmlFor="" key={category}>
+                                        <input type='checkbox' name='category' value={category} onChange={handleFilterChange} /> {category}
+                                    </label>
+                                    ))}
+                                </div>
+                                </form>
+                            </div>
+                        }
+                        </article> :""}
+                    
                 </section>
                 <section className="mt-4">
                     <div className="flex justify-between items-center">
@@ -128,9 +118,8 @@ export function Activity() {
                         <span onClick={handleShowCategory} className="p-large right" style={{ color: '#f36c9c' }}>Show {status.category === "Income" ? 'Expenses' : "Income"}<ion-icon name="chevron-forward-outline"></ion-icon></span>
                     </div>
                     {/* <DataList data={status.map} category={status.category}></DataList> */}
-                    <Transactions data={monthlyExpense} collectionRef={categoryRef} />
+                    <Transactions data={monthlyExpense} collectionRef={categoryRef} filterCategory={filterModal}/>
                 </section>
-            {/* <NavBar /> */}
         </main>
         <aside>
             <NavBarTest />

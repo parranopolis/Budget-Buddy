@@ -61,7 +61,7 @@ const handleShowCategory = () =>{
       </section>
       {/* transactions */}
       <section className="py-8 px-8">
-        <Transactions data={HomeData} collectionRef={categoryRef} range={'today'} />
+        <Transactions data={HomeData} collectionRef={categoryRef} filterCategory={{activeCategories:[]}}/>
       </section>
       <aside>
         <NavBarTest />

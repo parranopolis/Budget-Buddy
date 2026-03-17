@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react"
+import { useContext, useEffect, useMemo, useState } from "react"
 import { Link, useLocation } from "react-router-dom"
 import PropTypes from 'prop-types'
 import { where,query,doc, deleteDoc, collection, getDocs } from 'firebase/firestore'
@@ -8,7 +8,6 @@ import { NavBar, TopNavBar } from "./NavBar"
 import { db } from "../../services/firebaseConfig"
 import { DoughnutChart } from "./Activity"
 import { UserContext } from "../Context/Context"
-
 
 TotalSum.propTypes = {
     title : PropTypes.string,
@@ -101,30 +100,49 @@ function lastWeekSameWeekdayKey(today = new Date()) {
 
 Transactions.propTypes = {
     data : PropTypes.array,
-    collectionRef: PropTypes.string
+    collectionRef: PropTypes.string,
+    filterCategory: PropTypes.object
 }
 
-export function Transactions({ data, collectionRef }) {
+export function Transactions({ data, collectionRef, filterCategory }) {
     const [state, setState] = useState({
         date: new Date().toDateString(),
-        transaction: data,
+        transaction: [],
         category: collectionRef
     })
+
+    const q = useMemo(()=>{
+        if(data.length === 0) return []
+        if(filterCategory.activeCategories.length === 0) return data
+        return data.filter((item)=> filterCategory.activeCategories.includes(item.field))
+    },[data,filterCategory.activeCategories])
+
     useEffect(() => {
+        // if(q.length === 0) return
         setState(prevState => ({
             ...prevState,
-            transaction: data,
+            transaction: q.length === 0 ?data : q,
             category: collectionRef
         }))
-    }, [data,collectionRef])
+
+    }, [data,collectionRef,state.transaction,q])
+    
     return (
         <>
-        {data.length === 0 ? <span className='text-3xl font-bold'>No Activity</span> : (<>
+        {state.transaction.length === 0 ? <span className='text-3xl font-bold'>No Activity</span> : (<>
             <article>
                     <hr className="my-4 text-gray-300" />
                     <span className='text-3xl font-bold'>Activity</span>
+                    {location.pathname === "/" ? "" : (
+                        <div className="flex justify-around text-xl mt-4">
+                            <span>Transaccions: </span>
+                            <span>{state.transaction.length}</span>
+                            <span>Total: </span>
+                            <span>${state.transaction.reduce((acc, item) => acc + parseFloat(item.amount), 0).toFixed(2)}</span>
+                        </div>
+                    )}
                 </article>
-                <article className="flex flex-col gap-8 mt-8">
+                <article className="flex flex-col gap-8 mt-6">
 
                     {state.transaction?.map((item) => {
                         return (
