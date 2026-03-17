@@ -22,7 +22,7 @@ export function Activity() {
             totalThisPeriod: 0
         })
     const [filterModal, setFilterModal] = useState({
-        showModal: true,
+        showModal: false,
         categoryFilterData: [],
         activeCategories:[]
     })
