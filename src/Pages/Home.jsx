@@ -35,7 +35,9 @@ const handleShowCategory = () =>{
       <section className="bg-main py-8 px-8 flex flex-col gap-8 shadow">
         {/* personal info */}
         <article className="text-2xl grid grid-cols-[auto,1fr,auto] gap-4 items-center">
-          <div className="bg-white shadow rounded-full w-18 h-18 col-start-1"></div>
+          <div className="bg-white shadow rounded-full w-18 h-18 col-start-1">
+            <img src="/logo.webp" alt="" className="rounded-full" />
+          </div>
           <span className="bg-white py-4 px-6 rounded-2xl shadow min-w-0 text-center">{userName}</span>
           <span className="col-start-4" onClick={handleShowCategory}>{state.icon}</span> 
         </article>

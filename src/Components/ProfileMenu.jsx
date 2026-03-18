@@ -1,4 +1,4 @@
-import { Link, redirect, useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { useContext, useState } from "react"
 import { buildingBranch } from "../Logic"
 
@@ -8,7 +8,7 @@ import { UserContext } from "../Context/Context"
 
 export function ProfileMenu() {
     const [state, setState] = useState('disable')
-    var q = window.innerHeight - 70
+    // var q = window.innerHeight - 70
 
     const reRoute = useNavigate()
     const { userId, setUserId } = useContext(UserContext)

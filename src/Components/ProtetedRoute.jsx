@@ -49,7 +49,7 @@ export function ProtectedRoute({ children }) {
             if (user == null) {
                 reRoute('/login')
             } else {
-                setUserId(user.uid)
+                setUserId(user)
             }
         })
 
