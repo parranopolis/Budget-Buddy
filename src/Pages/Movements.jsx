@@ -12,10 +12,30 @@ import { useMemo } from "react";
 import {Timestamp } from "firebase/firestore";
 import { useLocation, useParams } from 'react-router-dom';
 import { FormatingText } from '../Logic/functions';
+import { Categories } from '../Components/Categories';
 
 export function DailyExpense() {
   const { userId } = useContext(UserContext);
-  const categories = ["General", "Food", "Gas", "Necessary", "Other"];
+  // const categories = ["General", "Food","Transport", "Gas", "Necessary", "Other", "Entertainment", "Health", "Education", "Shopping", "Bills", "Travel", "Gifts", "Subscriptions", "Work", "Personal Care"];
+  const categories = [
+  { name: "Food", icon: "🥩", color: "#f87171" },    // Red
+  { name: "Junk Food", icon: "🍕", color: "#f65ff1" },    // Red
+  { name: "Transport", icon: "🚗", color: "#fb923c" }, // Orange
+  { name: "Gas", icon: "⛽", color: "#fbbf24" },      // Amber
+  { name: "Necessary", icon: "🏠", color: "#4ade80" }, // Green
+  { name: "Other", icon: "✨", color: "#2dd4bf" },    // Teal
+  { name: "Entertainment", icon: "🎬", color: "#38bdf8" }, // Sky
+  { name: "Health", icon: "🏥", color: "#818cf8" },    // Indigo
+  { name: "Education", icon: "📚", color: "#a78bfa" }, // Violet
+  { name: "Shopping", icon: "🛍️", color: "#e879f9" }, // Fuchsia
+  { name: "Bills", icon: "📄", color: "#f472b6" },    // Pink
+  { name: "Travel", icon: "✈️", color: "#fb7185" },    // Rose
+  { name: "Gifts", icon: "🎁", color: "#fb923c" },    // Orange
+  { name: "Subscriptions", icon: "📺", color: "#60a5fa" }, // Blue
+  { name: "Work", icon: "💼", color: "#4b5563" },     // Gray
+  { name: "Personal Care", icon: "🧴", color: "#5eead4" }, // Teal light
+  { name: "General", icon: "📦", color: "#94a3b8" }, // Slate
+];
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [todayDate] = useState(() => {
@@ -158,13 +178,15 @@ export function DailyExpense() {
 //     "store": "pizza rica",
 //     "note": ""
 // }
+    const [showModal, setShowModal] = useState(true)
+
   return (
     <>
       <main className="mx-8 my-8">
         <h3 className="text-3xl font-medium">{isEditMode ? 'Update Expense' : 'Add Expense'}</h3>
 
         <section>
-          <article className="center">
+          <article className="">
             <br />
             {formError && <span className="formError">{formError}</span>}
             {succesMessage && <span className="formSucces">{succesMessage}</span>}
@@ -231,27 +253,9 @@ export function DailyExpense() {
                 <label className="sr-only" htmlFor="store">Store</label>
               </div>
 
-              <div className="flex col-span-6 gap-6 overflow-x-auto overscroll-x-contain snap-x snap-mandatory">
-                {categories.map((cat) => {
-                  const isActive = formData.field === cat;
-                  return (
-                    <button
-                      key={cat}
-                      type="button"
-                      data-value={cat}
-                      onClick={handleActiveCategory}
-                      className={[
-                        "w-18 shrink-0 snap-start h-18 rounded-full relative flex items-center justify-center",
-                        "bg-category",
-                        isActive
-                          ? "active-category-button ring-4 ring-white/70 shadow-lg scale-105"
-                          : "opacity-80 hover:opacity-100",
-                      ].join(" ")}
-                    >
-                      {cat}
-                    </button>
-                  );
-                })}
+              <div className="flex col-span-6 gap-6 overflow-x-auto overscroll-x-contain snap-x snap-mandatory py-4"> 
+                {/* {showModal === true ? <Modal/> : null} */}
+                <Categories categoriesData={categories} callback={handleActiveCategory} formData={formData}/>
               </div>
 
               <div className="col-span-6">
@@ -280,6 +284,62 @@ export function DailyExpense() {
   );
 }
 
+const Modal = () => {
+    return (
+         <section className="border bg-white flex w-80">
+            
+            <div>
+                <article>
+                <h3 className="text-2xl">Create New Category</h3>
+                <input
+                    name="store"
+                    //   value={formData.store}
+                    //   onChange={handleChange}
+                    type="text"
+                    id="store"
+                    className="border-Cborder border rounded-lg bg-bg-form px-4 py-2"
+                    placeholder="Store Name"
+                    autoCapitalize='words'
+                    
+                    />
+                    {/* color row */}
+                <div className="flex col-span-6 gap-6 overflow-x-auto overscroll-x-contain snap-x snap-mandatory w-3/4"> 
+                    <div className="w-12 h-12 border rounded-full bg-red-800 shrink-0 snap-start relative flex items-center justify-center"></div>
+                    <div className="w-12 h-12 border rounded-full bg-red-800 shrink-0 snap-start relative flex items-center justify-center"></div>
+                    <div className="w-12 h-12 border rounded-full bg-red-800 shrink-0 snap-start relative flex items-center justify-center"></div>
+                    <div className="w-12 h-12 border rounded-full bg-red-800 shrink-0 snap-start relative flex items-center justify-center"></div>
+                    <div className="w-12 h-12 border rounded-full bg-red-800 shrink-0 snap-start relative flex items-center justify-center"></div>
+                    <div className="w-12 h-12 border rounded-full bg-red-800 shrink-0 snap-start relative flex items-center justify-center"></div>
+                    <div className="w-12 h-12 border rounded-full bg-red-800 shrink-0 snap-start relative flex items-center justify-center"></div>
+                    <div className="w-12 h-12 border rounded-full bg-red-800 shrink-0 snap-start relative flex items-center justify-center"></div>
+                    <div className="w-12 h-12 border rounded-full bg-red-800 shrink-0 snap-start relative flex items-center justify-center"></div>
+                    <div className="w-12 h-12 border rounded-full bg-red-800 shrink-0 snap-start relative flex items-center justify-center"></div>
+                    <div className="w-12 h-12 border rounded-full bg-red-800 shrink-0 snap-start relative flex items-center justify-center"></div>
+                    <div className="w-12 h-12 border rounded-full bg-red-800 shrink-0 snap-start relative flex items-center justify-center"></div>
+                    <div className="w-12 h-12 border rounded-full bg-red-800 shrink-0 snap-start relative flex items-center justify-center"></div>
+                    <div className="w-12 h-12 border rounded-full bg-red-800 shrink-0 snap-start relative flex items-center justify-center"></div>
+                    <div className="w-12 h-12 border rounded-full bg-red-800 shrink-0 snap-start relative flex items-center justify-center"></div>
+                </div>
+                {/* icons row */}
+                <div className="flex">
+                    <div className="w-12 flex items-center justify-center h-12 rounded-full bg-blue-400"><ion-icon name="airplane-outline"></ion-icon></div>
+                    <div className="w-12 flex items-center justify-center h-12 rounded-full bg-blue-400"><ion-icon name="airplane-outline"></ion-icon></div>
+                    <div className="w-12 flex items-center justify-center h-12 rounded-full bg-blue-400"><ion-icon name="airplane-outline"></ion-icon></div>
+                    <div className="w-12 flex items-center justify-center h-12 rounded-full bg-blue-400"><ion-icon name="airplane-outline"></ion-icon></div>
+                </div>
+            </article>
+                <h4 className="text-2xl">Modify Category</h4>
+            <article className="flex gap-4">
+                <span className="px-4 py-2 rounded-lg bg-purple-300">Category 1</span>
+                <span className="px-4 py-2 rounded-lg bg-purple-300">Category 2</span>
+                <span className="px-4 py-2 rounded-lg bg-purple-300">Category 3</span>
+            </article>
+            <Submit text={'Create New Category'} />
+            </div>
+            
+        </section>
+    )
+};
 
 export function AddIncome() {
     return (
