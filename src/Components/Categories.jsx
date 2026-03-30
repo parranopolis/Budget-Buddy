@@ -1,42 +1,10 @@
 import { PropTypes } from "prop-types";
-
-
 Categories.propTypes= {
     categoriesData : PropTypes.array,
     callback : PropTypes.func,
     formData : PropTypes.object
     
 }
-
-// export function Categories({categoriesData,callback, formData}){
-//     return (
-//         <>
-//         <span className="text-3xl w-18 shrink-0 snap-start h-18 rounded-full relative flex items-center justify-center bg-category">+ </span>
-//         {/* // onClick={() => setShowModal(showModal === true ? false : true)}>+ </span> */}
-
-//         {categoriesData.map((cat) => {
-//                   const isActive = formData.field === cat;
-//                   return (
-//                     <button
-//                       key={cat}
-//                       type="button"
-//                       data-value={cat}
-//                       onClick={callback}
-//                       className={[
-//                         "w-18 shrink-0 snap-start h-18 rounded-full relative flex items-center justify-center",
-//                         "bg-category",
-//                         isActive
-//                           ? "active-category-button ring-4 ring-white/70 shadow-lg scale-105"
-//                           : "opacity-80 hover:opacity-100",
-//                       ].join(" ")}
-//                     >
-//                       {cat}
-//                     </button>
-//                   );
-//                 })}
-//         </>
-//     )
-// }
 
 export function Categories({ categoriesData, callback, formData }) {
   return (

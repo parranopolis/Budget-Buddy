@@ -199,8 +199,7 @@ export async function getExpensesByTimeFrame(uid, frame, collectionName, subColl
     const endStr = dateToStrLocal(end);
     // Start date is depends on the time frame
     const startStr = dateToStrLocal(start);
-    // console.log(startStr)
-
+  
     // pendiente activar el filtro -> all transactions
     
     // "all" = read all months docs under /months and then each month's expenses
@@ -234,7 +233,7 @@ export async function getExpensesByTimeFrame(uid, frame, collectionName, subColl
     
     
     // inicio y fin del rango de filtrando
-    const [startTimeFrame,endTimeFrame] = monthsBetweenInclusive(start, end);
+    // const [startTimeFrame,endTimeFrame] = monthsBetweenInclusive(start, end);
 
       const colRef = collection(db,collectionName,uid,subCollectionName);
 
@@ -250,45 +249,4 @@ export async function getExpensesByTimeFrame(uid, frame, collectionName, subColl
       const snap = await getDocs(qRange);
       return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
 
-    // return startStr
 }
-
-
-
-
-// Uso:
-// const items = await getTodayExpenses(auth.currentUser.uid);
-// console.log(items);
-
-
-// const expenseCollectionRef = collection(db, 'newMonthlyExpenses')
-        // const getMonthlyExpenseList = async () => {
-        //     // get info from local json file for testing purposes
-        //     let q = []
-        //     for (const key in test[userId]) {
-        //         if (!Object.hasOwn(test[userId], key)) continue;
-                
-        //         const expenseData = test[userId][key];
-        //         q.push(expenseData)
-        //     }
-        //     // console.log(q);
-        //     setMonthlyExpense(q)
-
-        //     //get info from firebase data base 
-        //     try {
-           
-                
-        //         // if (userId !== '') {
-        //             // const setQuery = await query(expenseCollectionRef)
-        //             // const data = (await getDocs(setQuery))
-        //             // const expenseData = data.docs.map(item => ({
-        //             //     id: item.id,
-        //             //     ...item.data()
-        //             // }))
-        //             // setMonthlyExpense(expenseData)
-        //         // }
-        //     } catch (error) {
-        //         console.log(error)
-        //     }
-        // }
-        // getMonthlyExpenseList()

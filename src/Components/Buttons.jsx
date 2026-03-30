@@ -1,26 +1,22 @@
-import { useState, useContext } from 'react'
-import { auth, googleProvider } from '../../services/firebaseConfig'
+import { auth } from '../../services/firebaseConfig'
 import '../Styles/components/Buttons.css'
 import '../Styles/main.css'
 
 import { useNavigate } from 'react-router-dom'
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
 
-import { UserContext } from '../Context/Context'
 
 export function GoogleButton({ text }) {
-    const { userId, setUserId } = useContext(UserContext)
     const reRoute = useNavigate()
     
     const provider = new GoogleAuthProvider()
     provider.setCustomParameters({
         prompt : 'select_account'
     })
-    const signInWithGoogle = (e) => {
+    const signInWithGoogle = () => {
 
         signInWithPopup(auth, provider)
-            // getRedirectResult(auth)
-            .then((result) => {
+            .then(() => {
                 reRoute('/')
             })
 
@@ -43,7 +39,6 @@ export function GoogleButton({ text }) {
 
 export function Submit({ text }) {
     return (
-        // <button className="btn waves-effect waves-light SubmitButton SubmitButton-PrimaryColor p-large" type="submit" name="action">{text}</button>
         <button className="bg-primary w-full px-4 py-2 text-white font-medium rounded-lg" type="submit" name="action">{text}</button>
     )
 }

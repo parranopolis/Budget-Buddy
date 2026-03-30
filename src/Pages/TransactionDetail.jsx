@@ -45,8 +45,6 @@ export function TransactionDetail() {
     return (
         <>
             <main className="h-screen">
-{/* 2F855A */}
-{/* 4A5568 36% */}
                 <section className="bg-[#2F855A] h-[25%] flex justify-between items-end-safe px-12 pb-8 text-white">
                     <div className="w-26 h-26 bg-[#4A5568] opacity-36 rounded-2xl">
                         <span></span>

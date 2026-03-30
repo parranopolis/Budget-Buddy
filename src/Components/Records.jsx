@@ -4,10 +4,11 @@ import PropTypes from 'prop-types'
 import { where,query,doc, deleteDoc, collection, getDocs } from 'firebase/firestore'
 import { monthlyCollectionContext } from "../Context/ExpensesContext"
 import './../Styles/components/Records.css'
-import { NavBar, TopNavBar } from "./NavBar"
+import { TopNavBar } from "./NavBar"
 import { db } from "../../services/firebaseConfig"
 import { DoughnutChart } from "./Activity"
 import { UserContext } from "../Context/Context"
+import { categories } from "../Logic/categories"
 
 TotalSum.propTypes = {
     title : PropTypes.string,
@@ -104,6 +105,8 @@ Transactions.propTypes = {
     filterCategory: PropTypes.object
 }
 
+// hacer el loader, la foto de la cateogria, y la pagina de error.
+
 export function Transactions({ data, collectionRef, filterCategory }) {
     const [state, setState] = useState({
         date: new Date().toDateString(),
@@ -118,7 +121,7 @@ export function Transactions({ data, collectionRef, filterCategory }) {
     },[data,filterCategory.activeCategories])
 
     useEffect(() => {
-        // if(q.length === 0) return
+        if(q.length === 0) return
         setState(prevState => ({
             ...prevState,
             transaction: q.length === 0 ?data : q,
@@ -143,14 +146,19 @@ export function Transactions({ data, collectionRef, filterCategory }) {
                     )}
                 </article>
                 <article className="flex flex-col gap-8 mt-6">
-
                     {state.transaction?.map((item) => {
+                        let categoryInfo = categories?.find(cat => cat.name === item.field)
+                        if(categoryInfo === undefined) categoryInfo = { name: "Income", icon: "💰", color: "#2f855a" } // Income
                         return (
                             <Link key={item.id} to={`/transactionDetail/${collectionRef}/${item.id}`} state={item} amount={item}> {/* Merchan detail */}
                                 <article className="text-black flex items-center justify-between gap-4 border-2 rounded-3xl p-6">
                                     <div className="flex items-center gap-4 min-w-0 flex-1">
                                         {/* Avatar / icono */}
-                                        <div className="bg-highlight rounded-full w-16 h-16 shrink-0" />
+                                        <div className={`rounded-full w-16 h-16 shrink-0 flex justify-center items-center`} style={{backgroundColor: categoryInfo.color}}>
+                                            <span className="">
+                                                {categoryInfo.icon}
+                                            </span>
+                                        </div>
                                         {/* Texto */}
                                         <div className="flex flex-col min-w-0">
                                         <span className="text-base font-medium truncate">
@@ -267,56 +275,10 @@ export function MerchanDetail() {
         </>
     )
 }
-// monthlyExpenses
-function Actions({ item }) {
-    const onDelete = async (e) => {
-        // const q = await doc(db, 'id', item.id)
-        const w = doc(db, 'monthlyExpenses', item.id)
-        const q = await deleteDoc(w)
-        // console.log(q.data())
-    }
-    return (
-        <>
-            <span>{item.id}</span>
-            <span className="h5"><ion-icon name="document-text-outline"></ion-icon></span>
-            <span onClick={onDelete} className="h5"><ion-icon name="trash-outline"></ion-icon></span>
-            <Link to={'/transactionDetail'}>
-                <span className="h5"><ion-icon name="chevron-forward-outline"></ion-icon></span>
-            </Link>
-        </>
-    )
-}
-
-// export function DateRange() {
-//     return(
-//         <>
-//             <section className="">
-//                 <article className="border-Cborder border rounded-lg bg-bg-form px-4 py-2 w-full text-center">
-//                     <span className="text-2xl font-extralight">Jul 01 - Jul 07 2025</span>
-//                 </article>            
-                
-//             </section>
-//         </>
-//     )
-// }
-
-//Crear el componente de rango de fecha. Ademas del formato ->  1w,1M,6M,1Y,5Y se debe poder seleccionar el rango de manera custom.
-//   <article className="border-Cborder border rounded-lg bg-bg-form px-4 py-2 w-full flex justify-between text-2xl font-extralight">
-//                         <span className="isActive">1W</span>
-//                         <span>1M</span>
-//                         <span>6M</span>
-//                         <span>1Y</span>
-//                         <span>5Y</span>
-//                     </article>
-
-//Reusarlo en "/reports" y en "/movementHistory"
 
 AnalyzedData.propTypes = {
     expense : PropTypes.array
 }
-
-// Chart.register(ArcElement, Tooltip, Legend, ChartDataLabels);
-
 
 export function AnalyzedData ({expense}){
   const [categoryStats, setCategoryStats] = useState([]);
@@ -352,54 +314,8 @@ export function AnalyzedData ({expense}){
                 {/* <ion-icon name="stats-chart-outline"></ion-icon> */}
                 <DoughnutChart dataSet={categoryStats}/>
             </article>
-            {/* <article className="
-            grid grid-rows-3 grid-flow-col
-            auto-cols-[minmax(8rem,1fr)] 
-            gap-2
-            h-27                            
-            w-full max-w-full
-            overflow-y-auto overflow-x-auto 
-            p-2
-            items-center
-            ">
-            {categoryStats.length === 0 ? (
-                <span>No hay datos</span>
-                ) : (
-                categoryStats.map(stat => (
-                    <span key={stat.category}>
-                    {stat.percentage}% {stat.category}
-                    </span>
-                ))
-            )}
-            </article> */}
         </section>
 
         </>
     )
 }
-
-{/* <article className="review">
-                    <section>
-                        <div>
-                            <span>time/day</span>
-                            <span>price</span>
-                        </div>
-                        <div>map</div>
-                        <div>
-                            <span>Name</span>
-                            <span><ion-icon name="chevron-forward-outline"></ion-icon></span> 
-                        </div>
-                    </section>
-                </article>*/}
-
-// console.log(filterElement)
-// const filteredData = data.filter(entry => { // Modified this to filter throw a prop array of object
-//     if (entry.date) {
-//         const entryDate = new Date(entry.date)
-//         const entryMonth = entryDate.getMonth()
-//         const entryYear = entryDate.getFullYear()
-
-//         return entryMonth === currentMonth && entryYear === currentYear
-//     }
-//     return false
-// })

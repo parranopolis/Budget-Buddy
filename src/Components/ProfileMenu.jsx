@@ -15,7 +15,7 @@ export function ProfileMenu() {
 
     const logAuth = async () => {
         try {
-            await signOut(auth).then((result) => {
+            await signOut(auth).then(() => {
                 setUserId(null)
                 reRoute('/login')
             })
@@ -26,7 +26,7 @@ export function ProfileMenu() {
 
     return (
         <>
-            <section className="profile z-depth-3 col" onClick={e => state != 'is-active' ? setState('is-active') : setState('disable')}>
+            <section className="profile z-depth-3 col" onClick={() => state != 'is-active' ? setState('is-active') : setState('disable')}>
                 <section className="profileCircle col s1" >
                 </section>
             </section>

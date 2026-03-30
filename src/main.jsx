@@ -1,6 +1,5 @@
 import { createRoot } from 'react-dom/client'
 import {
-  BrowserRouter,
   createBrowserRouter,
   RouterProvider,
 } from 'react-router-dom'
@@ -15,12 +14,9 @@ import { DailyExpense, AddIncome } from './Pages/Movements'
 import { ProtectedRoute } from './Components/ProtetedRoute'
 import { Activity } from './Pages/MovementsHistory'
 import { MonthlyCollectionProvider } from './Context/ExpensesContext'
-import { MonthlyIncomeProvider } from './Context/IncomeContext'
 import { MerchanDetail } from './Components/Records'
 import { TransactionDetail } from './Pages/TransactionDetail'
-import { TestingComponent } from './Components/TestingComponent'
 import { Reports } from './Pages/Reports'
-import { UploadRecords} from './Pages/uploadRecords'
 
 const root = createRoot(document.getElementById('root'))
 // actualizar el estado luego de hacer cambios en el ingreso o egreso de dinero
@@ -70,16 +66,8 @@ const router = createBrowserRouter([
         element: <TransactionDetail />
       },
       {
-        path:'testing',
-        element: <TestingComponent/>
-      },
-      {
         path:'reports',
         element: <Reports/>
-      },
-      {
-        path:'uploadRecords',
-        element: <UploadRecords/>
       }
     ]
   },

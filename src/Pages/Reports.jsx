@@ -3,12 +3,10 @@ import { AnalyzedData } from "../Components/Records";
 import { TimeFrames, TotalSum2 } from "../Logic/functions";
 import { useState, useCallback,useEffect,useContext } from "react";
 import { FilterByCriteria } from "../Logic/functions";
-// import { MonthlyIncomeContext } from "../Context/IncomeContext";
 import { monthlyCollectionContext } from "../Context/ExpensesContext";
 
 export function Reports (){
-    // const { monthlyIncome } = useContext(MonthlyIncomeContext)
-    const { monthlyExpense, exampleValue,categoryRef,setCategoryRef, incomeData } = useContext(monthlyCollectionContext)
+    const { monthlyExpense, exampleValue, incomeData } = useContext(monthlyCollectionContext)
     const [status, setStatus] = useState({
         category: 'Expense',
         map: [],                // mapa de datos filtrados listos para la UI
@@ -63,7 +61,6 @@ export function Reports (){
     },[exampleValue,status.period])
 
     return(
-    //   <section className="bg-main py-8 px-8 flex flex-col gap-8 shadow"><section/>
     <>
         <main className="m-8">
             <h3 className='text-3xl font-medium pb-8'>Analysis</h3>
@@ -103,10 +100,6 @@ export function Reports (){
                         </>
                         }
                     </article>
-                    {/* <article>
-                        <h3 className="text-3xl">Category Breakdown</h3>
-                        {console.log(status.categories)}
-                    </article> */}
                 </section>
             }
         </main>

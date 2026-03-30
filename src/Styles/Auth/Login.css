@@ -1,21 +1,19 @@
 .login {
-    display: grid;
-    grid-template-rows: auto 1fr;
-    height: 95vh;
-    padding-top: 2rem;
-    width: 85%;
-    margin: auto;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  height: 95vh;
+  padding-top: 2rem;
+  width: 85%;
+  margin: auto;
 }
 
 .login-Form .divisor {
-    /* width: 60%; */
-    margin-top: 2rem;
+  /* width: 60%; */
+  margin-top: 2rem;
 }
 
-
-
 .login .login-Form {
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
 }

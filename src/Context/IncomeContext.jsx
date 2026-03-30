@@ -2,9 +2,6 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { UserContext } from "./Context";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../services/firebaseConfig";
-import { getExpensesByTimeFrame } from "./ExpensesContext";
-
-
 
 export const MonthlyIncomeContext = createContext();
 
@@ -22,25 +19,6 @@ export const MonthlyIncomeProvider = ({ children }) => {
             const income = await getTodayIncome(userId)
             setMonthlyIncome(income)
         }
-
-        // const getMonthlyIncomeList = async () => {
-            
-            // get Income from Firebase Data base
-            // try {
-            //     if (userId !== '') {
-            //         const setQuery = await query(incomeCollectionRef, where('uid', '==', userId));
-            //         const data = (await getDocs(setQuery))
-            //         const incomeData = data.docs.map(item => ({
-            //             id: item.id,
-            //             ...item.data()
-            //         }))
-            //         setMonthlyIncome(incomeData)
-            //     }
-            // } catch (error) {
-            //     console.log(error)
-            // }
-        // }
-        // getMonthlyIncomeList()
         fetchTodayIncome()
     }, [userId])
 
