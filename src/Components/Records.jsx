@@ -9,6 +9,7 @@ import { db } from "../../services/firebaseConfig"
 import { DoughnutChart } from "./Activity"
 import { UserContext } from "../Context/Context"
 import { categories } from "../Logic/categories"
+import { FilterByCriteria } from "../Logic/functions"
 
 TotalSum.propTypes = {
     title : PropTypes.string,
@@ -108,6 +109,7 @@ Transactions.propTypes = {
 // hacer el loader, la foto de la cateogria, y la pagina de error.
 
 export function Transactions({ data, collectionRef, filterCategory }) {
+    
     const [state, setState] = useState({
         date: new Date().toDateString(),
         transaction: [],
@@ -115,8 +117,11 @@ export function Transactions({ data, collectionRef, filterCategory }) {
     })
 
     const q = useMemo(()=>{
+        
         if(data.length === 0) return []
+            
         if(filterCategory.activeCategories.length === 0) return data
+        // console.log(filterCategory.categoryFilterData)
         return data.filter((item)=> filterCategory.activeCategories.includes(item.field))
     },[data,filterCategory.activeCategories])
 

@@ -33,6 +33,8 @@ export function Reports (){
                 .filter(Boolean)
             )
             );
+            
+
             setStatus(prevStatus => ({
                 ...prevStatus,
                 map: [expense,income],
@@ -76,6 +78,7 @@ export function Reports (){
                         {/* <ChartActivity/>
                     </article> */}
                     <AnalyzedData expense={q}/>
+                    
                     <article className="text-center text-xl font-medium">
                         {status.incomeTotalPeriod == 0 && status.expenseTotalPeriod == 0 ? '' : calcPercentage(status.incomeTotalPeriod, status.expenseTotalPeriod) }
                     </article>

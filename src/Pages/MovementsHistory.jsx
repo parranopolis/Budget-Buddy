@@ -2,23 +2,25 @@ import { Link } from "react-router-dom"
 import { useCallback,useContext, useEffect, useMemo, useState } from "react"
 import {PropTypes } from 'prop-types'
 import { monthlyCollectionContext } from "../Context/ExpensesContext"
+
 // import { TimeContext } from "../Context/Context"
 // import Chart from 'chart.js/auto'
 // import ChartActivity from "../Components/Activity"
 
 import {NavBarTest} from "../Components/NavBar"
 
-import { TimeFrames } from "../Logic/functions"
+import { FilterByCriteria, TimeFrames } from "../Logic/functions"
 
 import './../Styles/pages/MovementsHistory.css'
 import { Transactions } from "../Components/Records"
+import Spinner from "../Components/loader"
 
 export function Activity() {
     const { monthlyExpense, exampleValue, categoryRef, setCategoryRef } = useContext(monthlyCollectionContext)
     const [status, setStatus] = useState({
             category: categoryRef,
             map: [],  // mapa de datos filtrados listos para la UI
-            period: '1W',
+            period: '1M',
             totalThisPeriod: 0
         })
     const [filterModal, setFilterModal] = useState({
@@ -41,13 +43,14 @@ export function Activity() {
         // exampleValue.setFilter(frame)
     },[])
 
-    // const [activeFilters, setActiveFilters ] = useState([])
-
    useEffect(()=>{
-        
     exampleValue.setFilter(status.period)
    },[exampleValue,status.period,setCategoryRef,status.category])
 
+   useMemo(()=>{
+    const actualData = FilterByCriteria(monthlyExpense, status.period)
+    return setStatus(prev => ({...prev, map: actualData}))
+   },[monthlyExpense, status.period])
 
    useMemo(() => {
     const categoryFiltered = [...new Set(monthlyExpense.map( item => item.field))]
@@ -74,7 +77,7 @@ export function Activity() {
     };
     return (
         <>
-        <main className="mx-8 my-8">
+            <main className="mx-8 my-8">
                 <h1 className='text-3xl font-medium'>Movement History</h1>
                 <section className="flex flex-col gap-8 mt-4">
                     {/* <article className="border-Cborder border rounded-lg bg-bg-form px-4 py-2 w-full flex justify-between items-center">
@@ -117,17 +120,12 @@ export function Activity() {
                         <span className="text-3xl">{categoryRef}</span>
                         <span onClick={handleShowCategory} className="p-large right" style={{ color: '#f36c9c' }}>Show {status.category === "Income" ? 'Expenses' : "Income"}<ion-icon name="chevron-forward-outline"></ion-icon></span>
                     </div>
-                    {/* <DataList data={status.map} category={status.category}></DataList> */}
-                    <Transactions data={monthlyExpense} collectionRef={categoryRef} filterCategory={filterModal}/>
+                    <Transactions data={status.map} collectionRef={categoryRef} filterCategory={filterModal} period={status.period}/>
                 </section>
-        </main>
+            </main>
         <aside>
             <NavBarTest />
         </aside>
-          {/* <!-- <div style="width: 500px;"><canvas id="dimensions"></canvas></div><br/> --> */}
-
-    {/* <!-- <script type="module" src="dimensions.js"></script> --> */}
-            {/* <script type="module" src="acquisitions.js"></script> */}
         </>
     )
 }
@@ -169,3 +167,6 @@ function DataList( {data, category} ) {
         </>
     )
 }
+
+
+

@@ -14,20 +14,10 @@ export const MonthlyCollectionProvider = ({ children }) => {
     const [HomeData, setHomeData] = useState([])
     const [filter, setFilter] = useState(locationRef === 'movementHistory' ? '1W' : '1M')
     const [categoryRef,setCategoryRef] = useState('Expenses')
-    // const location = useLocation()
+
     const example = useCallback(async (f,id, c) => {
-        //el filtro de 1 mes no se activa en /reports | en 6 meses funciona pero no estoy seguro de que sea accurate.
-        // datos del income hace falta conectarlo a todos lados (income form | pedir datos de income y aplicar los filtros)
-        // al cambiar de ruta no se limpia el estado de monthlyexpense
-        // al no tener datos en home el porcentaje queda en 0%%
-        // if(categoryRef === 'Expenses'){
-        // console.log(c)
         if(c === "Expenses")return await getExpensesByTimeFrame(id, f,'newMonthlyExpenses','expenses');
         if(c === "Income") return await getExpensesByTimeFrame(id, f,'newMonthlyIncome','incomes');
-        // }else if(c === 'Income'){
-// return []
-        // }
-        // return await connectToDB(f,id,c)
     },[])
 
     useEffect(() => {
@@ -135,6 +125,7 @@ function addYears(date, deltaYears) {
 }
 
 function startDateFromFrame(frame) {
+  // console.log(frame)
   const end = new Date(); // today (local)
   let start;
 
@@ -199,7 +190,7 @@ export async function getExpensesByTimeFrame(uid, frame, collectionName, subColl
     const endStr = dateToStrLocal(end);
     // Start date is depends on the time frame
     const startStr = dateToStrLocal(start);
-  
+    // console.log(startStr)
     // pendiente activar el filtro -> all transactions
     
     // "all" = read all months docs under /months and then each month's expenses
