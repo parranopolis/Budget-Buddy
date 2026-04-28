@@ -4,7 +4,7 @@ import {
   RouterProvider,
 } from 'react-router-dom'
 
-import { TimeProvider, UserProvider } from './Context/Context'
+import { TimeProvider, UserProvider } from './Context/Context.tsx'
 
 import { Home } from './Pages/Home'
 import { Login } from './Pages/Auth/Login'

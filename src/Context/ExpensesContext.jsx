@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useState, useMemo } from "react";
-import { UserContext } from "./Context";
+import { UserContext } from "./Context.tsx";
 import { collection, getDocs, query, where,orderBy } from "firebase/firestore";
 import { db } from "../services/firebaseConfig.ts";
 

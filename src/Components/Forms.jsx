@@ -5,7 +5,7 @@ import { auth, db } from "../services/firebaseConfig.ts"
 import { addDoc, collection, Timestamp, updateDoc, doc } from "firebase/firestore"
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth"
 
-import { UserContext } from "../Context/Context"
+import { UserContext } from "../Context/Context.tsx"
 
 import { Submit } from "./Buttons"
 import '../Styles/components/Forms.css'

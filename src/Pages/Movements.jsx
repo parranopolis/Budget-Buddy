@@ -5,7 +5,7 @@ import { Submit } from "../Components/Buttons";
 import { useContext, useEffect, useState } from 'react';
 import { addDoc, collection, updateDoc,doc } from 'firebase/firestore';
 import { db } from '../services/firebaseConfig.ts';
-import { UserContext } from '../Context/Context';
+import { UserContext } from '../Context/Context.tsx';
 import { AddIncomeForm } from '../Components/Forms';
 import { categories } from '../Logic/categories';
 import { useMemo } from "react";

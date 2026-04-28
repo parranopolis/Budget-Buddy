@@ -4,7 +4,7 @@ import { buildingBranch } from "../Logic"
 
 import { auth } from "../services/firebaseConfig.ts"
 import { signOut } from "firebase/auth"
-import { UserContext } from "../Context/Context"
+import { UserContext } from "../Context/Context.tsx"
 
 export function ProfileMenu() {
     const [state, setState] = useState('disable')

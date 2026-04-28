@@ -1,10 +1,10 @@
 
-import { Outlet, useNavigate } from "react-router-dom"
-import { auth } from "../services/firebaseConfig.ts"
-import { onAuthStateChanged } from "firebase/auth"
 import { useContext, useEffect } from "react"
-import { UserContext } from "../Context/Context"
+import { Outlet, useNavigate } from "react-router-dom"
 import { useLocation } from "react-router-dom"
+import { onAuthStateChanged } from "firebase/auth"
+import { auth } from "../services/firebaseConfig.ts"
+import { UserContext } from "../Context/Context.tsx"
 import { monthlyCollectionContext} from "../Context/ExpensesContext"
 
 export function ProtectedRoute({ children }) {

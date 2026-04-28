@@ -3,7 +3,7 @@ import {NavBarTest } from "../Components/NavBar";
 import { where,getFirestore, doc, deleteDoc, query, collection, getDocs } from 'firebase/firestore';
 import { useContext, useEffect, useState } from "react";
 import { Link} from "react-router-dom";
-import { UserContext } from "../Context/Context";
+import { UserContext } from "../Context/Context.tsx";
 
 export function TransactionDetail() {
 
