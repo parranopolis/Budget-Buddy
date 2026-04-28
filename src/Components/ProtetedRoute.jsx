@@ -1,6 +1,6 @@
 
 import { Outlet, useNavigate } from "react-router-dom"
-import { auth } from "../../services/firebaseConfig"
+import { auth } from "../services/firebaseConfig.ts"
 import { onAuthStateChanged } from "firebase/auth"
 import { useContext, useEffect } from "react"
 import { UserContext } from "../Context/Context"

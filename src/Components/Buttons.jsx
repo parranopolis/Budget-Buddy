@@ -1,4 +1,4 @@
-import { auth } from '../../services/firebaseConfig'
+import { auth } from '../services/firebaseConfig.ts'
 import '../Styles/components/Buttons.css'
 import '../Styles/main.css'
 

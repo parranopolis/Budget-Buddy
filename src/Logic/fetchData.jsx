@@ -1,6 +1,6 @@
-import { UserContext } from "../Context/Context";
+import { UserContext } from "../Context/Context.jsx";
 import { useContext, useEffect, useState } from "react";
-import {db, collection, query, where, getDocs} from "../services/firebaseConfig"
+import {db, collection, query, where, getDocs} from "../services/firebaseConfig.ts"
 
 export function TodayExpenseData(){
         const { userId} = useContext(UserContext)

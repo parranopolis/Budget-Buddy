@@ -1,7 +1,7 @@
 import { useState, useContext, useEffect } from "react"
 import { useNavigate, Link, useParams, useLocation } from "react-router-dom"
 
-import { auth, db } from "../../services/firebaseConfig"
+import { auth, db } from "../services/firebaseConfig.ts"
 import { addDoc, collection, Timestamp, updateDoc, doc } from "firebase/firestore"
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth"
 

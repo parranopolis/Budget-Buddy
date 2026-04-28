@@ -1,6 +1,6 @@
 import { useNavigate, Link, useLocation } from "react-router-dom"
 import { useEffect, useRef, useState } from 'react'
-import { auth } from "../../services/firebaseConfig"
+import { auth } from "../services/firebaseConfig.ts"
 import { signOut } from "firebase/auth"
 import { buildingBranch } from '../Logic'
 import useOutsideClick from "../Logic/modal"

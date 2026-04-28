@@ -1,15 +1,14 @@
 import { useContext, useEffect, useMemo, useState } from "react"
 import { Link, useLocation } from "react-router-dom"
 import PropTypes from 'prop-types'
-import { where,query,doc, deleteDoc, collection, getDocs } from 'firebase/firestore'
+import { where,query, collection, getDocs } from 'firebase/firestore'
 import { monthlyCollectionContext } from "../Context/ExpensesContext"
 import './../Styles/components/Records.css'
 import { TopNavBar } from "./NavBar"
-import { db } from "../../services/firebaseConfig"
+import { db } from "../services/firebaseConfig.ts"
 import { DoughnutChart } from "./Activity"
 import { UserContext } from "../Context/Context"
 import { categories } from "../Logic/categories"
-import { FilterByCriteria } from "../Logic/functions"
 
 TotalSum.propTypes = {
     title : PropTypes.string,

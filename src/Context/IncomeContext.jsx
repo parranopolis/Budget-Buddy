@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { UserContext } from "./Context";
 import { collection, getDocs, query, where } from "firebase/firestore";
-import { db } from "../../services/firebaseConfig";
+import { db } from "../services/firebaseConfig.ts";
 
 export const MonthlyIncomeContext = createContext();
 

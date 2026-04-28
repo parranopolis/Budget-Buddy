@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom"
 import { useContext, useState } from "react"
 import { buildingBranch } from "../Logic"
 
-import { auth } from "../../services/firebaseConfig"
+import { auth } from "../services/firebaseConfig.ts"
 import { signOut } from "firebase/auth"
 import { UserContext } from "../Context/Context"
 

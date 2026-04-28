@@ -1,7 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useState, useMemo } from "react";
 import { UserContext } from "./Context";
 import { collection, getDocs, query, where,orderBy } from "firebase/firestore";
-import { db } from "../../services/firebaseConfig";
+import { db } from "../services/firebaseConfig.ts";
 
 export const monthlyCollectionContext = createContext();
 
