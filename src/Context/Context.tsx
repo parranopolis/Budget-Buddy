@@ -3,8 +3,8 @@ import { auth } from "../services/firebaseConfig.ts";
 import { onAuthStateChanged } from "firebase/auth";
 
 interface UserContextType {
-    userId: string,
-    setUserId: React.Dispatch<React.SetStateAction<string>>,
+    userId: string | null,
+    setUserId: React.Dispatch<React.SetStateAction<string | null>>,
     userName: string | null,
     setUserName: React.Dispatch<React.SetStateAction<string | null>>
 }
@@ -19,7 +19,7 @@ export const UserContext = createContext<UserContextType | null>(null);
 export const TimeContext = createContext<TimeContextType | null>(null);
 
 export const UserProvider = ({ children} : {children: React.ReactNode}) => {
-    const [userId, setUserId] = useState<string>('')
+    const [userId, setUserId] = useState<string | null>(null)
     const [userName, setUserName] = useState<string | null>(null)
 
     useEffect(() => {
@@ -27,7 +27,8 @@ export const UserProvider = ({ children} : {children: React.ReactNode}) => {
                 if (user) {
                     setUserId(user.uid)
                     setUserName(user.displayName)
-                }
+                } 
+                
             })
         return () => {
             unsubscribe()

@@ -2,7 +2,7 @@ import { useContext, useEffect, useMemo, useState } from "react"
 import { Link, useLocation } from "react-router-dom"
 import PropTypes from 'prop-types'
 import { where,query, collection, getDocs } from 'firebase/firestore'
-import { monthlyCollectionContext } from "../Context/ExpensesContext"
+import { monthlyCollectionContext } from "../Context/ExpensesContext.tsx"
 import './../Styles/components/Records.css'
 import { TopNavBar } from "./NavBar"
 import { db } from "../services/firebaseConfig.ts"

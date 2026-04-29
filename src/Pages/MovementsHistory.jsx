@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom"
 import { useCallback,useContext, useEffect, useMemo, useState } from "react"
 import {PropTypes } from 'prop-types'
-import { monthlyCollectionContext } from "../Context/ExpensesContext"
+import { monthlyCollectionContext } from "../Context/ExpensesContext.tsx"
 
 // import { TimeContext } from "../Context/Context"
 // import Chart from 'chart.js/auto'
@@ -16,11 +16,11 @@ import { Transactions } from "../Components/Records"
 import Spinner from "../Components/loader"
 
 export function Activity() {
-    const { monthlyExpense, exampleValue, categoryRef, setCategoryRef } = useContext(monthlyCollectionContext)
+    const { monthlyExpense,setFilter, categoryRef, setCategoryRef } = useContext(monthlyCollectionContext)
     const [status, setStatus] = useState({
             category: categoryRef,
             map: [],  // mapa de datos filtrados listos para la UI
-            period: '1M',
+            period: '1W',
             totalThisPeriod: 0
         })
     const [filterModal, setFilterModal] = useState({
@@ -44,8 +44,8 @@ export function Activity() {
     },[])
 
    useEffect(()=>{
-    exampleValue.setFilter(status.period)
-   },[exampleValue,status.period,setCategoryRef,status.category])
+    setFilter(status.period)
+   },[setFilter,status.period,setCategoryRef,status.category])
 
    useMemo(()=>{
     const actualData = FilterByCriteria(monthlyExpense, status.period)

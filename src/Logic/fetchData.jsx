@@ -1,4 +1,4 @@
-import { UserContext } from "../Context/Context.jsx";
+import { UserContext } from "../Context/Context.tsx";
 import { useContext, useEffect, useState } from "react";
 import {db, collection, query, where, getDocs} from "../services/firebaseConfig.ts"
 

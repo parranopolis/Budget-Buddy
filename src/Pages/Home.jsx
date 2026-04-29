@@ -6,7 +6,7 @@ import { useContext, useState } from "react";
 import { UserContext } from "../Context/Context.tsx";
 import { TotalSum, Transactions } from "../Components/Records";
 import { Link } from "react-router-dom";
-import { monthlyCollectionContext } from "../Context/ExpensesContext";
+import { monthlyCollectionContext } from "../Context/ExpensesContext.tsx";
 
 export function Home() {
 
