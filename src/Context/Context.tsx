@@ -27,8 +27,10 @@ export const UserProvider = ({ children} : {children: React.ReactNode}) => {
                 if (user) {
                     setUserId(user.uid)
                     setUserName(user.displayName)
-                } 
-                
+                } else {
+                    setUserId(null)
+                    setUserName(null)
+                }
             })
         return () => {
             unsubscribe()

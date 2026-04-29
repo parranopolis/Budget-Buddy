@@ -1,18 +1,20 @@
 import '../Styles/pages/Movements.css'
 
-import {NavBarTest } from "../Components/NavBar";
-import { Submit } from "../Components/Buttons";
-import { useContext, useEffect, useState } from 'react';
+import { useLocation, useParams } from 'react-router-dom';
+import { useMemo, useContext, useEffect, useState } from 'react';
+
+import {Timestamp } from "firebase/firestore";
 import { addDoc, collection, updateDoc,doc } from 'firebase/firestore';
+
+import { NavBar } from "../Components/NavBar.tsx";
+import { Submit } from "../Components/Buttons.tsx";
 import { db } from '../services/firebaseConfig.ts';
 import { UserContext } from '../Context/Context.tsx';
-import { AddIncomeForm } from '../Components/Forms';
+import { Categories } from '../Components/Categories.tsx';
+
 import { categories } from '../Logic/categories';
-import { useMemo } from "react";
-import {Timestamp } from "firebase/firestore";
-import { useLocation, useParams } from 'react-router-dom';
 import { FormatingText } from '../Logic/functions';
-import { Categories } from '../Components/Categories';
+import { AddIncomeForm } from '../Components/Forms';
 
 export function DailyExpense() {
   const { userId } = useContext(UserContext);
@@ -249,7 +251,7 @@ export function DailyExpense() {
         </section>
       </main>
     <aside>
-        <NavBarTest />
+        <NavBar />
     </aside>
     </>
   );
@@ -260,7 +262,7 @@ export function AddIncome() {
             {/* <TopNavBar title='Add Income' /> */}
             <AddIncomeForm />
             {/* <NavBar /> */}
-            <NavBarTest />
+            <NavBar />
         </>
     )
 };

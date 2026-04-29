@@ -1,16 +1,17 @@
-import { NavBarTest } from "../Components/NavBar";
-import { AnalyzedData } from "../Components/Records";
-import { TimeFrames, TotalSum2 } from "../Logic/functions";
 import { useState, useCallback,useEffect,useContext } from "react";
-import { FilterByCriteria } from "../Logic/functions";
+
+import { NavBar } from "../Components/NavBar.tsx";
 import { monthlyCollectionContext } from "../Context/ExpensesContext.tsx";
+import { AnalyzedData } from "../Components/Records.tsx";
+
+import { TimeFrames, TotalSum2, FilterByCriteria } from "../Logic/functions";
 
 export function Reports (){
     const { monthlyExpense, setFilter, incomeData } = useContext(monthlyCollectionContext)
     const [status, setStatus] = useState({
         category: 'Expense',
         map: [],                // mapa de datos filtrados listos para la UI
-        period: '6M',
+        period: '1M',
         incomeTotalPeriod: 0,
         expenseTotalPeriod: 0,
         totalThisPeriod: 0,
@@ -107,7 +108,7 @@ export function Reports (){
             }
         </main>
         <aside>
-                <NavBarTest/>
+                <NavBar/>
         </aside>
     </>
     )

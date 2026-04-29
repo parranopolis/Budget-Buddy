@@ -1,7 +1,11 @@
 
-import { GoogleButton } from "./Buttons"
+import { GoogleButton } from "./Buttons.tsx"
 
-export function UseGoogleAccount({ text }) {
+interface AuthMethodsProps {
+    text: string
+}
+
+export function UseGoogleAccount({ text }: AuthMethodsProps) {
     
     return (
         <>

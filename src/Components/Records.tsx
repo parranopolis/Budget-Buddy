@@ -1,40 +1,58 @@
 import { useContext, useEffect, useMemo, useState } from "react"
-import { Link, useLocation } from "react-router-dom"
+import { Link } from "react-router-dom"
 import PropTypes from 'prop-types'
 import { where,query, collection, getDocs } from 'firebase/firestore'
-import { monthlyCollectionContext } from "../Context/ExpensesContext.tsx"
 import './../Styles/components/Records.css'
-import { TopNavBar } from "./NavBar"
 import { db } from "../services/firebaseConfig.ts"
 import { DoughnutChart } from "./Activity.tsx"
 import { UserContext } from "../Context/Context.tsx"
-import { categories } from "../Logic/categories"
+import { categories } from "../Logic/categories.js"
 
-TotalSum.propTypes = {
-    title : PropTypes.string,
-    collectionRef: PropTypes.string,
-    data: PropTypes.array,
+interface ExpenseItem {
+  amount: number,
+  date: string,
+  dateStr: object,
+  field: string,
+  id: string,
+  monthKey: string,
+  note: string,
+  payMethod: string,
+  store: string,
+  time: string,
+  uid: string,
+  yearKey: string
 }
 
-export function TotalSum({ title, collectionRef, data }) {
-    const { userId } = useContext(UserContext)
-    const [totalAmount, setTotalAmount] = useState(0)
+interface TotalSumProps {
+    title: string,
+    collectionRef: string,
+    data: ExpenseItem[]
+}
+
+interface CompareLastWeekType{
+    percetage:string,
+    day:string | undefined,
+    signal:string
+}
+
+export function TotalSum({ title, collectionRef, data }: TotalSumProps) {
+    const { userId } = useContext(UserContext) || {}
+    const [totalAmount, setTotalAmount] = useState<number>(0)
     const d = new Date();
     const weekday = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
     let day = weekday[d.getDay()];
     
-    const [compareLastWeek,setCompareLastWeek] = useState({
+    const [compareLastWeek,setCompareLastWeek] = useState<CompareLastWeekType>({
         percetage: '0',
         day:day,
         signal:''
     })
     useEffect(() => {
-        setTotalAmount(0)
-        if(data.length === 0) return
+        if(data.length === 0 && !userId) return
         const test = async() => {
             let totalToday = 0
             let totalSameDayLastWeek = 0
-            const colRef = collection(db,'newMonthlyExpenses',userId, 'expenses')
+            const colRef = collection(db,'newMonthlyExpenses',userId as string, 'expenses')
 
             const qRange = query(
                 colRef,
@@ -44,8 +62,11 @@ export function TotalSum({ title, collectionRef, data }) {
             const snap = await getDocs(qRange)
             const p = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }))
             
-            data.forEach((element) => totalToday = totalToday + parseFloat(element.amount))
-            p.forEach((element) => totalSameDayLastWeek = totalSameDayLastWeek + (element.amount))
+            data.forEach((element) => totalToday = totalToday + element.amount);
+            (p as ExpenseItem[]).forEach((element) => {
+                console.log(element)
+                totalSameDayLastWeek = totalSameDayLastWeek + (element.amount)
+            })
             // (v1 - v2) / v2 * 100 = % de cambio entre v1 y v2. 
             // Si el resultado es positivo, v1 es mayor que v2; 
             // si es negativo, v1 es menor que v2; y si es cero, ambos valores son iguales.
@@ -56,11 +77,20 @@ export function TotalSum({ title, collectionRef, data }) {
                 rPercentDifference = ((totalToday - totalSameDayLastWeek) / totalSameDayLastWeek) * 100
             }
             
-            setCompareLastWeek(prev =>({
-                ...prev,
-                percetage : rPercentDifference < 0 ? rPercentDifference.toFixed(2) * (-1) : rPercentDifference.toFixed(2) > 0 ? rPercentDifference.toFixed(2) : "Same",
-                signal : rPercentDifference > 0 ? "↑" : rPercentDifference < 0 ?"↓" : "",
-            }))
+            setCompareLastWeek(prev =>{
+                const absoluteDiff = Math.abs(rPercentDifference)
+                let finalPercentage : string
+                if(rPercentDifference === 0 ) {
+                    finalPercentage = "Same"
+                } else {
+                    finalPercentage = absoluteDiff.toFixed(2)
+                }
+                return {
+                    ...prev,
+                    percetage : finalPercentage,
+                    signal : rPercentDifference > 0 ? "↑" : rPercentDifference < 0 ?"↓" : "",
+                }
+            })
             setTotalAmount(totalToday)
         }
         test()
@@ -71,7 +101,7 @@ export function TotalSum({ title, collectionRef, data }) {
             <article className="bg-white flex rounded-2xl p-8 justify-between items-center">
                 <div className="flex flex-col gap-2">
                     <span className="text-base font-extralight">Today {title}</span>
-                    <span className="text-3xl font-light">$ {totalAmount.toFixed(2)}</span>
+                    <span className="text-3xl font-light">$ {totalAmount}</span>
                 </div>
                 {collectionRef === "Expenses" ? (
                     <div className="flex flex-col text-center w-30 md:w-40 gap-2">
@@ -184,98 +214,6 @@ export function Transactions({ data, collectionRef, filterCategory }) {
         </>
         )
             }
-        </>
-    )
-}
-
-export function MerchanDetail() {
-    const { monthlyExpense } = useContext(monthlyCollectionContext)
-    const [month, setMonth] = useState('')
-    const [expenses, setExpenses] = useState([])
-    const [totalSpend, setTotalSpend] = useState(0)
-    let storeName = useLocation()
-
-
-    const currentMonth = new Date().getMonth()
-    const currentYear = new Date().getFullYear()
-
-    useEffect(() => {
-        let number = 0
-        const filteredData = monthlyExpense.filter(entry => { // Modified this to filter throw a prop array of object 
-            if (entry.date) {
-                const entryDate = new Date(entry.date)
-                const entryMonth = entryDate.getMonth()
-                const entryYear = entryDate.getFullYear()
-
-                return entryMonth === currentMonth && entryYear === currentYear
-            }
-            return false
-        })
-        const getMonthName = () => {
-            const date = new Date(currentYear, currentMonth, 2)
-            return date.toLocaleDateString('en-US', { month: "long" })
-        }
-        const sortedData = filteredData.sort((a, b) => {
-            const dateA = new Date(a.date)
-            const dateB = new Date(b.date)
-            return dateB - dateA
-        })
-
-        const merchanDataList = sortedData.filter((field) => {
-            if (field.store == storeName.state.store) {
-                number = number + parseFloat(field.amount)
-                return field
-            }
-        })
-        setTotalSpend(number)
-        setMonth(getMonthName)
-        setExpenses(merchanDataList)
-        // console.log(merchanDataList)
-    }, [monthlyExpense])
-
-    return (
-        <>
-            <TopNavBar title={'Merchan Detail'} />
-
-            <div className="container">
-                <article className="presentation">
-                    <section className="card-image">
-                        <img src="#" alt="" />
-                    </section>
-                    <section>
-                        <div className="h6">Food</div>
-                        <div className="h3">{storeName.state.store}</div>
-                    </section>
-                </article>
-
-                <article>
-                    <span className="h4">Transaction History</span>{/* Show all transactions related with ths Company */}
-                    {expenses.map(item => {
-                        return (
-                            // <Link key={item.id} to={'/transactionDetail'}>
-                            <section key={item.id} className="transactionHistory">
-                                <div className="itemA">
-                                    <div className=" h6">{item.field}</div>
-                                    <div className=" p-large">{item.date}</div>
-                                </div>
-                                <div className="itemB">
-                                    <div className="h4 price">$ {item.amount}</div>
-                                    <div className="itemB-Actions">
-                                        <Actions item={item} />
-                                    </div>
-                                </div>
-                            </section>
-                            // </Link>
-                        )
-                    })}
-                </article>
-                <aside className="totalCompanyExpense">
-                    <div className="h6" >Total {month}</div>
-                    <div className="h4 price">${totalSpend}</div>
-                </aside>
-            </div >
-
-            <NavBar />
         </>
     )
 }

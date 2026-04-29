@@ -7,9 +7,9 @@ import { auth } from "../services/firebaseConfig.ts"
 import { UserContext } from "../Context/Context.tsx"
 import { monthlyCollectionContext} from "../Context/ExpensesContext.tsx"
 
-export function ProtectedRoute({ children }) {
-    const { setUserId } = useContext(UserContext)
-    const { setLocationRef} = useContext(monthlyCollectionContext)
+export function ProtectedRoute() {
+    const { setUserId } = useContext(UserContext)!
+    const { setLocationRef} = useContext(monthlyCollectionContext)!
     const reRoute = useNavigate()
     const location = useLocation()
 
@@ -24,7 +24,7 @@ export function ProtectedRoute({ children }) {
             if (user == null) {
                 reRoute('/login')
             } else {
-                setUserId(user)
+                setUserId(user.uid)
             }
         })
 
@@ -32,7 +32,7 @@ export function ProtectedRoute({ children }) {
         return () => {
             unsubscribe()
         }
-    }, [reRoute])
+    }, [reRoute,setUserId])
 
     return <Outlet />
 }

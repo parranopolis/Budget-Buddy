@@ -1,10 +1,10 @@
 import "../Styles/pages/Home.css";
 import "../Styles/main.css";
-import { NavBarTest} from "../Components/NavBar";
+import { NavBar} from "../Components/NavBar.tsx";
 
 import { useContext, useState } from "react";
 import { UserContext } from "../Context/Context.tsx";
-import { TotalSum, Transactions } from "../Components/Records";
+import { TotalSum, Transactions } from "../Components/Records.tsx";
 import { Link } from "react-router-dom";
 import { monthlyCollectionContext } from "../Context/ExpensesContext.tsx";
 
@@ -64,7 +64,7 @@ const handleShowCategory = () =>{
         <Transactions data={HomeData} collectionRef={categoryRef} filterCategory={{activeCategories:[]}}/>
       </section>
       <aside>
-        <NavBarTest />
+        <NavBar />
       </aside>
     </>
   );

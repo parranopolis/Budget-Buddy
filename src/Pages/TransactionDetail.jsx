@@ -1,5 +1,5 @@
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import {NavBarTest } from "../Components/NavBar";
+import {NavBar } from "../Components/NavBar.tsx";
 import { where,getFirestore, doc, deleteDoc, query, collection, getDocs } from 'firebase/firestore';
 import { useContext, useEffect, useState } from "react";
 import { Link} from "react-router-dom";
@@ -91,7 +91,7 @@ export function TransactionDetail() {
                 </section>
             </main>
             <aside className="">                
-                <NavBarTest />
+                <NavBar />
             </aside>
         </>
     )

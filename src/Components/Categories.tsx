@@ -1,12 +1,13 @@
-import { PropTypes } from "prop-types";
-Categories.propTypes= {
-    categoriesData : PropTypes.array,
-    callback : PropTypes.func,
-    formData : PropTypes.object
-    
+interface Category {
+  name: string, icon: string, color: string
+}
+interface CategoriesProps{
+  categoriesData: Category[],
+  callback: (e: React.MouseEvent<HTMLButtonElement>) => void,
+  formData: { amount: string, date: string, field: string, payMethod: string, store: string, note:string}
 }
 
-export function Categories({ categoriesData, callback, formData }) {
+export function Categories({ categoriesData, callback, formData }: CategoriesProps) {
   return (
     <>
       {categoriesData.map((cat) => {

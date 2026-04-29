@@ -1,5 +1,5 @@
 
-import { UseGoogleAccount } from "../../Components/AuthMethods"
+import { UseGoogleAccount } from "../../Components/AuthMethods.tsx"
 import { LoginForm } from "../../Components/Forms"
 import '../../Styles/Auth/Login.css'
 

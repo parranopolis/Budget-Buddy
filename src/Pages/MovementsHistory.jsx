@@ -1,19 +1,16 @@
+import './../Styles/pages/MovementsHistory.css'
+
 import { Link } from "react-router-dom"
 import { useCallback,useContext, useEffect, useMemo, useState } from "react"
 import {PropTypes } from 'prop-types'
+
 import { monthlyCollectionContext } from "../Context/ExpensesContext.tsx"
+import {NavBar} from "../Components/NavBar.tsx"
 
-// import { TimeContext } from "../Context/Context"
-// import Chart from 'chart.js/auto'
-// import ChartActivity from "../Components/Activity"
 
-import {NavBarTest} from "../Components/NavBar"
-
+import { Transactions } from "../Components/Records"
 import { FilterByCriteria, TimeFrames } from "../Logic/functions"
 
-import './../Styles/pages/MovementsHistory.css'
-import { Transactions } from "../Components/Records"
-import Spinner from "../Components/loader"
 
 export function Activity() {
     const { monthlyExpense,setFilter, categoryRef, setCategoryRef } = useContext(monthlyCollectionContext)
@@ -124,7 +121,7 @@ export function Activity() {
                 </section>
             </main>
         <aside>
-            <NavBarTest />
+            <NavBar />
         </aside>
         </>
     )

@@ -7,7 +7,7 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "fire
 
 import { UserContext } from "../Context/Context.tsx"
 
-import { Submit } from "./Buttons"
+import { Submit } from "./Buttons.tsx"
 import '../Styles/components/Forms.css'
 import '../Styles/main.css'
 import { useMemo } from "react"

@@ -5,8 +5,11 @@ import '../Styles/main.css'
 import { useNavigate } from 'react-router-dom'
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
 
+interface GoogleButtonProps {
+    text: string
+}
 
-export function GoogleButton({ text }) {
+export function GoogleButton({ text }: GoogleButtonProps) {
     const reRoute = useNavigate()
     
     const provider = new GoogleAuthProvider()
@@ -36,8 +39,10 @@ export function GoogleButton({ text }) {
         </button>
     )
 }
-
-export function Submit({ text }) {
+interface SubmitProps {
+    text: string
+}
+export function Submit({ text }: SubmitProps) {
     return (
         <button className="bg-primary w-full px-4 py-2 text-white font-medium rounded-lg" type="submit" name="action">{text}</button>
     )
