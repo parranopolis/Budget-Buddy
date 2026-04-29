@@ -10,7 +10,7 @@ export function Reports (){
     const [status, setStatus] = useState({
         category: 'Expense',
         map: [],                // mapa de datos filtrados listos para la UI
-        period: '1M',
+        period: '6M',
         incomeTotalPeriod: 0,
         expenseTotalPeriod: 0,
         totalThisPeriod: 0,

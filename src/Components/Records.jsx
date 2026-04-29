@@ -6,7 +6,7 @@ import { monthlyCollectionContext } from "../Context/ExpensesContext.tsx"
 import './../Styles/components/Records.css'
 import { TopNavBar } from "./NavBar"
 import { db } from "../services/firebaseConfig.ts"
-import { DoughnutChart } from "./Activity"
+import { DoughnutChart } from "./Activity.tsx"
 import { UserContext } from "../Context/Context.tsx"
 import { categories } from "../Logic/categories"
 

@@ -4,8 +4,8 @@ import { onAuthStateChanged } from "firebase/auth";
 
 interface UserContextType {
     userId: string | null,
-    setUserId: React.Dispatch<React.SetStateAction<string | null>>,
     userName: string | null,
+    setUserId: React.Dispatch<React.SetStateAction<string | null>>,
     setUserName: React.Dispatch<React.SetStateAction<string | null>>
 }
 
