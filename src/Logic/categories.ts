@@ -1,4 +1,10 @@
-  export const categories = [
+  export interface Category {
+    name: string,
+    icon: string,
+    color: string
+  }
+
+  export const categories: Category[] = [
   { name: "Food", icon: "🥩", color: "#f87171" },    // Red
   { name: "Junk Food", icon: "🍕", color: "#f65ff1" },    // Red
   { name: "Transport", icon: "🚗", color: "#fb923c" }, // Orange

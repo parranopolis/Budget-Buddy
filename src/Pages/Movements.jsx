@@ -12,7 +12,7 @@ import { db } from '../services/firebaseConfig.ts';
 import { UserContext } from '../Context/Context.tsx';
 import { Categories } from '../Components/Categories.tsx';
 
-import { categories } from '../Logic/categories';
+import { categories } from '../Logic/categories.ts';
 import { FormatingText } from '../Logic/functions';
 import { AddIncomeForm } from '../Components/Forms';
 

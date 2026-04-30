@@ -6,27 +6,13 @@ import './../Styles/components/Records.css'
 import { db } from "../services/firebaseConfig.ts"
 import { DoughnutChart } from "./Activity.tsx"
 import { UserContext } from "../Context/Context.tsx"
-import { categories } from "../Logic/categories.js"
-
-interface ExpenseItem {
-  amount: number,
-  date: string,
-  dateStr: object,
-  field: string,
-  id: string,
-  monthKey: string,
-  note: string,
-  payMethod: string,
-  store: string,
-  time: string,
-  uid: string,
-  yearKey: string
-}
+import { categories, type Category } from "../Logic/categories.ts"
+import { type ExpenseItem, type TransactionItem } from "../Context/ExpensesContext.tsx"
 
 interface TotalSumProps {
     title: string,
     collectionRef: string,
-    data: ExpenseItem[]
+    data: TransactionItem[]
 }
 
 interface CompareLastWeekType{
@@ -63,10 +49,8 @@ export function TotalSum({ title, collectionRef, data }: TotalSumProps) {
             const p = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }))
             
             data.forEach((element) => totalToday = totalToday + element.amount);
-            (p as ExpenseItem[]).forEach((element) => {
-                console.log(element)
-                totalSameDayLastWeek = totalSameDayLastWeek + (element.amount)
-            })
+            (p as TransactionItem[]).forEach((element) => totalSameDayLastWeek = totalSameDayLastWeek + (element.amount))
+
             // (v1 - v2) / v2 * 100 = % de cambio entre v1 y v2. 
             // Si el resultado es positivo, v1 es mayor que v2; 
             // si es negativo, v1 es menor que v2; y si es cero, ambos valores son iguales.
@@ -126,43 +110,48 @@ function lastWeekSameWeekdayKey(today = new Date()) {
         const y = d.getFullYear();
         const m = String(d.getMonth() + 1).padStart(2, "0");
         const day = String(d.getDate()).padStart(2, "0");
-        return `${y}-${m}-${day}`; // "YYYY-MM-DD"
-    }
-
-Transactions.propTypes = {
-    data : PropTypes.array,
-    collectionRef: PropTypes.string,
-    filterCategory: PropTypes.object
+        return `${y}-${m}-${day}`; // "YYYY-MM-DD"`
 }
 
 // hacer el loader, la foto de la cateogria, y la pagina de error.
 
-export function Transactions({ data, collectionRef, filterCategory }) {
+interface FilterCategory{
+    activeCategories: string[],
+    activeCategoryFilterData: string[],
+    showModa: boolean
+}
+
+interface TransactionsProps {
+    data: TransactionItem[],
+    collectionRef: string,
+    filterCategory: FilterCategory
+}
+
+
+export function Transactions({ data, collectionRef, filterCategory }: TransactionsProps) {
     
+
     const [state, setState] = useState({
         date: new Date().toDateString(),
-        transaction: [],
+        transaction: [] as TransactionItem[],
         category: collectionRef
     })
-
     const q = useMemo(()=>{
         
         if(data.length === 0) return []
-            
         if(filterCategory.activeCategories.length === 0) return data
-        // console.log(filterCategory.categoryFilterData)
-        return data.filter((item)=> filterCategory.activeCategories.includes(item.field))
+        return data.filter((item) => 
+            item.field ? filterCategory.activeCategories.includes(item.field): false)
     },[data,filterCategory.activeCategories])
 
     useEffect(() => {
-        if(q.length === 0) return
         setState(prevState => ({
             ...prevState,
-            transaction: q.length === 0 ?data : q,
+            transaction: q,
             category: collectionRef
         }))
 
-    }, [data,collectionRef,state.transaction,q])
+    }, [q, collectionRef])
     
     return (
         <>
@@ -175,16 +164,16 @@ export function Transactions({ data, collectionRef, filterCategory }) {
                             <span>Transaccions: </span>
                             <span>{state.transaction.length}</span>
                             <span>Total: </span>
-                            <span>${state.transaction.reduce((acc, item) => acc + parseFloat(item.amount), 0).toFixed(2)}</span>
+                            <span>${state.transaction.reduce((acc, item) => acc + item.amount, 0).toFixed(2)}</span>
                         </div>
                     )}
                 </article>
                 <article className="flex flex-col gap-8 mt-6">
                     {state.transaction?.map((item) => {
-                        let categoryInfo = categories?.find(cat => cat.name === item.field)
+                        let categoryInfo = categories?.find((cat:Category) => cat.name === item.field)
                         if(categoryInfo === undefined) categoryInfo = { name: "Income", icon: "💰", color: "#2f855a" } // Income
                         return (
-                            <Link key={item.id} to={`/transactionDetail/${collectionRef}/${item.id}`} state={item} amount={item}> {/* Merchan detail */}
+                            <Link key={item.id} to={`/transactionDetail/${collectionRef}/${item.id}`} state={item}> {/* Merchan detail */}
                                 <article className="text-black flex items-center justify-between gap-4 border-2 rounded-3xl p-6">
                                     <div className="flex items-center gap-4 min-w-0 flex-1">
                                         {/* Avatar / icono */}
@@ -218,17 +207,20 @@ export function Transactions({ data, collectionRef, filterCategory }) {
     )
 }
 
-AnalyzedData.propTypes = {
-    expense : PropTypes.array
+interface AnalyzedDataProps {
+    expense: ExpenseItem[];
 }
-
-export function AnalyzedData ({expense}){
-  const [categoryStats, setCategoryStats] = useState([]);
+interface CategoryStats{
+    category: string;
+    amount: number;
+    percentage: string;
+}
+export function AnalyzedData ({expense}: AnalyzedDataProps){
+  const [categoryStats, setCategoryStats] = useState<CategoryStats[]>([]);
 
   useEffect(()=> {
 
         if (!expense || expense.length === 0) return; // corta aquí si aún no hay datos
-
         // total de todos los gastos
         const total = expense.reduce((acc, e) => acc + (e.amount || 0), 0);
 
@@ -245,8 +237,9 @@ export function AnalyzedData ({expense}){
         const stats = Array.from(map.entries()).map(([cat, sum]) => ({
             category: cat,
             amount: sum,
-            percentage: total > 0 ? ((sum / total) * 100).toFixed(1) : 0,
+            percentage: total > 0 ? ((sum / total) * 100).toFixed(1) : "0",
         }));    
+        console.log(stats)
         setCategoryStats(stats);
     },[expense])
     return(

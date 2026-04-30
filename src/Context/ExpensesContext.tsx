@@ -3,7 +3,7 @@ import { UserContext } from "./Context.tsx";
 import { collection, getDocs, query, where,orderBy } from "firebase/firestore";
 import { db } from "../services/firebaseConfig.ts";
 
-interface ExpenseItem {
+export interface ExpenseItem {
   amount: number,
   date: string,
   dateStr: object,
@@ -16,25 +16,29 @@ interface ExpenseItem {
   time: string,
   uid: string,
   yearKey: string
+  from?:string
 }
-interface IncomeItem {
+export interface IncomeItem {
 amount: number,
 date: string,
 dateStr: object,
 from: string,
+field?: string,
+store?: string,
 id: string,
 monthKey: string,
 note: string,
 time: string,
 uid: string,
 }
+export type TransactionItem = ExpenseItem | IncomeItem
 
 interface MonthlyCollectionContextType {
-  monthlyExpense: ExpenseItem[],
-  incomeData: IncomeItem[],
+  monthlyExpense: TransactionItem[],
+  incomeData: TransactionItem[],
   categoryRef:string,
   locationRef: string | null,
-  HomeData : ExpenseItem[],
+  HomeData : TransactionItem[],
   filter: string,
   setLocationRef: React.Dispatch<React.SetStateAction<string | null>>,
   setCategoryRef: React.Dispatch<React.SetStateAction<string>>,

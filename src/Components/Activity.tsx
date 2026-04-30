@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Chart, type ChartData } from "chart.js/auto";
 
 interface DoughnutChartProps {
-  amout: number,
+  amount: number,
   category: string,
   percentage: string
 }
