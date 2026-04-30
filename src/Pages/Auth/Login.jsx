@@ -1,6 +1,6 @@
 
 import { UseGoogleAccount } from "../../Components/AuthMethods.tsx"
-import { LoginForm } from "../../Components/Forms"
+import { LoginForm } from "../../Components/Forms.tsx"
 import '../../Styles/Auth/Login.css'
 
 export function Login() {

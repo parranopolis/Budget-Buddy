@@ -1,7 +1,7 @@
 import '../Styles/pages/Movements.css'
 
 import { useLocation, useParams } from 'react-router-dom';
-import { useMemo, useContext, useEffect, useState } from 'react';
+import { useMemo, useEffect, useState } from 'react';
 
 import {Timestamp } from "firebase/firestore";
 import { addDoc, collection, updateDoc,doc } from 'firebase/firestore';
@@ -9,15 +9,14 @@ import { addDoc, collection, updateDoc,doc } from 'firebase/firestore';
 import { NavBar } from "../Components/NavBar.tsx";
 import { Submit } from "../Components/Buttons.tsx";
 import { db } from '../services/firebaseConfig.ts';
-import { UserContext } from '../Context/Context.tsx';
+import { useUserContext } from '../Context/Context.tsx';
 import { Categories } from '../Components/Categories.tsx';
-
+import { AddIncomeForm } from '../Components/Forms.tsx';
 import { categories } from '../Logic/categories.ts';
-import { FormatingText } from '../Logic/functions';
-import { AddIncomeForm } from '../Components/Forms';
+import { FormatingText } from '../Logic/functions.tsx';
 
 export function DailyExpense() {
-  const { userId } = useContext(UserContext);
+  const { userId } = useUserContext();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 

@@ -4,19 +4,21 @@ import { useNavigate, Link, useParams, useLocation } from "react-router-dom"
 import { auth, db } from "../services/firebaseConfig.ts"
 import { addDoc, collection, Timestamp, updateDoc, doc } from "firebase/firestore"
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth"
+import { FirebaseError } from "firebase/app"
 
-import { UserContext } from "../Context/Context.tsx"
+import { UserContext, useUserContext } from "../Context/Context.tsx"
 
 import { Submit } from "./Buttons.tsx"
 import '../Styles/components/Forms.css'
 import '../Styles/main.css'
 import { useMemo } from "react"
-import { FormatingText } from "../Logic/functions"
+import { FormatingText } from "../Logic/functions.tsx"
+import type { IncomeItem } from "../Context/ExpensesContext.tsx"
 
 export function LoginForm() {
-    const [email, setEmail] = useState()
-    const [password, setPassword] = useState()
-    const [loginError, setloginError] = useState('')
+    const [email, setEmail] = useState<string>('')
+    const [password, setPassword] = useState<string>('')
+    const [loginError, setloginError] = useState<string>('')
     // const { userId, setUserId } = useContext(UserContext)
     const reRoute = useNavigate()
 
@@ -31,7 +33,7 @@ export function LoginForm() {
                 await signInWithEmailAndPassword(auth, email, password).then(() => reRoute('/'))
             }
         } catch (error) {
-            setloginError(error.code)
+            if(error instanceof FirebaseError) setloginError(error.code)
         }
     }
 
@@ -81,9 +83,9 @@ export function PasswordRecoveryForm() {
 }
 
 export function SignIn() {
-    const [email, setEmail] = useState()
-    const [password, setPassword] = useState()
-    const [sigInError, setSigInError] = useState('')
+    const [email, setEmail] = useState<string>('')
+    const [password, setPassword] = useState<string>('')
+    const [sigInError, setSigInError] = useState<string>('')
 
     const singIn = async () => {
         try {
@@ -96,7 +98,7 @@ export function SignIn() {
                 await createUserWithEmailAndPassword(auth, email, password).then(() => reRoute('/'))
             }
         } catch (error) {
-            setSigInError(error.code)
+            if( error instanceof FirebaseError) setSigInError(error.code)
         }
     }
     const reRoute = useNavigate()
@@ -119,11 +121,17 @@ export function SignIn() {
     )
 }
 
+interface IncomeFormData{
+    amount:number;
+    date: string;
+    from: string;
+    note: string;
+}
+
 export function AddIncomeForm() {
 
-    // const expenseCollectionRef = collection(db, 'monthlyIncome')
-    const { userId } = useContext(UserContext)
-  const [isSubmitting, setIsSubmitting] = useState(false);
+    const { userId } = useUserContext()
+    const [isSubmitting, setIsSubmitting] = useState(false);
     
     const [todayDate] = useState(()=>{
 
@@ -141,8 +149,8 @@ export function AddIncomeForm() {
 
             return formattedDate
         })
-    const [formData, setFormData] = useState({
-        amount: '',
+    const [formData, setFormData] = useState<IncomeFormData>({
+        amount: 0,
         date: todayDate,
         from: '',
         note: '',
@@ -150,7 +158,7 @@ export function AddIncomeForm() {
     const [formError, setFormError] = useState('')
     const [successMessage, setSuccessMessage] = useState('')
 
-    const { id} = useParams()
+    const { id } = useParams<{id : string}>()
     const isEditMode = Boolean(id)
     const { state } = useLocation()
     useEffect(() => {
@@ -165,7 +173,7 @@ export function AddIncomeForm() {
         }))
     },[isEditMode, state, todayDate])
 
-    const handleChange = (e) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target
         setFormData((prevData) => ({
             ...prevData,
@@ -180,7 +188,7 @@ export function AddIncomeForm() {
         return collection(db, "newMonthlyIncome", userId, "incomes");
     },[userId]);
 
-    const sendForm = async (e) => {
+    const sendForm = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
 
         const { amount, date, from, note } = formData
@@ -190,42 +198,34 @@ export function AddIncomeForm() {
         }
 
         const dateTs = Timestamp.fromDate(new Date(`${date}T00:00:00.000Z`));
-        // console.log(date)
+
+        type IncomePayload = Omit<IncomeItem, 'id'>
+        
+        if (!userId || !incomeCollectionRef || !id) return
+        
+        const payload: IncomePayload = {
+            uid: userId,
+            amount: Number(amount),
+            date: date,
+            from: FormatingText(from),
+            note: FormatingText(note),
+            time: new Date().toLocaleDateString(),
+            dateStr: dateTs,
+            monthKey: date.slice(0,7),
+        }
         setFormError('')
         setIsSubmitting(true)
         try {
             if(isEditMode){
                 await updateDoc(
-                    doc(db, 'newMonthlyIncome', userId, 'incomes', id),
-                    {
-                       uid: userId,
-                        amount: Number(amount),
-                        date: date,
-                        from: FormatingText(from),
-                        note: FormatingText(note),
-                        time: new Date().toLocaleDateString(),
-                        dateStr: dateTs,
-                        monthKey: date.slice(0,7),
-                    }
-                )
-                setSuccessMessage('Income Updated successfully')
+                    doc(db, 'newMonthlyIncome', userId, 'incomes', id), payload)
+                    setSuccessMessage('Income Updated successfully')
             } else {
-                await addDoc(incomeCollectionRef, 
-                    {
-                        uid: userId,
-                        amount: Number(amount),
-                        date: date,
-                        from: FormatingText(from),
-                        note: FormatingText(note),
-                        time: new Date().toLocaleDateString(),
-                        dateStr: dateTs,
-                        monthKey: date.slice(0,7),
-                    }
-                )
+                await addDoc(incomeCollectionRef, payload)
                 setSuccessMessage('Income Added successfully')
             }
             setFormData({
-                amount: '',
+                amount: 0,
                 date: todayDate,
                 from: '',
                 note: '',
@@ -302,60 +302,7 @@ export function AddIncomeForm() {
                             />
                             <label className="sr-only" htmlFor='amount'>Note </label>
                         </div>
-                        {/* <section>
-                             <button>add persentage</button>
-                            <div className="collection">
-                                 Los datos vienen de la base de datos, y en base a lo que el usuario ingrese en el formulario, debe actualizarce cada elemento/divison
-                                {/* los datos obtenidos seran los porcentajes, en base a eso hacer la matematica 
-                                <a className="collection-item">
-                                    <span className="badge">D</span>  {/* Delete percentage 
-                                    <span className="badge">280</span>
-                                    <span className="badge">15%</span>
-                                    Savings
-                                </a>
-                                <a className="collection-item">
-                                    <span className="badge">D</span>  {/* Delete percentage
-                                    <span className="badge">120</span>
-                                    <span className="badge">10%</span>
-                                    Investmet
-                                </a>
-                                <a className="collection-item">
-                                    <span className="badge">D</span>  {/* Delete percentage
-                                    <span className="badge">890</span>
-                                    <span className="badge">55%</span>
-                                    rest
-                                </a>
-                                <a className="collection-item">
-                                    <span className="new pink lighten-2 badge" data-badge-caption='+'></span>  {/* al dar click en este elemento se debe mostrar el modal para agregar porcentage de division
-                                    Add Percentage
-                                </a>
-                            </div>
-                            <div className="row disable">  Modal para agregar porcentage
-                                <div className="">
-                                    <input
-                                        name='Category'
-                                        type="text"
-                                        id='Category'
-                                        required
-                                        className='validate'
-                                        placeholder="Food"
-                                    />
-                                    <label className="active" htmlFor='Category'>Category *</label>
-                                </div>
-                                <div className="input-field col s12">
-                                    <input
-                                        name='Percentage'
-                                        type="text"
-                                        id='percentage'
-                                        required
-                                        className='validate'
-                                        placeholder="17%"
-                                    />
-                                    <label className="active" htmlFor='Percentage'>Percentage *</label>
-                                </div> 
-                                <Submit text={'add Division'} />
-                            </div>
-                        </section> */}
+                        
                         <section className="col-start-1 col-end-7">
                             <Submit text={isSubmitting ? "Saving..." : "Send"} disable={isSubmitting} />
                         </section>

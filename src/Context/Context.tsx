@@ -1,12 +1,13 @@
 import { createContext, useEffect, useState } from "react";
 import { auth } from "../services/firebaseConfig.ts";
 import { onAuthStateChanged } from "firebase/auth";
+import { useContext } from "react";
 
 interface UserContextType {
-    userId: string | null,
-    userName: string | null,
-    setUserId: React.Dispatch<React.SetStateAction<string | null>>,
-    setUserName: React.Dispatch<React.SetStateAction<string | null>>
+    userId: string ,
+    userName: string ,
+    setUserId: React.Dispatch<React.SetStateAction<string>>,
+    setUserName: React.Dispatch<React.SetStateAction<string>>
 }
 
 interface TimeContextType {
@@ -19,17 +20,17 @@ export const UserContext = createContext<UserContextType | null>(null);
 export const TimeContext = createContext<TimeContextType | null>(null);
 
 export const UserProvider = ({ children} : {children: React.ReactNode}) => {
-    const [userId, setUserId] = useState<string | null>(null)
-    const [userName, setUserName] = useState<string | null>(null)
+    const [userId, setUserId] = useState<string>('')
+    const [userName, setUserName] = useState<string>('')
 
     useEffect(() => {
             const unsubscribe = onAuthStateChanged(auth, (user) => {
                 if (user) {
                     setUserId(user.uid)
-                    setUserName(user.displayName)
+                    // setUserName(user.displayName)
                 } else {
-                    setUserId(null)
-                    setUserName(null)
+                    setUserId('')
+                    setUserName('')
                 }
             })
         return () => {
@@ -40,6 +41,13 @@ export const UserProvider = ({ children} : {children: React.ReactNode}) => {
     return <UserContext.Provider value={{ userId, setUserId, userName, setUserName }}>
         {children}
     </UserContext.Provider>
+}
+
+// In your context file
+export const useUserContext = () => {
+  const context = useContext(UserContext)
+  if (!context) throw new Error('useUserContext must be used within a UserProvider')
+  return context // ✅ now returns UserContextType, never null
 }
 
 export const TimeProvider = ({ children } : {children: React.ReactNode}) => {

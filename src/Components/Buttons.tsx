@@ -40,10 +40,11 @@ export function GoogleButton({ text }: GoogleButtonProps) {
     )
 }
 interface SubmitProps {
-    text: string
+    text: string;
+    disable?: boolean;
 }
-export function Submit({ text }: SubmitProps) {
+export function Submit({ text, disable }: SubmitProps) {
     return (
-        <button className="bg-primary w-full px-4 py-2 text-white font-medium rounded-lg" type="submit" name="action">{text}</button>
+        <button className="bg-primary w-full px-4 py-2 text-white font-medium rounded-lg disabled:opacity-50 disabled:cursor-not-allowed" type="submit" name="action" disabled={disable}>{text}</button>
     )
 }

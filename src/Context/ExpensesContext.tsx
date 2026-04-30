@@ -1,5 +1,5 @@
-import { createContext, useCallback, useContext, useEffect, useState, useMemo } from "react";
-import { UserContext } from "./Context.tsx";
+import { createContext, useCallback, useEffect, useState, useMemo } from "react";
+import { useUserContext } from "./Context.tsx";
 import { collection, getDocs, query, where,orderBy } from "firebase/firestore";
 import { db } from "../services/firebaseConfig.ts";
 
@@ -50,7 +50,7 @@ interface MonthlyCollectionContextType {
 export const monthlyCollectionContext = createContext<MonthlyCollectionContextType | null>(null);
 
 export const MonthlyCollectionProvider = ({ children } : { children: React.ReactNode}) => {
-    const { userId } = useContext(UserContext)
+    const { userId } = useUserContext()
     const [monthlyExpense, setMonthlyExpense] = useState<ExpenseItem[]>([])//
     const [categoryRef,setCategoryRef] = useState('Expenses') //
     const [incomeData,setIncomeData] = useState<IncomeItem[]>([]) //

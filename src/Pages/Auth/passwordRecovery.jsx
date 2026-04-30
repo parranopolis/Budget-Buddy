@@ -1,4 +1,4 @@
-import { PasswordRecoveryForm } from "../../Components/Forms"
+import { PasswordRecoveryForm } from "../../Components/Forms.tsx"
 export function PasswordRecovery() {
     return (
         <>

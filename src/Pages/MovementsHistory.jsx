@@ -6,11 +6,8 @@ import {PropTypes } from 'prop-types'
 
 import { monthlyCollectionContext } from "../Context/ExpensesContext.tsx"
 import {NavBar} from "../Components/NavBar.tsx"
-
-
-import { Transactions } from "../Components/Records"
-import { FilterByCriteria, TimeFrames } from "../Logic/functions"
-
+import { Transactions } from "../Components/Records.tsx"
+import { FilterByCriteria, TimeFrames } from "../Logic/functions.tsx"
 
 export function Activity() {
     const { monthlyExpense,setFilter, categoryRef, setCategoryRef } = useContext(monthlyCollectionContext)

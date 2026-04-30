@@ -1,5 +1,5 @@
 import { UseGoogleAccount } from "../../Components/AuthMethods.tsx"
-import { SignIn } from "../../Components/Forms"
+import { SignIn } from "../../Components/Forms.tsx"
 
 export function CreateAccount() {
 

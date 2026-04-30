@@ -5,7 +5,7 @@ import { where,query, collection, getDocs } from 'firebase/firestore'
 import './../Styles/components/Records.css'
 import { db } from "../services/firebaseConfig.ts"
 import { DoughnutChart } from "./Activity.tsx"
-import { UserContext } from "../Context/Context.tsx"
+import { useUserContext } from "../Context/Context.tsx"
 import { categories, type Category } from "../Logic/categories.ts"
 import { type ExpenseItem, type TransactionItem } from "../Context/ExpensesContext.tsx"
 
@@ -22,7 +22,8 @@ interface CompareLastWeekType{
 }
 
 export function TotalSum({ title, collectionRef, data }: TotalSumProps) {
-    const { userId } = useContext(UserContext) || {}
+    const { userId } = useUserContext()
+    
     const [totalAmount, setTotalAmount] = useState<number>(0)
     const d = new Date();
     const weekday = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
@@ -239,7 +240,6 @@ export function AnalyzedData ({expense}: AnalyzedDataProps){
             amount: sum,
             percentage: total > 0 ? ((sum / total) * 100).toFixed(1) : "0",
         }));    
-        console.log(stats)
         setCategoryStats(stats);
     },[expense])
     return(

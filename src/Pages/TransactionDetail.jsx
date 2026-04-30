@@ -1,13 +1,13 @@
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import {NavBar } from "../Components/NavBar.tsx";
 import { where,getFirestore, doc, deleteDoc, query, collection, getDocs } from 'firebase/firestore';
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link} from "react-router-dom";
-import { UserContext } from "../Context/Context.tsx";
+import { useUserContext } from "../Context/Context.tsx";
 
 export function TransactionDetail() {
 
-    const { userId } = useContext(UserContext)
+    const { userId } = useUserContext()
     const [stats,setStats] = useState({
         totalAmount:0,
         totalTransactions:0
