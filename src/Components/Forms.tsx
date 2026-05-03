@@ -135,20 +135,20 @@ export function AddIncomeForm() {
     
     const [todayDate] = useState(()=>{
 
-            // Create a new Date object for today
-            const today = new Date();
+        // Create a new Date object for today
+        const today = new Date();
 
-            // Get year, month, and day
-            const year = today.getFullYear();
-            // Month is 0-indexed, so add 1
-            const month = (today.getMonth() + 1).toString().padStart(2, '0');
-            const day = today.getDate().toString().padStart(2, '0');
+        // Get year, month, and day
+        const year = today.getFullYear();
+        // Month is 0-indexed, so add 1
+        const month = (today.getMonth() + 1).toString().padStart(2, '0');
+        const day = today.getDate().toString().padStart(2, '0');
 
-            // Format the date as YYYY-MM-DD
-            const formattedDate = `${year}-${month}-${day}`;
+        // Format the date as YYYY-MM-DD
+        const formattedDate = `${year}-${month}-${day}`;
 
-            return formattedDate
-        })
+        return formattedDate
+    })
     const [formData, setFormData] = useState<IncomeFormData>({
         amount: 0,
         date: todayDate,
@@ -201,7 +201,9 @@ export function AddIncomeForm() {
 
         type IncomePayload = Omit<IncomeItem, 'id'>
         
-        if (!userId || !incomeCollectionRef || !id) return
+        // if (!userId || !incomeCollectionRef || !id) return
+        if (!userId || !incomeCollectionRef) return;
+        if (isEditMode && !id) return; // Solo exige ID si vas a actualizar
         
         const payload: IncomePayload = {
             uid: userId,
@@ -216,7 +218,7 @@ export function AddIncomeForm() {
         setFormError('')
         setIsSubmitting(true)
         try {
-            if(isEditMode){
+            if(isEditMode && id){
                 await updateDoc(
                     doc(db, 'newMonthlyIncome', userId, 'incomes', id), payload)
                     setSuccessMessage('Income Updated successfully')
@@ -308,9 +310,7 @@ export function AddIncomeForm() {
                         </section>
                     </form>
                 </article>
-                <section>
-
-                </section>
+                
             </section>
             </main>
         </>

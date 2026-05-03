@@ -8,7 +8,7 @@ import { UserContext, useUserContext } from "../Context/Context.tsx"
 import { monthlyCollectionContext} from "../Context/ExpensesContext.tsx"
 
 export function ProtectedRoute() {
-    const { setUserId } = useContext(UserContext)!
+    const { setUserId } = useContext(UserContext) !
     const { setLocationRef} = useContext(monthlyCollectionContext)!
     const reRoute = useNavigate()
     const location = useLocation()

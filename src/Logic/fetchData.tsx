@@ -36,7 +36,6 @@ const pad2 = (n:number) => String(n).padStart(2, "0");
 function startDateFromFrame(frame:string) {
   const end = new Date(); // today (local)
   let start : Date;
-
   switch (frame) {
     case "1W":
       start = new Date(end);
@@ -94,7 +93,7 @@ export async function getExpensesByTimeFrame(
   collectionName:string, 
   subCollectionName:string
 ):Promise<ExpenseItem[]> {
-  const { start, end } = startDateFromFrame(frame);
+    const { start, end } = startDateFromFrame(frame);
     // End date is always today
     const endStr = dateToStrLocal(end);
     // Start date is depends on the time frame
@@ -102,6 +101,9 @@ export async function getExpensesByTimeFrame(
 
     const colRef = collection(db,collectionName,uid,subCollectionName);
 
+    console.log(startStr)
+    console.log(endStr)
+    console.log('-------')
     //   Range query using lexicographic YYYY-MM-DD
       const qRange = query(
         colRef,
