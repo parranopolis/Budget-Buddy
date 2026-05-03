@@ -31,7 +31,7 @@ export function TransactionDetail() {
                 ? doc(db, 'newMonthlyIncome', userId, 'incomes', id)
                 : doc(db, 'newMonthlyExpenses', userId, 'expenses', id); 
             await deleteDoc(ref);
-            console.log('Documento eliminado correctamente');
+            // console.log('Documento eliminado correctamente');
                 navigate(-1)
             } catch (error) {
             console.error('Error eliminando el documento:', error);

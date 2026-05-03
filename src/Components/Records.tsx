@@ -141,6 +141,7 @@ export function Transactions({ data, collectionRef, filterCategory }: Transactio
         
         if(data.length === 0) return []
         if(filterCategory.activeCategories.length === 0) return data
+        console.log(data)
         return data.filter((item) => 
             item.field ? filterCategory.activeCategories.includes(item.field): false)
     },[data,filterCategory.activeCategories])

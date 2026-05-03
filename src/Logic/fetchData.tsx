@@ -41,9 +41,13 @@ function startDateFromFrame(frame:string) {
       start = new Date(end);
       start.setDate(end.getDate() - 7);
       break;
+    // case "1M":
+    //   start = addMonths(end, -1);
+    //   break;
     case "1M":
-      start = addMonths(end, -1);
-      break;
+      start = new Date(end);
+      start.setDate(end.getDate() - 30); // 30 días exactos evita el bug de setMonth
+  break;
     case "3M":
       start = addMonths(end, -3);
       break;
@@ -100,18 +104,15 @@ export async function getExpensesByTimeFrame(
     const startStr = dateToStrLocal(start);
 
     const colRef = collection(db,collectionName,uid,subCollectionName);
-
-    console.log(startStr)
-    console.log(endStr)
-    console.log('-------')
+    // console.log('-------')
     //   Range query using lexicographic YYYY-MM-DD
-      const qRange = query(
-        colRef,
-        where("date", ">=", startStr),
-        where("date", "<=", endStr),
-        orderBy("date", "desc")
-      );
-
-      const snap = await getDocs(qRange);
+    const qRange = query(
+      colRef,
+      where("date", ">=", startStr),
+      where("date", "<=", endStr),
+      orderBy("date", "desc")
+    );
+    
+    const snap = await getDocs(qRange);
       return snap.docs.map((d) => ({ id: d.id, ...d.data() }) as ExpenseItem);
 }
