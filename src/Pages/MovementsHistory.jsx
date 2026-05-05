@@ -8,6 +8,7 @@ import { monthlyCollectionContext } from "../Context/ExpensesContext.tsx"
 import {NavBar} from "../Components/NavBar.tsx"
 import { Transactions } from "../Components/Records.tsx"
 import { FilterByCriteria, TimeFrames } from "../Logic/functions.tsx"
+// import { startDateFromFrame } from "../Logic/fetchData.tsx"
 
 export function Activity() {
     const { monthlyExpense,setFilter, categoryRef, setCategoryRef } = useContext(monthlyCollectionContext)
@@ -43,13 +44,16 @@ export function Activity() {
 
    useMemo(()=>{
     const actualData = FilterByCriteria(monthlyExpense, status.period)
+    // const actualDataWithCategory = startDateFromFrame(status.period)
     return setStatus(prev => ({...prev, map: actualData}))
    },[monthlyExpense, status.period])
 
    useMemo(() => {
-    const categoryFiltered = [...new Set(monthlyExpense.map( item => item.field))]
+    let totalCategoriesList = status.map
+    const categoryFiltered = [...new Set(totalCategoriesList.map( item => item.field))]
+    
     setFilterModal(prev => ({...prev, categoryFilterData: categoryFiltered}))
-   },[monthlyExpense])
+   },[status.map])
     
     const handleFilterChange = (e) =>{
         const {value, checked} = e.target
@@ -98,8 +102,8 @@ export function Activity() {
                                 <h3 className="text-lg underline italic font-medium">Categories</h3>
                                 <div className="grid grid-cols-2 gap-2 py-4">
                                     {filterModal.categoryFilterData.map((category) =>(
-                                    <label htmlFor="" key={category}>
-                                        <input type='checkbox' name='category' value={category} onChange={handleFilterChange} /> {category}
+                                    <label htmlFor={`cat-${category}`} key={category}>
+                                        <input type='checkbox'id={`cat-${category}`} name='category' value={category} onChange={handleFilterChange} /> {category}
                                     </label>
                                     ))}
                                 </div>

@@ -8,6 +8,7 @@ interface CategoriesProps{
 }
 
 export function Categories({ categoriesData, callback, formData }: CategoriesProps) {
+  console.log(categoriesData)
   return (
     <>
       {categoriesData.map((cat) => {

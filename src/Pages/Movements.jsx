@@ -67,6 +67,7 @@ export function DailyExpense() {
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
   const handleActiveCategory = (e) => {
+    console.log(e)
     const value = e.currentTarget.dataset.value;
     setFormData((prev) => ({ ...prev, field: value }));
   };

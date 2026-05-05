@@ -17,7 +17,7 @@ import PropTypes from 'prop-types'
  * const salida = filterDataBy(['...', '...', '...', '...', 'M']);
  */
 
-export function filterDataBy(data) {
+export function filterDataBy(data: string[]) {
     // console.log(data[4])
     if (data[4] === 'W') {
         return filterDataByWeek(data)
@@ -33,11 +33,11 @@ export function filterDataBy(data) {
 /////////////////////
 
 // Helpers
-const startOfDay = d => new Date(d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, 0, 0);
-const endOfDay   = d => new Date(d.getFullYear(), d.getMonth(), d.getDate(), 23, 59, 59, 999);
+const startOfDay = (d:Date) => new Date(d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, 0, 0);
+const endOfDay   = (d:Date) => new Date(d.getFullYear(), d.getMonth(), d.getDate(), 23, 59, 59, 999);
 
 // Parse "YYYY-MM-DD" (or "YYYY/MM/DD") as LOCAL date (not UTC)
-export function parseLocalDate(input) {
+export function parseLocalDate(input:string | Date) {
   if (input instanceof Date) return startOfDay(input);
   if (typeof input === 'string') {
     const [y, m, d] = input.split(/[-/]/).map(Number);
@@ -47,6 +47,7 @@ export function parseLocalDate(input) {
   const d2 = new Date(input);
   return startOfDay(d2);
 }
+
 const today = new Date()
 
 // calcula el domingo de la semana actual
@@ -197,6 +198,7 @@ FilterByCriteria.PropTypes = {
 }
 
 export function FilterByCriteria(data,criteria){
+
     let result
     if(criteria == '1W'){
         result =filterDataByWeek(data)
