@@ -1,4 +1,4 @@
-import './../Styles/pages/MovementsHistory.css'
+import '../Styles/pages/MovementsHistory.css'
 
 import { Link } from "react-router-dom"
 import { useCallback,useContext, useEffect, useMemo, useState } from "react"
@@ -7,8 +7,8 @@ import {PropTypes } from 'prop-types'
 import { monthlyCollectionContext } from "../Context/ExpensesContext.tsx"
 import {NavBar} from "../Components/NavBar.tsx"
 import { Transactions } from "../Components/Records.tsx"
-import { FilterByCriteria, TimeFrames } from "../Logic/functions.tsx"
-// import { startDateFromFrame } from "../Logic/fetchData.tsx"
+import { TimeFrames } from "../Components/Forms.tsx"
+import {FilterByCriteria} from "../Logic/functions.ts"
 
 export function Activity() {
     const { monthlyExpense,setFilter, categoryRef, setCategoryRef } = useContext(monthlyCollectionContext)

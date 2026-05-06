@@ -3,7 +3,8 @@ import { useState, useCallback,useEffect,useContext } from "react";
 import { NavBar } from "../Components/NavBar.tsx";
 import { monthlyCollectionContext } from "../Context/ExpensesContext.tsx";
 import { AnalyzedData } from "../Components/Records.tsx";
-import { TimeFrames, TotalSum2, FilterByCriteria } from "../Logic/functions.tsx";
+import { TimeFrames } from "../Components/Forms.tsx"
+import {TotalSum2, FilterByCriteria } from "../Logic/functions.ts";
 
 export function Reports (){
     const { monthlyExpense, setFilter, incomeData } = useContext(monthlyCollectionContext)

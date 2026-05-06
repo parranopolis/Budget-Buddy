@@ -1,6 +1,6 @@
 import { createContext, useCallback, useEffect, useState, useMemo } from "react";
 import { useUserContext } from "./Context.tsx";
-import { getTodayExpenses, getExpensesByTimeFrame } from "../Logic/fetchData.tsx";
+import { getTodayExpenses, getExpensesByTimeFrame } from "../Logic/fetchData.ts";
 
 export interface ExpenseItem {
   amount: number,

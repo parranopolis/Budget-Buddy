@@ -13,7 +13,7 @@ import { useUserContext } from '../Context/Context.tsx';
 import { Categories } from '../Components/Categories.tsx';
 import { AddIncomeForm } from '../Components/Forms.tsx';
 import { categories } from '../Logic/categories.ts';
-import { FormatingText } from '../Logic/functions.tsx';
+import { FormatingText } from '../Logic/functions.ts';
 
 export function DailyExpense() {
   const { userId } = useUserContext();

@@ -2,7 +2,7 @@ import { useContext, useEffect, useMemo, useState } from "react"
 import { Link } from "react-router-dom"
 import PropTypes from 'prop-types'
 import { where,query, collection, getDocs } from 'firebase/firestore'
-import './../Styles/components/Records.css'
+import '../Styles/components/Records.css'
 import { db } from "../services/firebaseConfig.ts"
 import { DoughnutChart } from "./Activity.tsx"
 import { useUserContext } from "../Context/Context.tsx"

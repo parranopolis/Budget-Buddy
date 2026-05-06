@@ -12,8 +12,54 @@ import { Submit } from "./Buttons.tsx"
 import '../Styles/components/Forms.css'
 import '../Styles/main.css'
 import { useMemo } from "react"
-import { FormatingText } from "../Logic/functions.tsx"
+import { FormatingText } from "../Logic/functions.ts"
 import type { IncomeItem } from "../Context/ExpensesContext.tsx"
+
+
+export function TimeFrames({onChange,activeTimeFrame}: {onChange: (item:string) => void, activeTimeFrame: string}) {
+    // const timeFrameOpt = ['W','M','Y']
+    
+    const timeFrameOpt = ['1W','1M','6M','1Y','5Y']
+    // const [active, setActive] = useState(activeTimeFrame)
+    
+    //styles
+    const baseItem ="w-12 text-center rounded-lg px-2 cursor-pointer select-none";
+    const activeItem = "bg-primary ring-1 ring-white/40 text-white cursor-default shadow-xl";
+    const inactiveItem = "opacity-80 hover:opacity-100";
+    
+    const handleActivate = (item: string) => {
+        if (item === activeTimeFrame) return;        // ⬅️ evita set y onChange si ya está activo
+        onChange?.(item);
+    };
+
+    return(
+        <>
+            <article className="border-Cborder border rounded-lg bg-bg-form px-4 py-2 w-full flex justify-between text-2xl font-extralight">
+                {timeFrameOpt.map((item) => {
+                    // const active = value === item
+                    return(
+                    <div
+                        key={item}
+                        id={item}
+                        role="button"
+                        tabIndex={0}
+                        aria-pressed={activeTimeFrame === item}
+                        className={`${baseItem} ${activeTimeFrame === item ? activeItem : inactiveItem}`}
+                        onClick={() => handleActivate(item)}
+                        onKeyDown={(e) => {
+                            if ((e.key === "Enter" || e.key === " ") && activeTimeFrame !== item) {
+                            e.preventDefault();
+                            handleActivate(item);
+                            }
+                        }}>
+                        {item}
+                    </div> 
+                    )
+                })}
+            </article>
+        </>
+    )
+}
 
 export function LoginForm() {
     const [email, setEmail] = useState<string>('')
